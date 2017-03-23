@@ -32,6 +32,15 @@
 				'libraries': [],
 				'library_dirs': [],
 			},
+			'xcode_settings': {
+				'OTHER_CFLAGS': [
+					"-std=c++11",
+					"-stdlib=libc++",
+					'-Wno-sign-compare',
+					'-Wno-unused-function',
+					'-Wno-unused-private-field',
+				],
+			},
 
 			'sources': [
 				'guetzli_node.cc',
