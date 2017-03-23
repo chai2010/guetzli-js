@@ -12,6 +12,11 @@
 extern "C" {
 #endif
 
+
+#define GUETZLI_VERSION "1.0.1"
+
+const char* guetzli_getVersion();
+
 typedef struct guetzli_string_t guetzli_string_t;
 
 guetzli_string_t* guetzli_string_new(int size);

@@ -14,6 +14,10 @@
 #include <guetzli/quality.h>
 #include <guetzli/stats.h>
 
+const char* guetzli_getVersion() {
+	return GUETZLI_VERSION;
+}
+
 struct guetzli_string_t {
 	std::string str_;
 };

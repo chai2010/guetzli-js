@@ -4,9 +4,9 @@
 
 const guetzli = require('./guetzli.node');
 
-exports.hello = guetzli.hello
+exports.version = guetzli.getVersion()
 
 if(require.main === module) {
-	console.log(guetzli.hello())
+	console.log('guetzli-' + exports.version)
 }
 
