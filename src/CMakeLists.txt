@@ -9,13 +9,14 @@ cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_CXX_STANDARD 11)
 
-execute_process(COMMAND node -v OUTPUT_VARIABLE NODE_VERSION) # v7.7.3\n
-string(STRIP ${NODE_VERSION} NODE_VERSION)                    # v7.7.3
-string(SUBSTRING ${NODE_VERSION} 1 8 NODE_VERSION)            # 7.7.3
-
 if(WIN32)
+	execute_process(COMMAND node -v OUTPUT_VARIABLE NODE_VERSION) # v7.7.3\n
+	string(STRIP ${NODE_VERSION} NODE_VERSION)                    # v7.7.3
+	string(SUBSTRING ${NODE_VERSION} 1 8 NODE_VERSION)            # 7.7.3
+
 	set(NODE_DEV_ROOT $ENV{USERPROFILE}/.node-gyp/${NODE_VERSION})
 	set(NODE_DEV_LIB  node.lib)
+
 	include_directories(AFTER
 		${NODE_DEV_ROOT}/include/node
 	)
@@ -32,7 +33,18 @@ if(WIN32)
 endif()
 
 if(APPLE)
-	# TODO
+	execute_process(COMMAND node -v OUTPUT_VARIABLE NODE_VERSION) # v7.7.3\n
+	string(STRIP ${NODE_VERSION} NODE_VERSION)                    # v7.7.3
+	string(SUBSTRING ${NODE_VERSION} 1 8 NODE_VERSION)            # 7.7.3
+
+	# /usr/local/include/node
+	# $ENV{HOME}/.node-gyp/x.y.z/include/node
+	include_directories(AFTER
+		$ENV{HOME}/.node-gyp/${NODE_VERSION}/include/node
+	)
+	set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
+		"${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -undefined dynamic_lookup"
+	)
 endif()
 
 if(UNIX)
@@ -84,6 +96,7 @@ add_library(guetzli_node SHARED
 )
 set_target_properties(guetzli_node
 	PROPERTIES OUTPUT_NAME "guetzli"
+	PREFIX ""
 	SUFFIX ".node"
 )
 target_link_libraries(guetzli_node
