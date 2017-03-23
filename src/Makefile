@@ -4,7 +4,7 @@
 
 default: guetzli.node
 
-guetzli.node:
+guetzli.node: Makefile binding.gyp
 	node-gyp configure
 	node-gyp build
 	cmake -E copy build/Release/guetzli.node guetzli.node

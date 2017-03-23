@@ -41,18 +41,56 @@ endif()
 
 #------------------------------------------------------------------------------
 
-add_library(hellodll SHARED
-	./hello.cc
+set(GUETZLI_ROOT
+	./guetzli-1.0.1
 )
-set_target_properties(hellodll
-	PROPERTIES OUTPUT_NAME "hello"
+
+include_directories(AFTER
+	${GUETZLI_ROOT}
+	${GUETZLI_ROOT}/third_party/butteraugli
+)
+
+set(GUETZLI_SRC
+	${GUETZLI_ROOT}/guetzli/butteraugli_comparator.cc
+	${GUETZLI_ROOT}/guetzli/dct_double.cc
+	${GUETZLI_ROOT}/guetzli/debug_print.cc
+	${GUETZLI_ROOT}/guetzli/entropy_encode.cc
+	${GUETZLI_ROOT}/guetzli/fdct.cc
+	${GUETZLI_ROOT}/guetzli/gamma_correct.cc
+	${GUETZLI_ROOT}/guetzli/idct.cc
+	${GUETZLI_ROOT}/guetzli/jpeg_data.cc
+	${GUETZLI_ROOT}/guetzli/jpeg_data_decoder.cc
+	${GUETZLI_ROOT}/guetzli/jpeg_data_encoder.cc
+	${GUETZLI_ROOT}/guetzli/jpeg_data_reader.cc
+	${GUETZLI_ROOT}/guetzli/jpeg_data_writer.cc
+	${GUETZLI_ROOT}/guetzli/jpeg_huffman_decode.cc
+	${GUETZLI_ROOT}/guetzli/output_image.cc
+	${GUETZLI_ROOT}/guetzli/preprocess_downsample.cc
+	${GUETZLI_ROOT}/guetzli/processor.cc
+	${GUETZLI_ROOT}/guetzli/quality.cc
+	${GUETZLI_ROOT}/guetzli/quantize.cc
+	${GUETZLI_ROOT}/guetzli/score.cc
+
+	${GUETZLI_ROOT}/third_party/butteraugli/butteraugli/butteraugli.cc
+)
+
+#------------------------------------------------------------------------------
+
+add_library(guetzli_node SHARED
+	./guetzli_node.cc
+	./guetzli_capi.cc
+
+	${GUETZLI_SRC}
+)
+set_target_properties(guetzli_node
+	PROPERTIES OUTPUT_NAME "guetzli"
 	SUFFIX ".node"
 )
-target_link_libraries(hellodll
+target_link_libraries(guetzli_node
 	${NODE_DEV_LIB}
 )
 
-install(TARGETS hellodll
+install(TARGETS guetzli_node
 	RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}
 	LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}
 	ARCHIVE DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}

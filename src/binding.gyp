@@ -24,14 +24,40 @@
 			'target_name': '<(name)',
 
 			'defines': ['FOO'],
-			'include_dirs': [],
+			'include_dirs': [
+				'./guetzli-1.0.1',
+				'./guetzli-1.0.1/third_party/butteraugli',
+			],
 			'link_settings': {
 				'libraries': [],
 				'library_dirs': [],
 			},
 
 			'sources': [
-				'hello.cc',
+				'guetzli_node.cc',
+				'guetzli_capi.cc',
+
+				'./guetzli-1.0.1/guetzli/butteraugli_comparator.cc',
+				'./guetzli-1.0.1/guetzli/dct_double.cc',
+				'./guetzli-1.0.1/guetzli/debug_print.cc',
+				'./guetzli-1.0.1/guetzli/entropy_encode.cc',
+				'./guetzli-1.0.1/guetzli/fdct.cc',
+				'./guetzli-1.0.1/guetzli/gamma_correct.cc',
+				'./guetzli-1.0.1/guetzli/idct.cc',
+				'./guetzli-1.0.1/guetzli/jpeg_data.cc',
+				'./guetzli-1.0.1/guetzli/jpeg_data_decoder.cc',
+				'./guetzli-1.0.1/guetzli/jpeg_data_encoder.cc',
+				'./guetzli-1.0.1/guetzli/jpeg_data_reader.cc',
+				'./guetzli-1.0.1/guetzli/jpeg_data_writer.cc',
+				'./guetzli-1.0.1/guetzli/jpeg_huffman_decode.cc',
+				'./guetzli-1.0.1/guetzli/output_image.cc',
+				'./guetzli-1.0.1/guetzli/preprocess_downsample.cc',
+				'./guetzli-1.0.1/guetzli/processor.cc',
+				'./guetzli-1.0.1/guetzli/quality.cc',
+				'./guetzli-1.0.1/guetzli/quantize.cc',
+				'./guetzli-1.0.1/guetzli/score.cc',
+
+				'./guetzli-1.0.1/third_party/butteraugli/butteraugli/butteraugli.cc',
 			],
 		},
 	],
