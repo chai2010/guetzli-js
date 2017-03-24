@@ -1,8 +1,21 @@
-# Copyright 2013 <chaishushan{AT}gmail.com>. All rights reserved.
+# Copyright 2017 <chaishushan{AT}gmail.com>. All rights reserved.
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
+#------------------------------------------------------------------------------
+
+# for china user
+
+# npm  install -g cnpm --registry=https://registy.npm.taobao.org
+# cnpm install -g windows-build-tool
+# cnpm install -g node-gyp
+
+# node-gyp install --dist-url https://npm.taobao.org/mirrors/node
+
+#------------------------------------------------------------------------------
+
 project(NODE_GUETZLI)
+
 cmake_minimum_required(VERSION 3.5)
 
 #------------------------------------------------------------------------------
@@ -48,13 +61,24 @@ if(APPLE)
 endif()
 
 if(UNIX)
-	# TODO
+	execute_process(COMMAND node -v OUTPUT_VARIABLE NODE_VERSION) # v7.7.3\n
+	string(STRIP ${NODE_VERSION} NODE_VERSION)                    # v7.7.3
+	string(SUBSTRING ${NODE_VERSION} 1 8 NODE_VERSION)            # 7.7.3
+
+	# /usr/local/include/node
+	# $ENV{HOME}/.node-gyp/x.y.z/include/node
+	include_directories(AFTER
+		$ENV{HOME}/.node-gyp/${NODE_VERSION}/include/node
+	)
+	set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS
+		"${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -undefined dynamic_lookup"
+	)
 endif()
 
 #------------------------------------------------------------------------------
 
 set(GUETZLI_ROOT
-	./guetzli-1.0.1
+	./src/guetzli-1.0.1
 )
 
 include_directories(AFTER
@@ -89,10 +113,10 @@ set(GUETZLI_SRC
 #------------------------------------------------------------------------------
 
 add_library(guetzli_node SHARED
-	./guetzli_node.cc
-	./guetzli_capi.cc
+	./src/guetzli_node.cc
+	./src/guetzli_capi.cc
 
-	./guetzli/lodepng.cpp
+	./src/guetzli/lodepng.cpp
 
 	${GUETZLI_SRC}
 )
