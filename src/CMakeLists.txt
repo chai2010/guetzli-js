@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-project(NODE_HELLO)
+project(NODE_GUETZLI)
 cmake_minimum_required(VERSION 3.5)
 
 #------------------------------------------------------------------------------
