@@ -12,6 +12,12 @@
     "type": "git",
     "url": "git://github.com/chai2010/guetzli-js.git"
   },
+
+  "main": "index.js",
+  "bin": {
+	  "guetzli-cli": "bin/guetzli-cli.js"
+  },
+
   "scripts": {
     "preinstall": "",
     "postinstall": "node tools/copy_file.js build/Release/guetzli.node guetzli.node",
@@ -21,6 +27,6 @@
   "devDependencies": {
     "nodeunit": "^0.11.0"
   },
-  "main": "index.js",
+
   "license": "MIT"
 }
