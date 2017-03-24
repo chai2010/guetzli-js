@@ -11,7 +11,7 @@
 
 ```js
 const fs = require('fs')
-const guetzli = require('guetzli')
+const guetzli = require('guetzli-js')
 
 // usage node a.js input.png output.jpg
 let args = process.argv.splice(2)

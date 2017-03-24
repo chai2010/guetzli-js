@@ -1,5 +1,5 @@
 {
-  "name": "guetzli",
+  "name": "guetzli-js",
   "version": "1.0.0",
   "description": "Guetzli perceptual JPEG encoder",
   "author": "ChaiShushan <chaishushan@gmail.com> (https://github.com/chai2010)",
