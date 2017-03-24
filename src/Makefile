@@ -16,6 +16,9 @@ rebuild:
 run: guetzli.node
 	node index.js -h
 
+test: guetzli.node
+	node index.js ..\testdata\bees.png a.out.jpg
+
 deps:
 	npm  install -g cnpm --registry=https://registy.npm.taobao.org
 	cnpm install -g windows-build-tool

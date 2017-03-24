@@ -41,3 +41,5 @@ zz_build_*
 *.node
 *.lib
 *.exe
+a.out
+a.out.*

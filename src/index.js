@@ -2,9 +2,20 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-const guetzli = require('./guetzli.node');
+const fs = require('fs')
+const guetzli = require('./guetzli.node')
 
-exports.version = guetzli.getVersion()
+const version = guetzli.getVersion()
+
+const minQuality = 84
+const maxQuality = 110
+const defaultQuality = 95
+
+exports.version = version
+
+exports.minQuality = minQuality
+exports.maxQuality = maxQuality
+exports.defaultQuality = defaultQuality
 
 // function(buffer, width, height, stride, quality) -> Buffer
 exports.encodeGray = guetzli.encodeGray
@@ -35,9 +46,17 @@ function main(args) {
 	}
 
 	// load png
-	// decode png image
-	// encode jpg image
-	// save jpg
+	let data = fs.readFileSync(args[0])
 
-	console.log('TODO')
+	// decode png image
+	let m = guetzli.decodePng32(data)
+
+	// encode jpg image
+	let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, defaultQuality)
+
+	// save jpg
+	fs.writeFileSync(args[1], jpegData)
+
+	// OK
+	console.log('Done')
 }
