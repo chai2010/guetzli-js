@@ -35,12 +35,15 @@
 				'library_dirs': [],
 			},
 			'xcode_settings': {
+				'CLANG_CXX_LIBRARY': 'libc++',
+ 				'MACOSX_DEPLOYMENT_TARGET': '10.8',
 				'OTHER_CFLAGS': [
 					"-std=c++11",
 					"-stdlib=libc++",
 					'-Wno-sign-compare',
 					'-Wno-unused-function',
 					'-Wno-unused-private-field',
+					'-Wno-unused-result',
 				],
 			},
 
