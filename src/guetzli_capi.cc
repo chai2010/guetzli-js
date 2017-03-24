@@ -14,31 +14,8 @@
 #include <guetzli/quality.h>
 #include <guetzli/stats.h>
 
-const char* guetzli_getVersion() {
+const char* guetzliGetVersion() {
 	return GUETZLI_VERSION;
-}
-
-struct guetzli_string_t {
-	std::string str_;
-};
-
-guetzli_string_t* guetzli_string_new(int size) {
-	auto p = new guetzli_string_t();
-	p->str_.resize(size);
-	return p;
-}
-void guetzli_string_delete(guetzli_string_t* p) {
-	delete p;
-}
-
-void guetzli_string_resize(guetzli_string_t* p, int size) {
-	p->str_.resize(size);
-}
-int guetzli_string_size(guetzli_string_t* p) {
-	return int(p->str_.size());
-}
-char* guetzli_string_data(guetzli_string_t* p) {
-	return (char*)(p->str_.data());
 }
 
 static void grayToRGBVector(std::vector<uint8_t>* rgb, const uint8_t* pix, int w, int h, int stride) {
@@ -87,33 +64,28 @@ static void rgbaToRGBVector(std::vector<uint8_t>* rgb, const uint8_t* pix, int w
 	return;
 }
 
-static guetzli_string_t* encodeRGB(const std::vector<uint8_t>& rgb, int w, int h, float quality) {
+static bool encodeRGB(const std::vector<uint8_t>& rgb, int w, int h, float quality, std::string* output) {
 	guetzli::Params params;
 	params.butteraugli_target = guetzli::ButteraugliScoreForQuality(quality);
 	guetzli::ProcessStats stats;
 
-	auto p = guetzli_string_new(0);
-	if(!guetzli::Process(params, &stats, rgb, w, h, &p->str_)) {
-		guetzli_string_delete(p);
-		return NULL;
-	}
-	return p;
+	return guetzli::Process(params, &stats, rgb, w, h, output);
 }
 
-guetzli_string_t* guetzliEncodeGray(const uint8_t* pix, int w, int h, int stride, float quality) {
+bool guetzliEncodeGray(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output) {
 	std::vector<uint8_t> rgb;
 	grayToRGBVector(&rgb, pix, w, h, stride);
-	return encodeRGB(rgb, w, h, quality);
+	return encodeRGB(rgb, w, h, quality, output);
 }
 
-guetzli_string_t* guetzliEncodeRGB(const uint8_t* pix, int w, int h, int stride, float quality) {
+bool guetzliEncodeRGB(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output) {
 	std::vector<uint8_t> rgb;
 	rgbToRGBVector(&rgb, pix, w, h, stride);
-	return encodeRGB(rgb, w, h, quality);
+	return encodeRGB(rgb, w, h, quality, output);
 }
 
-guetzli_string_t* guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quality) {
+bool guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output) {
 	std::vector<uint8_t> rgb;
 	rgbaToRGBVector(&rgb, pix, w, h, stride);
-	return encodeRGB(rgb, w, h, quality);
+	return encodeRGB(rgb, w, h, quality, output);
 }

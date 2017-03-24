@@ -2,35 +2,20 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#ifndef guetzli_capi_h_
-#define guetzli_capi_h_
+#ifndef guetzli_cxxapi_h_
+#define guetzli_cxxapi_h_
 
 #include <stddef.h>
 #include <stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include <string>
 
 #define GUETZLI_VERSION "1.0.1"
 
-const char* guetzli_getVersion();
+const char* guetzliGetVersion();
 
-typedef struct guetzli_string_t guetzli_string_t;
+bool guetzliEncodeGray(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);
+bool guetzliEncodeRGB(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);
+bool guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);
 
-guetzli_string_t* guetzli_string_new(int size);
-void guetzli_string_delete(guetzli_string_t* p);
-
-void guetzli_string_resize(guetzli_string_t* p, int size);
-int guetzli_string_size(guetzli_string_t* p);
-char* guetzli_string_data(guetzli_string_t* p);
-
-guetzli_string_t* guetzliEncodeGray(const uint8_t* pix, int w, int h, int stride, float quality);
-guetzli_string_t* guetzliEncodeRGB(const uint8_t* pix, int w, int h, int stride, float quality);
-guetzli_string_t* guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quality);
-
-#ifdef __cplusplus
-}
-#endif
-#endif // guetzli_capi_h_
+#endif // guetzli_cxxapi_h_

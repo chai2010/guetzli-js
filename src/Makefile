@@ -14,7 +14,7 @@ rebuild:
 	cmake -E copy build/Release/guetzli.node guetzli.node
 
 run: guetzli.node
-	node index.js
+	node index.js -h
 
 deps:
 	npm  install -g cnpm --registry=https://registy.npm.taobao.org
