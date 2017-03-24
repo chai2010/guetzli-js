@@ -46,7 +46,7 @@ static bool checkEncodeArgsOrThrowException(
 			char sbuf[64];
 			snprintf(sbuf, sizeof(sbuf)-1,
 				"function(buffer, width, height, stride, quality)\n"
-				"args%d must be buffer type!\n",
+				"args%d must be number type!\n",
 				i
 			);
 			isolate->ThrowException(v8::Exception::TypeError(

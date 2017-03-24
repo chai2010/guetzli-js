@@ -18,4 +18,24 @@ bool guetzliEncodeGray(const uint8_t* pix, int w, int h, int stride, float quali
 bool guetzliEncodeRGB(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);
 bool guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);
 
+bool DecodePng32(
+	std::string* dst, const char* data, int size,
+	int* width, int* height
+);
+
+bool DecodePng24(
+	std::string* dst, const char* data, int size,
+	int* width, int* height
+);
+
+bool EncodePng32(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step /*=0*/
+);
+
+bool EncodePng24(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step /*=0*/
+);
+
 #endif // guetzli_cxxapi_h_

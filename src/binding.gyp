@@ -46,6 +46,8 @@
 				'guetzli_node.cc',
 				'guetzli_capi.cc',
 
+				'./guetzli/lodepng.cpp',
+
 				'./guetzli-1.0.1/guetzli/butteraugli_comparator.cc',
 				'./guetzli-1.0.1/guetzli/dct_double.cc',
 				'./guetzli-1.0.1/guetzli/debug_print.cc',

@@ -92,6 +92,8 @@ add_library(guetzli_node SHARED
 	./guetzli_node.cc
 	./guetzli_capi.cc
 
+	./guetzli/lodepng.cpp
+
 	${GUETZLI_SRC}
 )
 set_target_properties(guetzli_node
