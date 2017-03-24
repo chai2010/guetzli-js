@@ -7,7 +7,45 @@
 
 ## Install
 
-	$ npm install -g guetzli-js
+### Windows User
+
+```
+$ npm install -g windows-build-tool
+$ npm install -g node-gyp
+
+$ node-gyp install
+$ npm install -g guetzli-js
+```
+
+In China:
+
+```
+$ npm  install -g cnpm --registry=https://registy.npm.taobao.org
+$ cnpm install -g windows-build-tool
+$ cnpm install -g node-gyp
+
+$ node-gyp install --dist-url https://npm.taobao.org/mirrors/node
+$ cnpm install -g guetzli-js
+```
+
+### macOS and Linux User
+
+```
+$ npm install -g node-gyp
+
+$ node-gyp install
+$ npm install -g guetzli-js
+```
+
+In China:
+
+```
+$ npm  install -g cnpm --registry=https://registy.npm.taobao.org
+$ cnpm install -g node-gyp
+
+$ node-gyp install --dist-url https://npm.taobao.org/mirrors/node
+$ cnpm install -g guetzli-js
+```
 
 ## Example
 
@@ -31,10 +69,57 @@ let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQu
 fs.writeFileSync(args[1], jpegData)
 ```
 
-## API
+## PNG helper
+
+### `decodePng24(data)`
+
+```js
+const assert = require('assert')
+const fs = require('fs')
+
+let data = fs.readFileSync('./testdata/bees.png')
+let m = guetzli.decodePng24(data)
+
+assert(m.width == 444)
+assert(m.height == 258)
+assert(m.channels == 3) // RGB
+assert(m.depth == 8)    // 3*8 = 24 bit
+
+let pix_size = m.width*m.height*m.channels*m.depth/8
+assert(m.pix.length == pix_size)
+```
+
+### `decodePng32(data)`
+
+```js
+const assert = require('assert')
+const fs = require('fs')
+
+let data = fs.readFileSync('./testdata/bees.png')
+let m = guetzli.decodePng32(data)
+
+assert(m.width == 444)
+assert(m.height == 258)
+assert(m.channels == 4) // RGBA
+assert(m.depth == 8)    // 4*8 = 32 bit
+
+let pix_size = m.width*m.height*m.channels*m.depth/8
+assert(m.pix.length == pix_size)
+```
+
+## Guetzli API
+
+### `encodeGray(pix, width, height, stride, quality)`
 
 TODO
 
+### `encodeRGB(pix, width, height, stride, quality)`
+
+TODO
+
+### `encodeRGBA(pix, width, height, stride, quality)`
+
+TODO
 
 ## License
 
