@@ -1,11 +1,26 @@
 {
-  "name": "zuetzli",
+  "name": "guetzli",
   "version": "1.0.0",
   "description": "Guetzli perceptual JPEG encoder",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "author": "ChaiShushan <chaishushan@gmail.com> (https://github.com/chai2010)",
+  "keywords": [
+    "guetzli",
+    "jpeg",
+    "jpeg-encoder"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chai2010/guetzli-js.git"
   },
-  "author": "chaishushan",
-  "license": "ISC"
+  "scripts": {
+    "preinstall": "",
+    "postinstall": "node tools/copy_file.js build/Release/guetzli.node guetzli.node",
+    "test": "nodeunit test.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodeunit": "^0.11.0"
+  },
+  "main": "index.js",
+  "license": "MIT"
 }

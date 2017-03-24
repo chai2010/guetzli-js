@@ -41,8 +41,7 @@ function main(args) {
 	}
 
 	if(args.length != 2) {
-		console.log('Usage: guetzli input_filename output_filename')
-		process.exit(1)
+		process.exit(0)
 	}
 
 	// load png
