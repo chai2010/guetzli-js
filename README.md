@@ -7,7 +7,7 @@
 
 ## Install
 
-	$ npm install time
+	$ npm install -g guetzli-js
 
 ## Example
 
