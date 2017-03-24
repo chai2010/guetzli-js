@@ -6,9 +6,14 @@ const guetzli = require('./guetzli.node');
 
 exports.version = guetzli.getVersion()
 
+// function(buffer, width, height, stride, quality) -> Buffer
 exports.encodeGray = guetzli.encodeGray
 exports.encodeRGB = guetzli.encodeRGB
 exports.encodeRGBA = guetzli.encodeRGBA
+
+// function(data) -> {pix, width, height, channels, depth}
+exports.decodePng24 = guetzli.decodePng24
+exports.decodePng32 = guetzli.decodePng32
 
 if(require.main === module) {
 	main(process.argv.splice(2))
