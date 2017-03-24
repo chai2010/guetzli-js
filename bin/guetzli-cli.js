@@ -30,7 +30,7 @@ function main(args) {
 	let m = guetzli.decodePng32(data)
 
 	// encode jpg image
-	let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, defaultQuality)
+	let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality)
 
 	// save jpg
 	fs.writeFileSync(args[1], jpegData)
