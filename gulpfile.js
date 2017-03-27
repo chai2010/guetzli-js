@@ -14,7 +14,7 @@ const buffer = require('vinyl-buffer')
 
 gulp.task('default', ['dist', 'example'])
 
-gulp.task('dist', ['build'])
+gulp.task('dist', ['build', 'copy-testdata'])
 
 gulp.task('build', () => {
 	let tsProj = ts.createProject('tsconfig.json')
@@ -45,3 +45,6 @@ gulp.task('example-copy-html', () => {
 	return gulp.src(['example/*.html']).pipe(gulp.dest('dist/example'))
 })
 
+gulp.task('copy-testdata', () => {
+	return gulp.src(['testdata']).pipe(gulp.dest('dist/testdata'))
+})
