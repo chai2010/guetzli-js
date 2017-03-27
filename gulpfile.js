@@ -37,6 +37,10 @@ gulp.task('example', ['example-copy-html'], () => {
 	.pipe(gulp.dest('dist/example'))
 })
 
+gulp.task('copy-gyp-build', () => {
+	return gulp.src(['build/**/*.node']).pipe(gulp.dest('dist/build'))
+})
+
 gulp.task('example-copy-html', () => {
 	return gulp.src(['example/*.html']).pipe(gulp.dest('dist/example'))
 })

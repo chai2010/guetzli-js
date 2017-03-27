@@ -2,7 +2,9 @@
 	"files": [
 		"lib/guetzli-cli.ts",
 		"lib/main.ts",
-		"lib/greet.ts"
+		"lib/greet.ts",
+		"lib/utils.ts",
+		"lib/test.ts"
 	],
 	"compilerOptions": {
 		"outDir": "./dist/lib",

@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 const fs = require('fs')
-const guetzli = require('../index.js')
+const guetzli = require('./main')
 
 if(require.main === module) {
 	main(process.argv.splice(2))

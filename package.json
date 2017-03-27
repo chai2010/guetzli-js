@@ -13,14 +13,14 @@
     "type": "git",
     "url": "git://github.com/chai2010/guetzli-js.git"
   },
-  "main": "index.js",
+  "main": "dist/lib/main.js",
   "bin": {
-    "guetzli-cli": "bin/guetzli-cli.js"
+    "guetzli-cli": "dist/lib/guetzli-cli.js"
   },
   "scripts": {
     "preinstall": "",
-    "postinstall": "node tools/copy_file.js build/Release/guetzli.node guetzli.node",
-    "test": "nodeunit test.js"
+    "postinstall": "gulp && gulp copy-gyp-build",
+    "test": "nodeunit dist/lib/test.js"
   },
   "dependencies": {},
   "devDependencies": {
