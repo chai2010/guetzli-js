@@ -9,7 +9,7 @@ if(require.main === module) {
 	main(process.argv.splice(2))
 }
 
-function main(args) {
+function main(args: string[]) {
 	if(args.length == 1 && args[0] == '-v') {
 		console.log('guetzli-' + guetzli.version)
 		process.exit(0)

@@ -1,10 +1,11 @@
 {
 	"files": [
-		"src/ts/main.ts",
-		"src/ts/greet.ts"
+		"lib/guetzli-cli.ts",
+		"lib/main.ts",
+		"lib/greet.ts"
 	],
 	"compilerOptions": {
-		"outDir": "src/js",
+		"outDir": "./dist/lib",
 		"declaration": true,
 		"removeComments": false,
 		"noImplicitAny": true,

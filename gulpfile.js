@@ -14,16 +14,16 @@ const buffer = require('vinyl-buffer')
 
 gulp.task('default', ['dist', 'example'])
 
-gulp.task('dist', ['build', 'build-copy-type'])
+gulp.task('dist', ['build'])
 
 gulp.task('build', () => {
 	let tsProj = ts.createProject('tsconfig.json')
-	return tsProj.src().pipe(tsProj()).js.pipe(gulp.dest('dist'))
+	return tsProj.src().pipe(tsProj()).js.pipe(gulp.dest('dist/lib'))
 })
 
 gulp.task('example', ['example-copy-html'], () => {
 	return browserify({
-		basedir: 'src/example',
+		basedir: 'example',
 		debug: true,
 		entries: ['index.ts'],
 		cache: {},
@@ -37,11 +37,7 @@ gulp.task('example', ['example-copy-html'], () => {
 	.pipe(gulp.dest('dist/example'))
 })
 
-gulp.task('build-copy-type', ['build'], () => {
-	return gulp.src(['src/js/*.d.ts']).pipe(gulp.dest('dist'))
-})
-
 gulp.task('example-copy-html', () => {
-	return gulp.src(['src/example/*.html']).pipe(gulp.dest('dist/example'))
+	return gulp.src(['example/*.html']).pipe(gulp.dest('dist/example'))
 })
 

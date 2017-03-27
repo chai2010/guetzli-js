@@ -2,8 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import * as greet from "./../ts/greet"
-import * as foo from "../base/foo"
+import * as greet from "../lib/greet"
 
 export function hi(name: string) {
 	return greet.sayHello(name)
@@ -11,7 +10,7 @@ export function hi(name: string) {
 
 export function showHello(id: string, name: string): void {
 	const e = document.getElementById(id)
-	e.innerText = greet.sayHello(name) + foo.foo()
+	e.innerText = greet.sayHello(name)
 }
 
 showHello('greeting', 'typescript')
