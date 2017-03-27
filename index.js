@@ -2,7 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-var ccapi = require('./guetzli.node')
+var ccapi = function() {
+	try {
+		return require('./build/Release/guetzli.node');
+	} catch(err) {
+		return require('./build/Debug/guetzli.node');
+	}
+}()
 
 var assert = require('assert');
 var utils = require('./utils.js')

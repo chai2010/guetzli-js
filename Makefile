@@ -7,11 +7,9 @@ default: guetzli.node
 guetzli.node: Makefile binding.gyp
 	node-gyp configure
 	node-gyp build
-	cmake -E copy build/Release/guetzli.node guetzli.node
 
 rebuild:
 	node-gyp rebuild
-	cmake -E copy build/Release/guetzli.node guetzli.node
 
 run: guetzli.node
 	node index.js -h
