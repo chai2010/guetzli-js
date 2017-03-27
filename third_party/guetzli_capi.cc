@@ -5,6 +5,7 @@
 #include "./guetzli_capi.h"
 #include "./guetzli/lodepng.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 #include <string>

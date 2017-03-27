@@ -78,7 +78,7 @@ endif()
 #------------------------------------------------------------------------------
 
 set(GUETZLI_ROOT
-	./src/guetzli-1.0.1
+	./third_party/guetzli-1.0.1
 )
 
 include_directories(AFTER
@@ -113,10 +113,10 @@ set(GUETZLI_SRC
 #------------------------------------------------------------------------------
 
 add_library(guetzli_node SHARED
-	./src/guetzli_node.cc
-	./src/guetzli_capi.cc
+	./third_party/guetzli_node.cc
+	./third_party/guetzli_capi.cc
 
-	./src/guetzli/lodepng.cpp
+	./third_party/guetzli/lodepng.cpp
 
 	${GUETZLI_SRC}
 )
@@ -129,10 +129,20 @@ target_link_libraries(guetzli_node
 	${NODE_DEV_LIB}
 )
 
-install(TARGETS guetzli_node
-	RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}
-	LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}
-	ARCHIVE DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}
-)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	install(TARGETS guetzli_node
+		RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/Debug
+		LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/Debug
+		ARCHIVE DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/Debug
+	)
+else()
+	install(TARGETS guetzli_node
+		RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/Release
+		LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/Release
+		ARCHIVE DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/Release
+	)
+endif()
+
+
 
 #------------------------------------------------------------------------------
