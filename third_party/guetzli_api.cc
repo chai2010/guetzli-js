@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#include "./guetzli_capi.h"
+#include "./guetzli_api.h"
 #include "./guetzli/lodepng.h"
 
 #include <stdlib.h>

@@ -58,7 +58,7 @@
 
 			'sources': [
 				'./third_party/guetzli_node.cc',
-				'./third_party/guetzli_capi.cc',
+				'./third_party/guetzli_api.cc',
 
 				'./third_party/guetzli/lodepng.cpp',
 

@@ -114,7 +114,7 @@ set(GUETZLI_SRC
 
 add_library(guetzli_node SHARED
 	./third_party/guetzli_node.cc
-	./third_party/guetzli_capi.cc
+	./third_party/guetzli_api.cc
 
 	./third_party/guetzli/lodepng.cpp
 

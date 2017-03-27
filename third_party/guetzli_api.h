@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#ifndef guetzli_cxxapi_h_
-#define guetzli_cxxapi_h_
+#ifndef guetzli_api_h_
+#define guetzli_api_h_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -38,4 +38,4 @@ bool EncodePng24(
 	int width, int height, int width_step /*=0*/
 );
 
-#endif // guetzli_cxxapi_h_
+#endif // guetzli_api_h_
