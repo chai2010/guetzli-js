@@ -1,0 +1,14 @@
+{
+	"files": [
+		"src/ts/main.ts",
+		"src/ts/greet.ts"
+	],
+	"compilerOptions": {
+		"outDir": "src/js",
+		"declaration": true,
+		"removeComments": false,
+		"noImplicitAny": true,
+		"allowJs": false,
+		"target": "es3"
+	}
+}

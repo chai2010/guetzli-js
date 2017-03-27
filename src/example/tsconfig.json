@@ -1,0 +1,12 @@
+{
+	"files": [
+		"./index.ts"
+	],
+	"compilerOptions": {
+		"declaration": true,
+		"removeComments": false,
+		"noImplicitAny": true,
+		"allowJs": false,
+		"target": "es3"
+	}
+}
