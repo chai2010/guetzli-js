@@ -20,9 +20,9 @@ const child_process = require('child_process')
 // task
 // ----------------------------------------------------------------------------
 
-gulp.task('default', ['dist', 'example'])
+gulp.task('default', ['dist'])
 
-gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build'])
+gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build', 'example'])
 
 gulp.task('build', ['build-gyp'], () => {
 	let tsProj = ts.createProject('tsconfig.json')
@@ -74,9 +74,19 @@ gulp.task('test', ['dist'], (cb) => {
 	gulp.src('dist/lib/test.js').pipe(nodeunit())
 });
 
+
+gulp.task('test-cli', ['dist'], (cb) => {
+	const cmd = 'node dist/lib/guetzli-cli.js testdata/bees.png a.out.jpg'
+	child_process.exec(cmd, function(err) {
+		if(err) return cb(err)
+		cb()
+	})
+})
+
 gulp.task('clean', (cb) => {
 	try {
 		removeDirectoryList(['build', 'dist'])
+		fs.unlinkSync('a.out.jpg')
 		cb()
 	} catch(err) {
 		cb(err)

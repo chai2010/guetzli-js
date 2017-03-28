@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-let ccapi = function() {
+const ccapi = function() {
 	try {
 		return require('../build/Release/guetzli.node');
 	} catch(err) {
@@ -10,47 +10,53 @@ let ccapi = function() {
 	}
 }()
 
-let assert = require('assert');
-let utils = require('./utils')
+const assert = require('assert')
+const utils = require('./utils')
 
-export let version = ccapi.getVersion()
+export const version: string = ccapi.getVersion()
 
-exports.minQuality = 84
-exports.maxQuality = 110
-exports.defaultQuality = 95
+export const minQuality: number = 84
+export const maxQuality: number = 110
+export const defaultQuality: number = 95
 
-// function(buffer, width, height, stride, quality) -> Buffer
-exports.encodeGray = function(pix_buffer:any, width:number, height:number, stride:number, quality:number) {
-	assert(utils.isBuffer(pix_buffer))
+export interface Image {
+	pix:      Uint8Array;
+	width:    number;
+	height:   number;
+	channels: number;
+	depth:    number;
+}
+
+export function encodeGray(pix:Uint8Array, width:number, height:number, stride:number, quality:number): Uint8Array {
+	assert(utils.isBuffer(pix))
 	assert((width|0) > 0 && (height|0) > 0)
 	assert((stride|0) == 0 || (stride|0) >= (width|0)*1)
 	assert((quality|0) >= this.minQuality && (quality|0) <= this.maxQuality)
 
-	return ccapi.encodeGray(pix_buffer, width, height, stride, quality)
+	return ccapi.encodeGray(pix, width, height, stride, quality)
 }
-exports.encodeRGB = function(pix_buffer:any, width:number, height:number, stride:number, quality:number) {
-	assert(utils.isBuffer(pix_buffer))
+export function encodeRGB(pix:Uint8Array, width:number, height:number, stride:number, quality:number): Uint8Array {
+	assert(utils.isBuffer(pix))
 	assert((width|0) > 0 && (height|0) > 0)
 	assert((stride|0) == 0 || (stride|0) >= (width|0)*3)
 	assert((quality|0) >= this.minQuality && (quality|0) <= this.maxQuality)
 
-	return ccapi.encodeRGB(pix_buffer, width, height, stride, quality)
+	return ccapi.encodeRGB(pix, width, height, stride, quality)
 }
-exports.encodeRGBA = function(pix_buffer:any, width:number, height:number, stride:number, quality:number) {
-	assert(utils.isBuffer(pix_buffer))
+export function encodeRGBA(pix:Uint8Array, width:number, height:number, stride:number, quality:number): Uint8Array {
+	assert(utils.isBuffer(pix))
 	assert((width|0) > 0 && (height|0) > 0)
 	assert((stride|0) == 0 || (stride|0) >= (width|0)*4)
 	assert((quality|0) >= this.minQuality && (quality|0) <= this.maxQuality)
 
-	return ccapi.encodeRGBA(pix_buffer, width, height, stride, quality)
+	return ccapi.encodeRGBA(pix, width, height, stride, quality)
 }
 
-// function(data) -> {pix, width, height, channels, depth}
-exports.decodePng24 = function(data_buffer:any) {
-	assert(utils.isBuffer(data_buffer))
-	assert(data_buffer.length > 0)
+export function decodePng24(data:Uint8Array): Image {
+	assert(utils.isBuffer(data))
+	assert(data.length > 0)
 
-	var m = ccapi.decodePng24(data_buffer)
+	var m = ccapi.decodePng24(data)
 
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
@@ -64,11 +70,11 @@ exports.decodePng24 = function(data_buffer:any) {
 		depth: m.depth
 	}
 }
-exports.decodePng32 = function(data_buffer:any) {
-	assert(utils.isBuffer(data_buffer))
-	assert(data_buffer.length > 0)
+export function decodePng32(data:Uint8Array): Image {
+	assert(utils.isBuffer(data))
+	assert(data.length > 0)
 
-	var m = ccapi.decodePng32(data_buffer)
+	var m = ccapi.decodePng32(data)
 
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
