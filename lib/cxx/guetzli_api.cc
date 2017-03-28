@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 #include "./guetzli_api.h"
-#include "./guetzli/lodepng.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +14,8 @@
 #include <guetzli/processor.h>
 #include <guetzli/quality.h>
 #include <guetzli/stats.h>
+
+#include <lodepng.h>
 
 // ----------------------------------------------------------------------------
 // Guetzli api
