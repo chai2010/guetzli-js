@@ -5,6 +5,7 @@
 const gulp = require('gulp')
 const ts = require('gulp-typescript')
 const uglify =require('gulp-uglify')
+const nodeunit = require('gulp-nodeunit')
 
 const browserify = require('browserify')
 const tsify = require('tsify')
@@ -12,13 +13,37 @@ const tsify = require('tsify')
 const source = require('vinyl-source-stream')
 const buffer = require('vinyl-buffer')
 
+const fs = require('fs')
+const child_process = require('child_process')
+
+// ----------------------------------------------------------------------------
+// task
+// ----------------------------------------------------------------------------
+
 gulp.task('default', ['dist', 'example'])
 
-gulp.task('dist', ['build', 'copy-testdata'])
+gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build'])
 
-gulp.task('build', () => {
+gulp.task('build', ['build-gyp'], () => {
 	let tsProj = ts.createProject('tsconfig.json')
-	return tsProj.src().pipe(tsProj()).js.pipe(gulp.dest('dist/lib'))
+	return tsProj.src().pipe(tsProj()).pipe(gulp.dest('dist/lib'))
+})
+
+gulp.task('build-gyp', (cb) => {
+	let s1 = 'build/Release/guetzli.node'
+	let s2 = 'build/Debug/guetzli.node'
+	if(fs.existsSync(s1) || fs.existsSync(s2)) {
+		cb()
+		return
+	}
+	child_process.exec('node-gyp rebuild', function(err) {
+		if(err) return cb(err)
+		cb()
+	})
+})
+
+gulp.task('copy-gyp-build', ['build-gyp'], () => {
+	return gulp.src(['build/**/*.node']).pipe(gulp.dest('dist/build'))
 })
 
 gulp.task('example', ['example-copy-html'], () => {
@@ -37,14 +62,52 @@ gulp.task('example', ['example-copy-html'], () => {
 	.pipe(gulp.dest('dist/example'))
 })
 
-gulp.task('copy-gyp-build', () => {
-	return gulp.src(['build/**/*.node']).pipe(gulp.dest('dist/build'))
-})
-
 gulp.task('example-copy-html', () => {
 	return gulp.src(['example/*.html']).pipe(gulp.dest('dist/example'))
 })
 
 gulp.task('copy-testdata', () => {
-	return gulp.src(['testdata']).pipe(gulp.dest('dist/testdata'))
+	return gulp.src(['testdata/*']).pipe(gulp.dest('dist/testdata'))
 })
+
+gulp.task('test', ['dist'], (cb) => {
+	gulp.src('dist/lib/test.js').pipe(nodeunit())
+});
+
+gulp.task('clean', (cb) => {
+	try {
+		removeDirectoryList(['build', 'dist'])
+		cb()
+	} catch(err) {
+		cb(err)
+	}
+})
+
+// ----------------------------------------------------------------------------
+// helper function
+// ----------------------------------------------------------------------------
+
+function removeDirectoryList(pathList) {
+	for(let i = 0; i < pathList.length; i++) {
+		removeDirectory(pathList[i])
+	}
+}
+
+function removeDirectory(path) {
+	if(fs.existsSync(path)) {
+		fs.readdirSync(path).forEach(function(file, index) {
+			let curPath = path + "/" + file;
+			if(fs.lstatSync(curPath).isDirectory()) { // recurse
+				removeDirectory(curPath);
+			} else { // delete file
+				fs.unlinkSync(curPath);
+			}
+		})
+		fs.rmdirSync(path);
+	}
+}
+
+// ----------------------------------------------------------------------------
+// END
+// ----------------------------------------------------------------------------
+

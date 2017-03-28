@@ -2,18 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import * as greet from "./greet"
-
-export function hi(name: string) {
-	return greet.sayHello(name)
-}
-
-export function showHello(id: string, name: string): void {
-	const e = document.getElementById(id)
-	e.innerText = greet.sayHello(name)
-}
-
-var ccapi = function() {
+let ccapi = function() {
 	try {
 		return require('../build/Release/guetzli.node');
 	} catch(err) {
@@ -21,10 +10,10 @@ var ccapi = function() {
 	}
 }()
 
-var assert = require('assert');
-var utils = require('./utils.js')
+let assert = require('assert');
+let utils = require('./utils')
 
-exports.version = ccapi.getVersion()
+export let version = ccapi.getVersion()
 
 exports.minQuality = 84
 exports.maxQuality = 110

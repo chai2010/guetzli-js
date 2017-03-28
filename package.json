@@ -19,7 +19,7 @@
   },
   "scripts": {
     "preinstall": "",
-    "postinstall": "gulp && gulp copy-gyp-build",
+    "postinstall": "gulp",
     "test": "nodeunit dist/lib/test.js"
   },
   "dependencies": {},
@@ -27,6 +27,7 @@
     "@types/node": "^7.0.11",
     "browserify": "^14.1.0",
     "gulp": "^3.9.1",
+    "gulp-nodeunit": "^0.1.0",
     "gulp-typescript": "^3.1.6",
     "gulp-uglify": "^2.1.2",
     "nodeunit": "^0.11.0",
