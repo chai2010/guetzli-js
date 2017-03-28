@@ -20,11 +20,21 @@ export const maxQuality: number = 110
 export const defaultQuality: number = 95
 
 export interface Image {
-	pix:      Uint8Array;
 	width:    number;
 	height:   number;
 	channels: number;
 	depth:    number;
+	stride:   number;
+	pix:      Uint8Array;
+}
+
+export function encodeImage(m: Image, quality:number = defaultQuality): Uint8Array {
+	switch(m.channels) {
+	case 1: return encodeGray(m.pix, m.width, m.height, m.stride, quality)
+	case 2: return encodeRGB(m.pix, m.width, m.height, m.stride, quality)
+	case 3: return encodeRGBA(m.pix, m.width, m.height, m.stride, quality)
+	}
+	throw "guetzli.encodeImage: unknown channels:" + m.channels
 }
 
 export function encodeGray(pix:Uint8Array, width:number, height:number, stride:number, quality:number): Uint8Array {
@@ -63,11 +73,12 @@ export function decodePng24(data:Uint8Array): Image {
 	assert(m.channels > 0 && m.depth > 0)
 
 	return {
-		pix: m.pix,
 		width: m.width,
 		height: m.height,
 		channels: m.channels,
-		depth: m.depth
+		depth: m.depth,
+		stride: m.width*3,
+		pix: m.pix,
 	}
 }
 export function decodePng32(data:Uint8Array): Image {
@@ -81,11 +92,12 @@ export function decodePng32(data:Uint8Array): Image {
 	assert(m.channels > 0 && m.depth > 0)
 
 	return {
-		pix: m.pix,
 		width: m.width,
 		height: m.height,
 		channels: m.channels,
-		depth: m.depth
+		depth: m.depth,
+		stride: m.width*4,
+		pix: m.pix,
 	}
 }
 
