@@ -48,8 +48,9 @@ gulp.task('copy-gyp-build', ['build-gyp'], () => {
 
 gulp.task('copy-cxx-emscripten', () => {
 	return gulp.src([
-		'lib/cxx-emscripten/*.js',
-		'lib/cxx-emscripten/*.d.ts',
+		'lib/cxx-emscripten/guetzli.out.js',
+		'lib/cxx-emscripten/main.js',
+		'lib/cxx-emscripten/main.d.ts',
 	]).pipe(gulp.dest(
 		'dist/lib/cxx-emscripten'
 	))

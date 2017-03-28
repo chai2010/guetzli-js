@@ -36,11 +36,12 @@ CPP_FILES+=$(GUETZLI_ROOT)/third_party/butteraugli/butteraugli/butteraugli.cc
 EMCC:=emcc
 EMCCFLAGS+=$(INC)
 EMCCFLAGS+=-DGUETZLI_BUILD_FOR_BROWSER
+EMCCFLAGS+=--memory-init-file 0
 EMCCFLAGS+=-std=c++14
-EMLDFLAGS+=-O1
+EMLDFLAGS+=-O3
 
-$(TARG).out.js: $(CPP_FILES) Makefile
-	$(EMCC) $(EMCCFLAGS) $(EMLDFLAGS) $(CPP_FILES) -o $@
+$(TARG).out.js: $(CPP_FILES) Makefile pre.js post.js
+	$(EMCC) $(EMCCFLAGS) $(EMLDFLAGS) --pre-js pre.js --post-js post.js $(CPP_FILES) -o $@
 
 run: $(TARG).out.js
 	node main.js

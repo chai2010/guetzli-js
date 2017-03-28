@@ -9,4 +9,4 @@ function showVersion(id: string, version: string): void {
 	e.innerText = version
 }
 
-showVersion('guetzli-version', guetzli.version)
+showVersion('guetzli-version', "guetzli-" + guetzli.version)
