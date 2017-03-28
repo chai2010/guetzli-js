@@ -10,7 +10,6 @@ INC+=-I../cxx
 INC+=-I$(GUETZLI_ROOT)
 INC+=-I$(GUETZLI_ROOT)/third_party/butteraugli
 
-CPP_FILES+=./main.cc
 CPP_FILES+=../cxx/guetzli_api.cc
 CPP_FILES+=$(GUETZLI_ROOT)/guetzli/butteraugli_comparator.cc
 CPP_FILES+=$(GUETZLI_ROOT)/guetzli/dct_double.cc
