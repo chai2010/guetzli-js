@@ -86,7 +86,9 @@ gulp.task('test-cli', ['dist'], (cb) => {
 gulp.task('clean', (cb) => {
 	try {
 		removeDirectoryList(['build', 'dist'])
-		fs.unlinkSync('a.out.jpg')
+		if(fs.existsSync('a.out.jpg')) {
+			fs.unlinkSync('a.out.jpg')
+		}
 		cb()
 	} catch(err) {
 		cb(err)
