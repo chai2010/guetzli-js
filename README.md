@@ -71,7 +71,20 @@ fs.writeFileSync(args[1], jpegData)
 
 ## PNG helper
 
-### `decodePng24(data)`
+### Image Type
+
+```ts
+interface Image {
+    width: number;
+    height: number;
+    channels: number;
+    depth: number;
+    stride: number;
+    pix: Uint8Array;
+}
+```
+
+### `function decodePng24(data: Uint8Array): Image`
 
 ```js
 const assert = require('assert')
@@ -89,7 +102,7 @@ let pix_size = m.width*m.height*m.channels*m.depth/8
 assert(m.pix.length == pix_size)
 ```
 
-### `decodePng32(data)`
+### `function decodePng32(data: Uint8Array): Image`
 
 ```js
 const assert = require('assert')
@@ -109,15 +122,28 @@ assert(m.pix.length == pix_size)
 
 ## Guetzli API
 
-### `encodeGray(pix, width, height, stride, quality)`
+### Glocal Variable
+
+```ts
+export declare const version: string;
+export declare const minQuality: number;     // 84
+export declare const maxQuality: number;     // 110
+export declare const defaultQuality: number; // 95
+```
+
+### `function encodeImage(m: Image, quality?: number = defaultQuality): Uint8Array`
 
 TODO
 
-### `encodeRGB(pix, width, height, stride, quality)`
+### `function encodeGray(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
 TODO
 
-### `encodeRGBA(pix, width, height, stride, quality)`
+### `function encodeRGB(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
+
+TODO
+
+### `function encodeRGBA(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
 TODO
 
