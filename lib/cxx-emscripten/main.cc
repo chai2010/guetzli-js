@@ -5,6 +5,6 @@
 #include <stdio.h>
 
 int main() {
-	printf("TODO\n");
+	printf("hello guetzli!\n");
 	return 0;
 }

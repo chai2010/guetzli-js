@@ -42,5 +42,6 @@ zz_build_*
 *.node
 *.lib
 *.exe
+*.out.js
 a.out
 a.out.*
