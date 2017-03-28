@@ -22,7 +22,7 @@ const child_process = require('child_process')
 
 gulp.task('default', ['dist'])
 
-gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build', 'example'])
+gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build', 'copy-cxx-emscripten', 'example'])
 
 gulp.task('build', ['build-gyp'], () => {
 	let tsProj = ts.createProject('tsconfig.json')
@@ -44,6 +44,15 @@ gulp.task('build-gyp', (cb) => {
 
 gulp.task('copy-gyp-build', ['build-gyp'], () => {
 	return gulp.src(['build/**/*.node']).pipe(gulp.dest('dist/build'))
+})
+
+gulp.task('copy-cxx-emscripten', () => {
+	return gulp.src([
+		'lib/cxx-emscripten/*.js',
+		'lib/cxx-emscripten/*.d.ts',
+	]).pipe(gulp.dest(
+		'dist/lib/cxx-emscripten'
+	))
 })
 
 gulp.task('example', ['example-copy-html'], () => {

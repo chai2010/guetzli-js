@@ -13,7 +13,7 @@ static auto preMain = emscripten_run_script_int(R"==(
 	shouldRunNow = false;
 )==");
 
-int main() {
+int main0() {
 	printf("hello guetzli!\n");
 	return 0;
 }
