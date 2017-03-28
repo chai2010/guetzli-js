@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(GUETZLI_ROOT
 	../guetzli-1.0.1
+	../png
 )
 
 include_directories(AFTER
@@ -61,7 +62,8 @@ install(TARGETS guetzlilib
 
 add_executable(guetzlihello
 	./hello.cc
-	./lodepng.cpp
+
+	../png/lodepng.cpp
 
 	${GUETZLI_SRC}
 )

@@ -10,12 +10,13 @@ guetzli.node: Makefile binding.gyp
 
 rebuild:
 	node-gyp rebuild
+	cmake -E copy_directory build dist/build
 
 run: guetzli.node
-	node index.js -h
+	node dist/lib/guetzli-cli.js -h
 
 test: guetzli.node
-	node index.js testdata\bees.png a.out.jpg
+	node dist/lib/guetzli-cli.js testdata/bees.png a.out.jpg
 
 deps:
 	npm  install -g cnpm --registry=https://registy.npm.taobao.org
@@ -27,5 +28,3 @@ clean:
 	cmake -E remove_directory zz_build_win64_release
 	cmake -E remove_directory zz_build_win32_release
 	cmake -E remove_directory zz_build_debug_proj_mt_tmp
-	cmake -E remove guetzli.node
-	cmake -E remove guetzli.lib

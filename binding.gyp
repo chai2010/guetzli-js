@@ -29,6 +29,8 @@
 			'include_dirs': [
 				'./third_party/guetzli-1.0.1',
 				'./third_party/guetzli-1.0.1/third_party/butteraugli',
+				'./third_party/jpeg',
+				'./third_party/png',
 			],
 			'link_settings': {
 				'libraries': [],
@@ -57,10 +59,10 @@
 			],
 
 			'sources': [
-				'./third_party/guetzli_node.cc',
-				'./third_party/guetzli_api.cc',
+				'./lib/cxx/guetzli_node.cc',
+				'./lib/cxx/guetzli_api.cc',
 
-				'./third_party/guetzli/lodepng.cpp',
+				'./third_party/png/lodepng.cpp',
 
 				'./third_party/guetzli-1.0.1/guetzli/butteraugli_comparator.cc',
 				'./third_party/guetzli-1.0.1/guetzli/dct_double.cc',

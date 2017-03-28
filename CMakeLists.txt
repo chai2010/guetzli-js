@@ -112,11 +112,16 @@ set(GUETZLI_SRC
 
 #------------------------------------------------------------------------------
 
-add_library(guetzli_node SHARED
-	./third_party/guetzli_node.cc
-	./third_party/guetzli_api.cc
+include_directories(AFTER
+	./third_party/jpeg
+	./third_party/png
+)
 
-	./third_party/guetzli/lodepng.cpp
+add_library(guetzli_node SHARED
+	./lib/cxx/guetzli_node.cc
+	./lib/cxx/guetzli_api.cc
+
+	./third_party/png/lodepng.cpp
 
 	${GUETZLI_SRC}
 )
