@@ -6,10 +6,12 @@ TARG:=guetzli
 
 GUETZLI_ROOT:=../../third_party/guetzli-1.0.1
 
+INC+=-I../cxx
 INC+=-I$(GUETZLI_ROOT)
 INC+=-I$(GUETZLI_ROOT)/third_party/butteraugli
 
-CPP_FILES+=main.cc
+CPP_FILES+=./main.cc
+CPP_FILES+=../cxx/guetzli_api.cc
 CPP_FILES+=$(GUETZLI_ROOT)/guetzli/butteraugli_comparator.cc
 CPP_FILES+=$(GUETZLI_ROOT)/guetzli/dct_double.cc
 CPP_FILES+=$(GUETZLI_ROOT)/guetzli/debug_print.cc
@@ -41,7 +43,7 @@ $(TARG).out.js: $(CPP_FILES) Makefile
 	$(EMCC) $(EMCCFLAGS) $(EMLDFLAGS) $(CPP_FILES) -o $@
 
 run: $(TARG).out.js
-	node $(TARG).out.js
+	node main.js
 
 clean:
 	-rm $(TARG).out.js
