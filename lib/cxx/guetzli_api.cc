@@ -15,7 +15,9 @@
 #include <guetzli/quality.h>
 #include <guetzli/stats.h>
 
-#include <lodepng.h>
+#if !defined(GUETZLI_BUILD_FOR_BROWSER)
+#	include <lodepng.h>
+#endif
 
 // ----------------------------------------------------------------------------
 // Guetzli api
@@ -24,6 +26,58 @@
 const char* guetzliGetVersion() {
 	return GUETZLI_VERSION;
 }
+
+// ----------------------------------------------------------------------------
+
+struct guetzli_string_t {
+	std::string str_;
+};
+
+guetzli_string_t* guetzli_string_new(int size) {
+	auto p = new guetzli_string_t();
+	p->str_.resize(size);
+	return p;
+}
+void guetzli_string_delete(guetzli_string_t* p) {
+	delete p;
+}
+
+void guetzli_string_resize(guetzli_string_t* p, int size) {
+	p->str_.resize(size);
+}
+int guetzli_string_size(guetzli_string_t* p) {
+	return int(p->str_.size());
+}
+char* guetzli_string_data(guetzli_string_t* p) {
+	return (char*)(p->str_.data());
+}
+
+guetzli_string_t* guetzli_encode_Gray(const uint8_t* pix, int w, int h, int stride, float quality) {
+	auto p = guetzli_string_new(0);
+	if(!guetzliEncodeGray(pix, w, h, stride, quality, &p->str_)) {
+		guetzli_string_delete(p);
+		return NULL;
+	}
+	return p;
+}
+guetzli_string_t* guetzli_encode_RGB(const uint8_t* pix, int w, int h, int stride, float quality) {
+	auto p = guetzli_string_new(0);
+	if(!guetzliEncodeRGB(pix, w, h, stride, quality, &p->str_)) {
+		guetzli_string_delete(p);
+		return NULL;
+	}
+	return p;
+}
+guetzli_string_t* guetzli_encode_RGBA(const uint8_t* pix, int w, int h, int stride, float quality) {
+	auto p = guetzli_string_new(0);
+	if(!guetzliEncodeRGBA(pix, w, h, stride, quality, &p->str_)) {
+		guetzli_string_delete(p);
+		return NULL;
+	}
+	return p;
+}
+
+// ----------------------------------------------------------------------------
 
 static void grayToRGBVector(std::vector<uint8_t>* rgb, const uint8_t* pix, int w, int h, int stride) {
 	rgb->resize(w*h*3);
@@ -100,6 +154,8 @@ bool guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quali
 // ----------------------------------------------------------------------------
 // PNG helper
 // ----------------------------------------------------------------------------
+
+#if !defined(GUETZLI_BUILD_FOR_BROWSER)
 
 bool DecodePng32(
 	std::string* dst, const char* data, int size,
@@ -230,6 +286,8 @@ bool EncodePng24(
 
 	return true;
 }
+
+#endif // GUETZLI_BUILD_FOR_BROWSER
 
 // ----------------------------------------------------------------------------
 // END
