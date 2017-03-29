@@ -4,6 +4,14 @@
 
 import Module = require('./cxx-emscripten/guetzli.out')
 
+function cToUint8Array(p: number, size: number): Uint8Array {
+	let q = new Uint8Array(size|0)
+	for(let i = 0; i < q.length; i++) {
+		q[i] = Module.HEAPU8[p+i]
+	}
+	return q
+}
+
 // CAPI_EXPORT(const char*) guetzliGetVersion();
 function guetzliGetVersion(): string {
 	return Module.ccall('guetzliGetVersion', 'string',
@@ -12,8 +20,10 @@ function guetzliGetVersion(): string {
 	)
 }
 
+type guetzli_string_t = number
+
 // CAPI_EXPORT(guetzli_string_t*) guetzli_string_new(int size);
-function guetzli_string_new(size: number): number {
+function guetzli_string_new(size: number): guetzli_string_t {
 	return Module.ccall('guetzli_string_new', 'number',
 		['number'],
 		[size]
@@ -21,7 +31,7 @@ function guetzli_string_new(size: number): number {
 }
 
 // CAPI_EXPORT(void) guetzli_string_delete(guetzli_string_t* p);
-function guetzli_string_delete(p: number): void {
+function guetzli_string_delete(p: guetzli_string_t): void {
 	Module.ccall('guetzli_string_delete', 'null',
 		['number'],
 		[p]
@@ -29,7 +39,7 @@ function guetzli_string_delete(p: number): void {
 }
 
 // CAPI_EXPORT(void) guetzli_string_resize(guetzli_string_t* p, int size);
-function guetzli_string_resize(p: number, size: number): void {
+function guetzli_string_resize(p: guetzli_string_t, size: number): void {
 	return Module.ccall('guetzli_string_resize', 'null',
 		['number', 'number'],
 		[p, size]
@@ -37,7 +47,7 @@ function guetzli_string_resize(p: number, size: number): void {
 }
 
 // CAPI_EXPORT(int) guetzli_string_size(guetzli_string_t* p);
-function guetzli_string_size(p: number): number {
+function guetzli_string_size(p: guetzli_string_t): number {
 	return Module.ccall('guetzli_string_size', 'number',
 		['number'],
 		[p]
@@ -45,7 +55,7 @@ function guetzli_string_size(p: number): number {
 }
 
 // CAPI_EXPORT(char*) guetzli_string_data(guetzli_string_t* p);
-function guetzli_string_data(p: number): number {
+function guetzli_string_data(p: guetzli_string_t): number {
 	return Module.ccall('guetzli_string_data', 'number',
 		['number'],
 		[p]
@@ -54,7 +64,7 @@ function guetzli_string_data(p: number): number {
 
 // CAPI_EXPORT(guetzli_string_t*)
 // guetzli_encode_Gray(const uint8_t* pix, int w, int h, int stride, float quality);
-function guetzli_encode_Gray(pix: Uint8Array, w: number, h: number, stride: number, quality: number): number {
+function guetzli_encode_Gray(pix: Uint8Array, w: number, h: number, stride: number, quality: number): guetzli_string_t {
 	return Module.ccall('guetzli_encode_Gray', 'number',
 		['array', 'number', 'number', 'number', 'number'],
 		[pix, w, h, stride, quality]
@@ -63,7 +73,7 @@ function guetzli_encode_Gray(pix: Uint8Array, w: number, h: number, stride: numb
 
 // CAPI_EXPORT(guetzli_string_t*)
 // guetzli_encode_RGB(const uint8_t* pix, int w, int h, int stride, float quality);
-function guetzli_encode_RGB(pix: Uint8Array, w: number, h: number, stride: number, quality: number): number {
+function guetzli_encode_RGB(pix: Uint8Array, w: number, h: number, stride: number, quality: number): guetzli_string_t {
 	return Module.ccall('guetzli_encode_RGB', 'number',
 		['array', 'number', 'number', 'number', 'number'],
 		[pix, w, h, stride, quality]
@@ -72,7 +82,7 @@ function guetzli_encode_RGB(pix: Uint8Array, w: number, h: number, stride: numbe
 
 // CAPI_EXPORT(guetzli_string_t*)
 // guetzli_encode_RGBA(const uint8_t* pix, int w, int h, int stride, float quality);
-function guetzli_encode_RGBA(pix: Uint8Array, w: number, h: number, stride: number, quality: number): number {
+function guetzli_encode_RGBA(pix: Uint8Array, w: number, h: number, stride: number, quality: number): guetzli_string_t {
 	return Module.ccall('guetzli_encode_RGBA', 'number',
 		['array', 'number', 'number', 'number', 'number'],
 		[pix, w, h, stride, quality]
@@ -105,27 +115,21 @@ export function encodeImage(m: Image, quality:number = defaultQuality): Uint8Arr
 
 export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
 	let s = guetzli_encode_Gray(pix, w, h, stride, quality)
-	let start = guetzli_string_data(s)
-	let end = start + guetzli_string_size(s)
-	let q = Module.HEAPU8.slice(start, end)
+	let q = cToUint8Array(guetzli_string_data(s), guetzli_string_size(s))
 	guetzli_string_delete(s)
 	return q
 }
 
 export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
 	let s = guetzli_encode_RGB(pix, w, h, stride, quality)
-	let start = guetzli_string_data(s)
-	let end = start + guetzli_string_size(s)
-	let q = Module.HEAPU8.slice(start, end)
+	let q = cToUint8Array(guetzli_string_data(s), guetzli_string_size(s))
 	guetzli_string_delete(s)
 	return q
 }
 
 export function encodeRGBA(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
 	let s = guetzli_encode_RGBA(pix, w, h, stride, quality)
-	let start = guetzli_string_data(s)
-	let end = start + guetzli_string_size(s)
-	let q = Module.HEAPU8.slice(start, end)
+	let q = cToUint8Array(guetzli_string_data(s), guetzli_string_size(s))
 	guetzli_string_delete(s)
 	return q
 }
