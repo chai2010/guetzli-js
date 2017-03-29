@@ -72,7 +72,10 @@ gulp.task('example', ['example-copy-html'], () => {
 })
 
 gulp.task('example-copy-html', () => {
-	return gulp.src(['example/*.html']).pipe(gulp.dest('dist/example'))
+	return gulp.src([
+		'example/*.html',
+		'example/*.js',
+	]).pipe(gulp.dest('dist/example'))
 })
 
 gulp.task('copy-testdata', () => {
