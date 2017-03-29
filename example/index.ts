@@ -10,7 +10,7 @@ import guetzli = require("../lib/browser")
 declare let window: any
 declare let document: any
 
-declare function saveAs(data: any, filename?: string, disableAutoBOM?: boolean): void
+declare function saveAs(data: Blob|File, filename?: string, disableAutoBOM?: boolean): void
 
 class MyApp {
 	main() {
