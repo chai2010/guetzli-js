@@ -18,11 +18,14 @@ const child_process = require('child_process')
 
 // ----------------------------------------------------------------------------
 // task
+// gulp dist
+// gulp copy-cxx-emscripten
+// gulp example
 // ----------------------------------------------------------------------------
 
 gulp.task('default', ['dist'])
 
-gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build', 'copy-cxx-emscripten', 'example'])
+gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build'])
 
 gulp.task('build', ['build-gyp'], () => {
 	let tsProj = ts.createProject('tsconfig.json')
