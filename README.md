@@ -122,7 +122,7 @@ interface Image {
 }
 ```
 
-### `function encodeImage(m: Image, quality?: number = defaultQuality): Uint8Array`
+### `encodeImage(m: Image, quality?: number = defaultQuality): Uint8Array`
 
 ```js
 const guetzli = require('guetzli-js')
@@ -141,7 +141,7 @@ let jpegData = guetzli.encodeImage({
 })
 ```
 
-### `function encodeGray(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
+### `encodeGray(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
 ```js
 const guetzli = require('guetzli-js/browser')
@@ -174,7 +174,7 @@ let jpegData = guetzli.encodeGray({
 })
 ```
 
-### `function encodeRGB(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
+### `encodeRGB(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
 ```js
 const guetzli = require('guetzli-js/browser')
@@ -205,7 +205,7 @@ let jpegData = guetzli.encodeGray({
 })
 ```
 
-### `function encodeRGBA(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
+### `encodeRGBA(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
 
 ```js
@@ -227,7 +227,7 @@ let jpegData = guetzli.encodeRGBA({
 
 ## PNG helper (only for NodeJS)
 
-### `function decodePng24(data: Uint8Array): Image`
+### `decodePng24(data: Uint8Array): Image`
 
 ```js
 const assert = require('assert')
@@ -245,7 +245,7 @@ let pix_size = m.width*m.height*m.channels*m.depth/8
 assert(m.pix.length == pix_size)
 ```
 
-### `function decodePng32(data: Uint8Array): Image`
+### `decodePng32(data: Uint8Array): Image`
 
 ```js
 const assert = require('assert')
