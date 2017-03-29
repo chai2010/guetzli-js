@@ -106,7 +106,17 @@ export function encodeImage(m: Image, quality:number = defaultQuality): Uint8Arr
 }
 
 export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
-	let s = guetzli_encode_Gray(pix, w, h, stride, quality)
+	let s = Module.ccall(
+		'guetzli_encode_Gray', 'number', [
+			'array',  // pix
+			'number', // width
+			'number', // height
+			'number', // stride
+			'number'  // quality
+		],
+		[pix, w, h, stride, quality]
+	)
+
 	let start = guetzli_string_data(s)
 	let end = start + guetzli_string_size(s)
 	let q = Module.HEAPU8.slice(start, end)
@@ -115,7 +125,17 @@ export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, qu
 }
 
 export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
-	let s = guetzli_encode_RGB(pix, w, h, stride, quality)
+	let s = Module.ccall(
+		'guetzli_encode_RGB', 'number', [
+			'array',  // pix
+			'number', // width
+			'number', // height
+			'number', // stride
+			'number'  // quality
+		],
+		[pix, w, h, stride, quality]
+	)
+
 	let start = guetzli_string_data(s)
 	let end = start + guetzli_string_size(s)
 	let q = Module.HEAPU8.slice(start, end)
@@ -124,7 +144,17 @@ export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, qua
 }
 
 export function encodeRGBA(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
-	let s = guetzli_encode_RGBA(pix, w, h, stride, quality)
+	let s = Module.ccall(
+		'guetzli_encode_RGBA', 'number', [
+			'array',  // pix
+			'number', // width
+			'number', // height
+			'number', // stride
+			'number'  // quality
+		],
+		[pix, w, h, stride, quality]
+	)
+
 	let start = guetzli_string_data(s)
 	let end = start + guetzli_string_size(s)
 	let q = Module.HEAPU8.slice(start, end)
