@@ -164,14 +164,10 @@ for(let y = 0; y < canvas.height; y++) {
 	}
 }
 
-let jpegData = guetzli.encodeGray({
-	width:    w,
-	height:   h,
-	channels: 4,
-	depth:    8,
-	stride:   0,
-	pix:      gray,
-})
+let jpegData = guetzli.encodeGray(
+	gray, canvas.width, canvas.height, 0,
+	guetzli.defaultQuality
+)
 ```
 
 ### `encodeRGB(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
@@ -195,14 +191,10 @@ for(let y = 0; y < canvas.height; y++) {
 	}
 }
 
-let jpegData = guetzli.encodeGray({
-	width:    canvas.width,
-	height:   canvas.height,
-	channels: 4,
-	depth:    8,
-	stride:   0,
-	pix:      rgb,
-})
+let jpegData = guetzli.encodeRGB(
+	rgb, canvas.width, canvas.height, 0,
+	guetzli.defaultQuality
+)
 ```
 
 ### `encodeRGBA(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
@@ -215,14 +207,10 @@ let canvas = document.getElementById('myCanvas')
 let ctx = canvas.getContext('2d')
 let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
 
-let jpegData = guetzli.encodeRGBA({
-	width:    canvas.width,
-	height:   canvas.height,
-	channels: 4,
-	depth:    8,
-	stride:   0,
-	pix:      rgba,
-})
+let jpegData = guetzli.encodeRGBA(
+	rgba, canvas.width, canvas.height, 0,
+	guetzli.defaultQuality
+)
 ```
 
 ## PNG helper (only for NodeJS)
