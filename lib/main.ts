@@ -31,8 +31,8 @@ export interface Image {
 export function encodeImage(m: Image, quality:number = defaultQuality): Uint8Array {
 	switch(m.channels) {
 	case 1: return encodeGray(m.pix, m.width, m.height, m.stride, quality)
-	case 2: return encodeRGB(m.pix, m.width, m.height, m.stride, quality)
-	case 3: return encodeRGBA(m.pix, m.width, m.height, m.stride, quality)
+	case 3: return encodeRGB(m.pix, m.width, m.height, m.stride, quality)
+	case 4: return encodeRGBA(m.pix, m.width, m.height, m.stride, quality)
 	}
 	throw "guetzli.encodeImage: unknown channels:" + m.channels
 }
