@@ -83,6 +83,28 @@ const guetzli_encode_RGBA = Module.cwrap(
 
 export const version: string = guetzliGetVersion()
 
+export const minQuality: number = 84
+export const maxQuality: number = 110
+export const defaultQuality: number = 95
+
+export interface Image {
+	width:    number;
+	height:   number;
+	channels: number;
+	depth:    number;
+	stride:   number;
+	pix:      Uint8Array;
+}
+
+export function encodeImage(m: Image, quality:number = defaultQuality): Uint8Array {
+	switch(m.channels) {
+	case 1: return encodeGray(m.pix, m.width, m.height, m.stride, quality)
+	case 3: return encodeRGB(m.pix, m.width, m.height, m.stride, quality)
+	case 4: return encodeRGBA(m.pix, m.width, m.height, m.stride, quality)
+	}
+	throw "guetzli.encodeImage: unknown channels:" + m.channels
+}
+
 export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
 	let s = guetzli_encode_Gray(pix, w, h, stride, quality)
 	let start = guetzli_string_data(s)
