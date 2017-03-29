@@ -170,7 +170,7 @@ let jpegData = guetzli.encodeGray({
 	channels: 4,
 	depth:    8,
 	stride:   0,
-	pix:      pix,
+	pix:      gray,
 })
 ```
 
