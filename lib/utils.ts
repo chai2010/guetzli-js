@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-function isNode() {
+export function isNode(): boolean {
 	if(typeof process === 'object') {
 		if(typeof process.versions === 'object') {
 			if(typeof process.versions.node !== 'undefined') {
@@ -13,24 +13,20 @@ function isNode() {
 	return false
 }
 
-var is_node = isNode()
+export const is_node: boolean = isNode()
 
-function isUint8Array(obj:any) {
+export function isUint8Array(obj:any): boolean {
 	return obj instanceof Uint8Array && (!is_node || !Buffer.isBuffer(obj))
 }
 
-function isArrayBuffer(obj:any) {
+export function isArrayBuffer(obj:any): boolean {
 	return obj instanceof ArrayBuffer
 }
 
-function isBuffer(obj:any) {
+export function isBuffer(obj:any): boolean {
 	if(!is_node) {
 		return false
 	}
 	return Buffer.isBuffer(obj)
 }
 
-exports.isNode = isNode
-exports.isUint8Array = isUint8Array
-exports.isArrayBuffer = isArrayBuffer
-exports.isBuffer = isBuffer
