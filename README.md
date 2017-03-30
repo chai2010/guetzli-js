@@ -10,7 +10,7 @@ This demo show guetzli-js in browser, encode a canvas and save as a jpeg file.
 
 - https://chai2010.github.io/guetzli-js/example/
 
-The source code is [here](example).
+The source code is [here](https://github.com/chai2010/guetzli-js/tree/master/example).
 
 Build example form source:
 
@@ -94,7 +94,7 @@ fs.writeFileSync(args[1], jpegData)
 ## Example for Borwser
 
 ```js
-const guetzli = require('guetzli-js/browser')
+const guetzli = require('guetzli-js/dist/lib/browser')
 
 let canvas = document.getElementById('myCanvas')
 let ctx = canvas.getContext('2d')
@@ -167,7 +167,7 @@ let jpegData = guetzli.encodeImage({
 ### `encodeGray(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
 ```js
-const guetzli = require('guetzli-js/browser')
+const guetzli = require('guetzli-js/dist/lib/browser')
 
 let canvas = document.getElementById('myCanvas')
 let ctx = canvas.getContext('2d')
@@ -196,7 +196,7 @@ let jpegData = guetzli.encodeGray(
 ### `encodeRGB(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
 ```js
-const guetzli = require('guetzli-js/browser')
+const guetzli = require('guetzli-js/dist/lib/browser')
 
 let canvas = document.getElementById('myCanvas')
 let ctx = canvas.getContext('2d')
@@ -224,7 +224,7 @@ let jpegData = guetzli.encodeRGB(
 
 
 ```js
-const guetzli = require('guetzli-js/browser')
+const guetzli = require('guetzli-js/dist/lib/browser')
 
 let canvas = document.getElementById('myCanvas')
 let ctx = canvas.getContext('2d')
