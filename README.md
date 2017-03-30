@@ -4,6 +4,29 @@
 
 [Guetzli](https://github.com/google/guetzli) for NodeJS/Browser
 
+## Online Demo
+
+This demo show guetzli-js in browser, encode a canvas and save as a jpeg file.
+
+- https://chai2010.github.io/guetzli-js/example/
+
+The source code is [here](example).
+
+Build example form source:
+
+```
+gulp example
+```
+
+Start a web server:
+
+```
+npm install http-server -g
+http-server dist -a 127.0.0.1 -p 8080 -c-1
+```
+
+Open the page: http://127.0.0.1:8080/example/
+
 
 ## Install
 
