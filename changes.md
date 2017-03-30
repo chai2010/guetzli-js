@@ -6,6 +6,10 @@
 TODO
 -->
 
+## 1.0.8
+
+- try fix bin/guetzli-cli on darwin
+
 ## 1.0.7
 
 - try fix bin/guetzli-cli

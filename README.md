@@ -96,7 +96,7 @@ $ cnpm install -g guetzli-js
 ### Build `lib/cxx-emscripten/guetzli.out.js` with Emscripten
 
 - Install Emscripten
-- make
+- `make`
 
 
 ## Command: `guetzli-cli`
