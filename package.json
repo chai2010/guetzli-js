@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "guetzli-js",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "Guetzli perceptual JPEG encoder",
   "author": "ChaiShushan <chaishushan@gmail.com> (https://github.com/chai2010)",
   "keywords": [
@@ -14,13 +14,13 @@
     "type": "git",
     "url": "git://github.com/chai2010/guetzli-js.git"
   },
-  "main": "dist/lib/main.js",
+  "main": "./dist/lib/main.js",
   "bin": {
-    "guetzli-cli": "dist/lib/guetzli-cli.js"
+    "guetzli-cli": "./dist/lib/guetzli-cli.js"
   },
   "scripts": {
     "preinstall": "",
-    "postinstall": "gulp",
+    "postinstall": "node tools/copy_file.js build/Release/guetzli.node dist/build/Release/guetzli.node",
     "test": "nodeunit dist/lib/test.js"
   },
   "dependencies": {},
