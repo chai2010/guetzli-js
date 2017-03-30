@@ -21,9 +21,13 @@ const child_process = require('child_process')
 // gulp dist
 // gulp copy-cxx-emscripten
 // gulp example
+//
+// gulp all
 // ----------------------------------------------------------------------------
 
 gulp.task('default', ['dist'])
+
+gulp.task('all', ['dist', 'copy-cxx-emscripten', 'example'])
 
 gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build'])
 
