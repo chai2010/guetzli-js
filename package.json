@@ -1,13 +1,14 @@
 {
   "private": false,
   "name": "guetzli-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Guetzli perceptual JPEG encoder",
   "author": "ChaiShushan <chaishushan@gmail.com> (https://github.com/chai2010)",
   "keywords": [
     "guetzli",
     "jpeg",
-    "jpeg-encoder"
+    "jpeg-encoder",
+    "jpeg-encoder-in-browser"
   ],
   "repository": {
     "type": "git",
