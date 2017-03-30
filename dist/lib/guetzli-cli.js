@@ -1,12 +1,12 @@
 // Copyright 2017 <chaishushan{AT}gmail.com>. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+"use strict";
+exports.__esModule = true;
 var fs = require('fs');
 var guetzli = require('./main');
-if (require.main === module) {
-    main(process.argv.splice(2));
-}
-function main(args) {
+function main() {
+    var args = process.argv.splice(2);
     if (args.length == 1 && args[0] == '-v') {
         console.log('guetzli-' + guetzli.version);
         process.exit(0);
@@ -16,6 +16,7 @@ function main(args) {
         process.exit(0);
     }
     if (args.length != 2) {
+        console.log('Usage: guetzli input_filename output_filename');
         process.exit(0);
     }
     // load png
@@ -29,3 +30,4 @@ function main(args) {
     // OK
     console.log('Done');
 }
+exports.main = main;

@@ -6,6 +6,10 @@
 TODO
 -->
 
+## 1.0.7
+
+- try fix bin/guetzli-cli
+
 ## 1.0.3~1.0.6
 
 - try fix npm install

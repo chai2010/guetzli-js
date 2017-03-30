@@ -5,11 +5,9 @@
 const fs = require('fs')
 const guetzli = require('./main')
 
-if(require.main === module) {
-	main(process.argv.splice(2))
-}
+export function main() {
+	let args = process.argv.splice(2)
 
-function main(args: string[]) {
 	if(args.length == 1 && args[0] == '-v') {
 		console.log('guetzli-' + guetzli.version)
 		process.exit(0)
@@ -20,6 +18,7 @@ function main(args: string[]) {
 	}
 
 	if(args.length != 2) {
+		console.log('Usage: guetzli input_filename output_filename')
 		process.exit(0)
 	}
 
