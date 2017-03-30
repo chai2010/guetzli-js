@@ -6,6 +6,8 @@
 
 ## Online Demo
 
+**Browser suggest: Chrome, Firefox, Edge. Chrome is the best choice!**
+
 This demo show guetzli-js in browser, encode a canvas and save as a jpeg file.
 
 - https://chai2010.github.io/guetzli-js/example/
