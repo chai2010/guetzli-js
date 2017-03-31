@@ -2,15 +2,6 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-env:
-  - CXX=g++-4.8
-addons:
-apt:
-sources:
-  - ubuntu-toolchain-r-test
-packages:
-  - g++-4.8
-
 language: node_js
 
 node_js:
@@ -23,3 +14,10 @@ script:
 # Run tests
   - npm test
 
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
