@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-let pkg = require('./main')
+import pkg = require('./main')
 
 exports.testVersion = function(t: any) {
 	t.ok(pkg.version == '1.0.1')

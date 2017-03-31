@@ -1,1 +1,0 @@
-declare let pkg: any;

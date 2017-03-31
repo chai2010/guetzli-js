@@ -4,7 +4,8 @@
 		"lib/main.ts",
 		"lib/browser.ts",
 		"lib/utils.ts",
-		"lib/test.ts"
+		"lib/test.ts",
+		"lib/bench.ts"
 	],
 	"compilerOptions": {
 		"outDir": "./dist/lib",
