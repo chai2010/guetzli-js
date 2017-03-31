@@ -7,13 +7,8 @@ language: node_js
 node_js:
   - "7"
 
-script:
-# Output useful info for debugging
-  - node --version
-  - npm --version
-# Run tests
-  - npm test
-
+env:
+  - CXX=g++-4.8
 addons:
   apt:
     sources:
@@ -21,3 +16,10 @@ addons:
     packages:
     - gcc-4.8
     - g++-4.8
+
+script:
+# Output useful info for debugging
+  - node --version
+  - npm --version
+# Run tests
+  - npm test
