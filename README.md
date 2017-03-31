@@ -1,5 +1,6 @@
 # guetzli-js
 
+[![Build Status](https://travis-ci.org/chai2010/guetzli-js.svg)](https://travis-ci.org/chai2010/guetzli-js)
 ![License](https://img.shields.io/npm/l/guetzli-js.svg)
 [![NPM Version](https://img.shields.io/npm/v/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)
 [![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)  
