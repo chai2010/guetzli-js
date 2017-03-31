@@ -1,9 +1,9 @@
 # guetzli-js
 
 [![Build Status](https://travis-ci.org/chai2010/guetzli-js.svg)](https://travis-ci.org/chai2010/guetzli-js)
-![License](https://img.shields.io/npm/l/guetzli-js.svg)
+[![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)
 [![NPM Version](https://img.shields.io/npm/v/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)
-[![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)  
+![License](https://img.shields.io/npm/l/guetzli-js.svg)
 
 [![NPM](https://nodei.co/npm/guetzli-js.png?downloads=true&downloadRank=true&stars=true)](https://npmjs.org/guetzli-js)  
 [![NPM](https://nodei.co/npm-dl/guetzli-js.png?height=3&months=9)](https://npmjs.org/guetzli-js)  
