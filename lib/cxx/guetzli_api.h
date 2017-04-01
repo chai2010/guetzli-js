@@ -74,13 +74,11 @@ bool DecodePng24(
 );
 
 bool EncodePng32(
-	std::string* dst, const char* data, int size,
-	int width, int height, int width_step /*=0*/
+	std::string* dst, const char* data, int width, int height, int stride /*=0*/
 );
 
 bool EncodePng24(
-	std::string* dst, const char* data, int size,
-	int width, int height, int width_step /*=0*/
+	std::string* dst, const char* data, int width, int height, int stride /*=0*/
 );
 
 bool DecodeJpegGray(std::string* dst, const char* data, int size, int* width, int* height);

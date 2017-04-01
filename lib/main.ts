@@ -13,6 +13,10 @@ const ccapi = function() {
 const assert = require('assert')
 const utils = require('./utils')
 
+// ----------------------------------------------------------------------------
+// guetzli api
+// ----------------------------------------------------------------------------
+
 export const version: string = ccapi.getVersion()
 
 export const minQuality: number = 84
@@ -69,11 +73,12 @@ export function encodeRGBA(pix:Uint8Array, width:number, height:number, stride:n
 	})
 }
 
-export function decodePng24(data:Uint8Array): Image {
-	assert(utils.isBuffer(data))
-	assert(data.length > 0)
+// ----------------------------------------------------------------------------
+// PNG helper (NodeJS Only)
+// ----------------------------------------------------------------------------
 
-	var m = ccapi.decodePng24(data, 3)
+export function decodePng24(data:Uint8Array): Image {
+	let m = ccapi.decodePng(data, 3)
 
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
@@ -89,10 +94,7 @@ export function decodePng24(data:Uint8Array): Image {
 	}
 }
 export function decodePng32(data:Uint8Array): Image {
-	assert(utils.isBuffer(data))
-	assert(data.length > 0)
-
-	var m = ccapi.decodePng(data, 4)
+	let m = ccapi.decodePng(data, 4)
 
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
@@ -108,6 +110,23 @@ export function decodePng32(data:Uint8Array): Image {
 	}
 }
 
+export function encodePng24(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array {
+	return ccapi.encodePng(pix, width, height, 3, stride)
+}
+export function encodePng32(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array {
+	return ccapi.encodePng(pix, width, height, 4, stride)
+}
+
+// ----------------------------------------------------------------------------
+// JPEG helper (NodeJS Only)
+// ----------------------------------------------------------------------------
+
+// TODO
+
+// ----------------------------------------------------------------------------
+// main module
+// ----------------------------------------------------------------------------
+
 if(require.main === module) {
 	main(process.argv.splice(2))
 }
@@ -118,4 +137,8 @@ function main(args: string[]) {
 		process.exit(0)
 	}
 }
+
+// ----------------------------------------------------------------------------
+// END
+// ----------------------------------------------------------------------------
 

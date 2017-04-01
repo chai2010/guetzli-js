@@ -210,28 +210,27 @@ bool DecodePng24(
 }
 
 bool EncodePng32(
-	std::string* dst, const char* data, int size,
-	int width, int height, int width_step /*=0*/
+	std::string* dst, const char* data, int width, int height, int stride /*=0*/
 ) {
-	if(dst == NULL || data == NULL || size <= 0) {
+	if(dst == NULL || data == NULL) {
 		return false;
 	}
 	if(width <= 0 || height <= 0) {
 		return false;
 	}
 
-	if(width_step < width*4) {
-		width_step = width*4;
+	if(stride < width*4) {
+		stride = width*4;
 	}
 
 	std::string tmp;
 	auto pSrcData = data;
 
-	if(width_step > width*4) {
+	if(stride > width*4) {
 		tmp.resize(width*height*4);
 		for(int i = 0; i < height; ++i) {
 			auto ppTmp = (char*)tmp.data() + i*width*4;
-			auto ppSrc = (char*)data + i*width_step;
+			auto ppSrc = (char*)data + i*stride;
 			memcpy(ppTmp, ppSrc, width*4);
 		}
 		pSrcData = tmp.data();
@@ -250,28 +249,27 @@ bool EncodePng32(
 }
 
 bool EncodePng24(
-	std::string* dst, const char* data, int size,
-	int width, int height, int width_step /*=0*/
+	std::string* dst, const char* data, int width, int height, int stride /*=0*/
 ) {
-	if(dst == NULL || data == NULL || size <= 0) {
+	if(dst == NULL || data == NULL) {
 		return false;
 	}
 	if(width <= 0 || height <= 0) {
 		return false;
 	}
 
-	if(width_step < width*3) {
-		width_step = width*3;
+	if(stride < width*3) {
+		stride = width*3;
 	}
 
 	std::string tmp;
 	auto pSrcData = data;
 
-	if(width_step > width*3) {
+	if(stride > width*3) {
 		tmp.resize(width*height*3);
 		for(int i = 0; i < height; ++i) {
 			auto ppTmp = (char*)tmp.data() + i*width*3;
-			auto ppSrc = (char*)data + i*width_step;
+			auto ppSrc = (char*)data + i*stride;
 			memcpy(ppTmp, ppSrc, width*3);
 		}
 		pSrcData = tmp.data();

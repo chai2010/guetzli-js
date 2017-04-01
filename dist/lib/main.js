@@ -13,6 +13,9 @@ var ccapi = function () {
 }();
 var assert = require('assert');
 var utils = require('./utils');
+// ----------------------------------------------------------------------------
+// guetzli api
+// ----------------------------------------------------------------------------
 exports.version = ccapi.getVersion();
 exports.minQuality = 84;
 exports.maxQuality = 110;
@@ -61,10 +64,11 @@ function encodeRGBA(pix, width, height, stride, quality) {
     });
 }
 exports.encodeRGBA = encodeRGBA;
+// ----------------------------------------------------------------------------
+// PNG helper (NodeJS Only)
+// ----------------------------------------------------------------------------
 function decodePng24(data) {
-    assert(utils.isBuffer(data));
-    assert(data.length > 0);
-    var m = ccapi.decodePng24(data, 3);
+    var m = ccapi.decodePng(data, 3);
     assert(utils.isBuffer(m.pix));
     assert(m.width > 0 && m.height > 0);
     assert(m.channels > 0 && m.depth > 0);
@@ -79,8 +83,6 @@ function decodePng24(data) {
 }
 exports.decodePng24 = decodePng24;
 function decodePng32(data) {
-    assert(utils.isBuffer(data));
-    assert(data.length > 0);
     var m = ccapi.decodePng(data, 4);
     assert(utils.isBuffer(m.pix));
     assert(m.width > 0 && m.height > 0);
@@ -95,6 +97,21 @@ function decodePng32(data) {
     };
 }
 exports.decodePng32 = decodePng32;
+function encodePng24(pix, width, height, stride) {
+    return ccapi.encodePng(pix, width, height, 3, stride);
+}
+exports.encodePng24 = encodePng24;
+function encodePng32(pix, width, height, stride) {
+    return ccapi.encodePng(pix, width, height, 4, stride);
+}
+exports.encodePng32 = encodePng32;
+// ----------------------------------------------------------------------------
+// JPEG helper (NodeJS Only)
+// ----------------------------------------------------------------------------
+// TODO
+// ----------------------------------------------------------------------------
+// main module
+// ----------------------------------------------------------------------------
 if (require.main === module) {
     main(process.argv.splice(2));
 }
@@ -104,3 +121,6 @@ function main(args) {
         process.exit(0);
     }
 }
+// ----------------------------------------------------------------------------
+// END
+// ----------------------------------------------------------------------------

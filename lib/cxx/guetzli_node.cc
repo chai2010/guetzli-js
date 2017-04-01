@@ -313,6 +313,96 @@ static void decodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	return;
 }
 
+// function(pix, width, height, channels, stride) -> Buffer
+static void encodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
+	auto isolate = args.GetIsolate();
+
+	if(args.Length() != 5) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride) -> Buffer\n"
+			"Wrong number of arguments!\n"
+		);
+		return;
+	}
+
+	if(!args[0]->IsObject() || !node::Buffer::HasInstance(args[0]->ToObject())) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride) -> Buffer\n"
+			"args[0] must be buffer type!\n"
+		);
+		return;
+	}
+
+	for(int i = 1; i < 5; i++) {
+		if(!args[i]->IsNumber()) {
+			v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride) -> Buffer\n"
+				"args[%d] must be number type!\n",
+				i
+			);
+			return;
+		}
+	}
+
+	auto pix = (const uint8_t*)(node::Buffer::Data(args[0]->ToObject()));
+	auto width = int(args[1]->NumberValue());
+	auto height = int(args[2]->NumberValue());
+	auto channels = int(args[3]->NumberValue());
+	auto stride = int(args[4]->NumberValue());
+
+	if(pix == NULL) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride) -> Buffer\n"
+			"invalid pix: NULL!\n",
+			channels
+		);
+		return;
+	}
+	if(width <= 0 || height <= 0) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride) -> Buffer\n"
+			"invalid image size: %dx%d!\n",
+			width, height
+		);
+		return;
+	}
+	if(channels != 3 && channels != 4) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride) -> Buffer\n"
+			"invalid channels: %d, expect 1/3/4!\n",
+			channels
+		);
+		return;
+	}
+	if(stride != 0 && stride < width*channels) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride) -> Buffer\n"
+			"invalid stride: %d, expect 0 or width*channels!\n",
+			stride
+		);
+		return;
+	}
+
+	bool rv = false;
+	std::string output;
+	switch(channels) {
+	case 3:
+		rv = EncodePng24(&output, (const char*)pix, width, height, stride);
+		break;
+	case 4:
+		rv = EncodePng32(&output, (const char*)pix, width, height, stride);
+		break;
+	}
+	if(!rv) {
+		v8ThrowException(isolate, "c++: encodePng failed!");
+		return;
+	}
+
+	auto result = node::Buffer::Copy(isolate, output.data(), output.size());
+	args.GetReturnValue().Set(result.ToLocalChecked());
+	return;
+}
+
 // ----------------------------------------------------------------------------
 // NodeJS Module
 // ----------------------------------------------------------------------------
@@ -323,6 +413,7 @@ static void initModule(v8::Local<v8::Object> module) {
 	NODE_SET_METHOD(module, "encodeImage", encodeImage);
 
 	NODE_SET_METHOD(module, "decodePng", decodePng);
+	NODE_SET_METHOD(module, "encodePng", encodePng);
 }
 
 NODE_MODULE(guetzli, initModule);

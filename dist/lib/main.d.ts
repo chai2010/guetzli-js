@@ -16,3 +16,5 @@ export declare function encodeRGB(pix: Uint8Array, width: number, height: number
 export declare function encodeRGBA(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array;
 export declare function decodePng24(data: Uint8Array): Image;
 export declare function decodePng32(data: Uint8Array): Image;
+export declare function encodePng24(pix: Uint8Array, width: number, height: number, stride: number): Uint8Array;
+export declare function encodePng32(pix: Uint8Array, width: number, height: number, stride: number): Uint8Array;
