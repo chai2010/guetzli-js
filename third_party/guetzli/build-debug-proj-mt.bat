@@ -5,24 +5,10 @@
 :: ----------------------------------------------------------------------------
 :: Setup MSVC
 
-:: VS2010
-if not "x%VS100COMNTOOLS%" == "x" (
-	echo Setup VS2010 Win64 ...
-	call "%VS100COMNTOOLS%\..\..\VC\vcvarsall.bat" x86_amd64
-	goto build
-)
-
-:: VS2012
-if not "x%VS110COMNTOOLS%" == "x" (
-	echo Setup VS2012 Win64 ...
-	call "%VS110COMNTOOLS%\..\..\VC\vcvarsall.bat" x86_amd64
-	goto build
-)
-
-:: VS2013
-if not "x%VS120COMNTOOLS%" == "x" (
-	echo Setup VS2013 Win64 ...
-	call "%VS120COMNTOOLS%\..\..\VC\vcvarsall.bat" x86_amd64
+:: VS2015
+if not "x%VS140COMNTOOLS%" == "x" (
+	echo Setup VS2015 Win64 ...
+	call "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" x86_amd64
 	goto build
 )
 
@@ -35,16 +21,15 @@ mkdir zz_build_debug_proj_mt_tmp
 cd    zz_build_debug_proj_mt_tmp
 
 cmake ..^
+  -G "Visual Studio 14 2015 Win64"^
   -DCMAKE_BUILD_TYPE=debug^
   -DCMAKE_INSTALL_PREFIX=..^
   ^
-  -DCMAKE_C_FLAGS_DEBUG="/MTd /Zi /Od /Ob0 /RTC1"^
-  -DCMAKE_CXX_FLAGS_DEBUG="/MTd /Zi /Od /Ob0 /RTC1"^
-  ^
-  -DCMAKE_C_FLAGS_RELEASE="/MT /O2 /Ob2 /DNDEBUG"^
-  -DCMAKE_CXX_FLAGS_RELEASE="/MT /O2 /Ob2 /DNDEBUG"^
-  ^
-  -DCMAKE_EXE_LINKER_FLAGS="/MANIFEST:NO"
+  -DCMAKE_MODULE_LINKER_FLAGS="/machine:x64"^
+  -DCMAKE_SHARED_LINKER_FLAGS="/machine:x64"^
+  -DCMAKE_STATIC_LINKER_FLAGS="/machine:x64"^
+  -DCMAKE_EXE_LINKER_FLAGS="/MACHINE:x64"
+
 
 :: -----------------------------------------------------------------------------
 cd ..
