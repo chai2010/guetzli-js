@@ -78,6 +78,27 @@ bool EncodePng24(
 	std::string* dst, const char* data, int size,
 	int width, int height, int width_step /*=0*/
 );
+
+bool DecodeJpegGray(std::string* dst, const char* data, int size, int* width, int* height);
+bool DecodeJpegRGB(std::string* dst, const char* data, int size, int* width, int* height);
+bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, int* height);
+
+bool EncodeJpegGray(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step, /* =0 */
+	int quality /* =90 */
+);
+bool EncodeJpegRGB(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step, /* =0 */
+	int quality /* =90 */
+);
+bool EncodeJpegRGBA(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step, /* =0 */
+	int quality /* =90 */
+);
+
 #endif // GUETZLI_BUILD_FOR_BROWSER
 
 // ----------------------------------------------------------------------------

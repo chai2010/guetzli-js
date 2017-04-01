@@ -121,6 +121,8 @@ add_library(guetzli_node SHARED
 	./lib/cxx/guetzli_node.cc
 	./lib/cxx/guetzli_api.cc
 
+	./third_party/jpeg/jpgd.cpp
+	./third_party/jpeg/jpge.cpp
 	./third_party/png/lodepng.cpp
 
 	${GUETZLI_SRC}

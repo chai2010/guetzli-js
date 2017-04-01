@@ -16,6 +16,8 @@
 #include <guetzli/stats.h>
 
 #if !defined(GUETZLI_BUILD_FOR_BROWSER)
+#	include <jpge.h>
+#	include <jpgd.h>
 #	include <lodepng.h>
 #endif
 
@@ -285,6 +287,146 @@ bool EncodePng24(
 	free(png);
 
 	return true;
+}
+
+// --------------------------------------------------------
+
+static bool DecodeJpeg(std::string* dst, const char* data, int size, int* width, int* height, int expect_channels) {
+	if(dst == NULL || data == NULL || size <= 0) {
+		return false;
+	}
+	if(width == NULL || height == NULL) {
+		return false;
+	}
+	if(expect_channels != 1 && expect_channels != 3 && expect_channels != 4) {
+		return false;
+	}
+
+	int channels;
+	auto p = jpgd::decompress_jpeg_image_from_memory(
+		(const unsigned char *)data, size,
+		width, height, &channels,
+		expect_channels
+	);
+	if(p == NULL) {
+		return false;
+	}
+	if(*width <= 0 || *height <= 0 || channels != expect_channels) {
+		free(p);
+		return false;
+	}
+
+	dst->resize((*width)*(*height)*expect_channels);
+	dst->assign((const char*)p, dst->size());
+	free(p);
+
+	return true;
+}
+
+static bool EncodeJpeg(
+	std::string* dst, const char* data, int size,
+	int width, int height, int channels, int width_step /* =0 */,
+	int quality /* =90 */
+) {
+	if(dst == NULL || data == NULL || size <= 0) {
+		return false;
+	}
+	if(width <= 0 || height <= 0) {
+		return false;
+	}
+	if(channels != 1 && channels != 3) {
+		return false;
+	}
+	if(quality <= 0 || quality > 100) {
+		return false;
+	}
+
+	if(width_step < width*channels) {
+		width_step = width*channels;
+	}
+
+	std::string tmp;
+	auto pSrcData = data;
+
+	jpge::params comp_params;
+	if(channels == 3) {
+		comp_params.m_subsampling = jpge::H2V2;   // RGB
+		comp_params.m_quality = quality;
+
+		if(width_step > width*channels) {
+			tmp.resize(width*height*3);
+			for(int i = 0; i < height; ++i) {
+				auto ppTmp = (char*)tmp.data() + i*width*channels;
+				auto ppSrc = (char*)data + i*width_step;
+				memcpy(ppTmp, ppSrc, width*channels);
+			}
+			pSrcData = tmp.data();
+		}
+	} else {
+		comp_params.m_subsampling = jpge::Y_ONLY; // Gray
+		comp_params.m_quality = quality;
+
+		// if Gray: convert to RGB;
+		tmp.resize(width*height*3);
+		for(int i = 0; i < height; ++i) {
+			auto ppTmp = (char*)tmp.data() + i*width*3;
+			auto ppSrc = (char*)data + i*width_step;
+			for(int j = 0; j < width; ++j) {
+				ppTmp[i*3+0] = ppSrc[i];
+				ppTmp[i*3+1] = ppSrc[i];
+				ppTmp[i*3+2] = ppSrc[i];
+			}
+		}
+		channels = 3;
+		pSrcData = tmp.data();
+	}
+
+	int buf_size = ((width*height*3)>1024)? (width*height*3): 1024;
+	dst->resize(buf_size);
+	bool rv = compress_image_to_jpeg_file_in_memory(
+		(void*)dst->data(), buf_size, width, height, channels,
+		(const jpge::uint8*)pSrcData,
+		comp_params
+	);
+	if(!rv) {
+		dst->clear();
+		return false;
+	}
+
+	dst->resize(buf_size);
+	return true;
+}
+
+bool DecodeJpegGray(std::string* dst, const char* data, int size, int* width, int* height) {
+	return DecodeJpeg(dst, data, size, width, height, 1);
+}
+bool DecodeJpegRGB(std::string* dst, const char* data, int size, int* width, int* height) {
+	return DecodeJpeg(dst, data, size, width, height, 3);
+}
+bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, int* height) {
+	return DecodeJpeg(dst, data, size, width, height, 4);
+}
+
+bool EncodeJpegGray(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step, /* =0 */
+	int quality /* =90 */
+) {
+	return EncodeJpeg(dst, data, size, width, height, 1, width_step, quality);
+}
+bool EncodeJpegRGB(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step, /* =0 */
+	int quality /* =90 */
+) {
+	return EncodeJpeg(dst, data, size, width, height, 3, width_step, quality);
+}
+bool EncodeJpegRGBA(
+	std::string* dst, const char* data, int size,
+	int width, int height, int width_step, /* =0 */
+	int quality /* =90 */
+) {
+	return EncodeJpeg(dst, data, size, width, height, 4, width_step, quality);
 }
 
 #endif // GUETZLI_BUILD_FOR_BROWSER
