@@ -107,22 +107,24 @@ Borwser(A), `<script src='./guetzli.out.js'></script>` style:
 
 <script src='./guetzli.out.js'></script>
 <script>
-$(document).ready(function() {
-	var canvas = document.getElementById('myCanvas')
-	var ctx = canvas.getContext('2d')
+const guetzli = Module
 
-	var m = new Image()
+$(document).ready(function() {
+	let canvas = document.getElementById('myCanvas')
+	let ctx = canvas.getContext('2d')
+
+	let m = new Image()
 	m.src = './bees.png'
 	m.onload = function() {
 		ctx.drawImage(m, 0, 0, canvas.width, canvas.height)
 	}
 })
 $("#saveAsBtnRun").click(function() {
-	var canvas = document.getElementById('myCanvas')
-	var ctx = canvas.getContext('2d')
-	var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
+	let canvas = document.getElementById('myCanvas')
+	let ctx = canvas.getContext('2d')
+	let imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
-	var jpegData = Module.encodeImage({
+	let jpegData = guetzli.encodeImage({
 		width:    canvas.width,
 		height:   canvas.height,
 		channels: 4,
@@ -138,14 +140,14 @@ $("#saveAsBtnRun").click(function() {
 Borwser(B), `require('guetzli-js/dist/lib/browser')` style:
 
 ```js
-var guetzli = require('guetzli-js/dist/lib/browser')
+const guetzli = require('guetzli-js/dist/lib/browser')
 
-var canvas = document.getElementById('myCanvas')
-var ctx = canvas.getContext('2d')
-var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
+let canvas = document.getElementById('myCanvas')
+let ctx = canvas.getContext('2d')
+let imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
 // all image
-var jpegData = guetzli.encodeImage({
+let jpegData = guetzli.encodeImage({
 	width:    canvas.width,
 	height:   canvas.height,
 	channels: 4,
@@ -155,7 +157,7 @@ var jpegData = guetzli.encodeImage({
 })
 
 // sub image
-var jpegData2 = guetzli.encodeImage({
+let jpegData2 = guetzli.encodeImage({
 	width:    canvas.width/2,
 	height:   canvas.height/2,
 	channels: 4,
