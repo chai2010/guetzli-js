@@ -52,6 +52,10 @@ CAPI_EXPORT(guetzli_string_t*) guetzli_encode_RGBA(const uint8_t* pix, int w, in
 
 // ----------------------------------------------------------------------------
 
+static const int kGuetzliMinQuality = 84;
+static const int kGuetzliMaxQuality = 110;
+static const int kGuetzliDefaultQuality = 95;
+
 bool guetzliEncodeGray(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);
 bool guetzliEncodeRGB(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);
 bool guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quality, std::string* output);

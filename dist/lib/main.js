@@ -19,36 +19,46 @@ exports.maxQuality = 110;
 exports.defaultQuality = 95;
 function encodeImage(m, quality) {
     if (quality === void 0) { quality = exports.defaultQuality; }
-    switch (m.channels) {
-        case 1: return encodeGray(m.pix, m.width, m.height, m.stride, quality);
-        case 3: return encodeRGB(m.pix, m.width, m.height, m.stride, quality);
-        case 4: return encodeRGBA(m.pix, m.width, m.height, m.stride, quality);
+    if (m.depth != 8) {
+        throw "guetzli.encodeImage: unsupport depth: " + m.depth;
     }
-    throw "guetzli.encodeImage: unknown channels:" + m.channels;
+    if (m.channels != 1 && m.channels != 3 && m.channels != 4) {
+        throw "guetzli.encodeImage: unsupport channels:" + m.channels;
+    }
+    return ccapi.encodeImage(m.pix, m.width, m.height, m.channels, m.stride, quality);
 }
 exports.encodeImage = encodeImage;
 function encodeGray(pix, width, height, stride, quality) {
-    assert(utils.isBuffer(pix));
-    assert((width | 0) > 0 && (height | 0) > 0);
-    assert((stride | 0) == 0 || (stride | 0) >= (width | 0) * 1);
-    assert((quality | 0) >= this.minQuality && (quality | 0) <= this.maxQuality);
-    return ccapi.encodeGray(pix, width, height, stride, quality);
+    return encodeImage({
+        width: width,
+        height: height,
+        channels: 1,
+        depth: 8,
+        stride: stride,
+        pix: pix
+    });
 }
 exports.encodeGray = encodeGray;
 function encodeRGB(pix, width, height, stride, quality) {
-    assert(utils.isBuffer(pix));
-    assert((width | 0) > 0 && (height | 0) > 0);
-    assert((stride | 0) == 0 || (stride | 0) >= (width | 0) * 3);
-    assert((quality | 0) >= this.minQuality && (quality | 0) <= this.maxQuality);
-    return ccapi.encodeRGB(pix, width, height, stride, quality);
+    return encodeImage({
+        width: width,
+        height: height,
+        channels: 3,
+        depth: 8,
+        stride: stride,
+        pix: pix
+    });
 }
 exports.encodeRGB = encodeRGB;
 function encodeRGBA(pix, width, height, stride, quality) {
-    assert(utils.isBuffer(pix));
-    assert((width | 0) > 0 && (height | 0) > 0);
-    assert((stride | 0) == 0 || (stride | 0) >= (width | 0) * 4);
-    assert((quality | 0) >= this.minQuality && (quality | 0) <= this.maxQuality);
-    return ccapi.encodeRGBA(pix, width, height, stride, quality);
+    return encodeImage({
+        width: width,
+        height: height,
+        channels: 4,
+        depth: 8,
+        stride: stride,
+        pix: pix
+    });
 }
 exports.encodeRGBA = encodeRGBA;
 function decodePng24(data) {
