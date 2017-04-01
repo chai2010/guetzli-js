@@ -6,6 +6,12 @@
 TODO
 -->
 
+## 1.?.?
+
+- support [travis-ci](https://travis-ci.org/chai2010/guetzli-js) build
+- node: add encodePng helper
+
+
 ## 1.0.8
 
 - try fix bin/guetzli-cli on darwin
