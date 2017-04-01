@@ -113,21 +113,21 @@ export function encodeImage(m: Image, quality:number = defaultQuality): Uint8Arr
 	throw "guetzli.encodeImage: unknown channels:" + m.channels
 }
 
-export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
+export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array {
 	let s = guetzli_encode_Gray(pix, w, h, stride, quality)
 	let q = cToUint8Array(guetzli_string_data(s), guetzli_string_size(s))
 	guetzli_string_delete(s)
 	return q
 }
 
-export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
+export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array {
 	let s = guetzli_encode_RGB(pix, w, h, stride, quality)
 	let q = cToUint8Array(guetzli_string_data(s), guetzli_string_size(s))
 	guetzli_string_delete(s)
 	return q
 }
 
-export function encodeRGBA(pix:Uint8Array, w:number, h:number, stride:number, quality:number) {
+export function encodeRGBA(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array {
 	let s = guetzli_encode_RGBA(pix, w, h, stride, quality)
 	let q = cToUint8Array(guetzli_string_data(s), guetzli_string_size(s))
 	guetzli_string_delete(s)

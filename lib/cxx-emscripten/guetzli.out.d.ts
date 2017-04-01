@@ -77,3 +77,16 @@ export let preloadedAudios: any;
 export function _malloc(size: number): number;
 export function _free(ptr: number): void;
 
+// guetzli api
+
+export const version: string;
+
+export const minQuality: number;
+export const maxQuality: number;
+export const defaultQuality: number;
+
+export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
+export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
+export function encodeRGBA(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
+export function encodeImage(pix:Uint8Array, w:number, h:number, channels:number, stride:number, quality:number): Uint8Array;
+
