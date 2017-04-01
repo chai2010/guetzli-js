@@ -1,3 +1,5 @@
+<p align="center"><img src="guetzli.png" alt="Guetzli" width="64"></p>
+
 # guetzli-js
 
 [![Build Status](https://travis-ci.org/chai2010/guetzli-js.svg)](https://travis-ci.org/chai2010/guetzli-js)
