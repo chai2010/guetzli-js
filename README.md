@@ -324,6 +324,15 @@ let pix_size = m.width*m.height*m.channels*m.depth/8
 assert(m.pix.length == pix_size)
 ```
 
+### `encodePng24(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array`
+
+TODO
+
+### `encodePng32(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array`
+
+TODO
+
+
 ## Other
 
 ### Build `guetzli.node` with CMake
