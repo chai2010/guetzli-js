@@ -85,8 +85,18 @@ export const minQuality: number;
 export const maxQuality: number;
 export const defaultQuality: number;
 
+export interface Image {
+	width:    number;
+	height:   number;
+	channels: number;
+	depth:    number;
+	stride:   number;
+	pix:      Uint8Array;
+}
+
+export function encodeImage(m: Image, quality:number): Uint8Array;
+
 export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
 export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
 export function encodeRGBA(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
-export function encodeImage(pix:Uint8Array, w:number, h:number, channels:number, stride:number, quality:number): Uint8Array;
 
