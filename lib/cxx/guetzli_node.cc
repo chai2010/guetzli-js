@@ -125,6 +125,7 @@ static void getVersion(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	);
 }
 
+// function(buffer, width, height, channels, stride, quality) -> Buffer
 static void encodeImage(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	auto isolate = args.GetIsolate();
 
@@ -162,6 +163,14 @@ static void encodeImage(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	auto stride = int(args[4]->NumberValue());
 	auto quality = float(args[5]->NumberValue());
 
+	if(pix == NULL) {
+		v8ThrowException(isolate,
+			"function(buffer, width, height, channels, stride, quality) -> Buffer\n"
+			"invalid pix: NULL!\n",
+			channels
+		);
+		return;
+	}
 	if(width <= 0 || height <= 0) {
 		v8ThrowException(isolate,
 			"function(buffer, width, height, channels, stride, quality) -> Buffer\n"
@@ -208,7 +217,7 @@ static void encodeImage(const v8::FunctionCallbackInfo<v8::Value>& args) {
 		break;
 	}
 	if(!rv) {
-		v8ThrowException(isolate, "encodeImage failed!");
+		v8ThrowException(isolate, "c++: encodeImage failed!");
 		return;
 	}
 
@@ -221,51 +230,60 @@ static void encodeImage(const v8::FunctionCallbackInfo<v8::Value>& args) {
 // PNG helper
 // ----------------------------------------------------------------------------
 
-// function DecodePng(data) -> {pix, width, height, channels, depth};
-static bool checkDecodePngArgsOrThrowException(
-	v8::Isolate* isolate,
-	const v8::FunctionCallbackInfo<v8::Value>& args
-) {
-	if(args.Length() != 1) {
-		isolate->ThrowException(v8::Exception::TypeError(
-			v8::String::NewFromUtf8(isolate,
-				"function(data) -> {pix, width, height, channels, depth}\n"
-				"Wrong number of arguments!\n"
-			)
-		));
-		return false;
+// function(data, expect_channels) -> {pix, width, height, channels, depth};
+static void decodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
+	auto isolate = args.GetIsolate();
+
+	if(args.Length() != 2) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"Wrong number of arguments!\n"
+		);
+		return;
 	}
 
 	if(!args[0]->IsObject() || !node::Buffer::HasInstance(args[0]->ToObject())) {
-		isolate->ThrowException(v8::Exception::TypeError(
-			v8::String::NewFromUtf8(isolate,
-				"function(data) -> {pix, width, height, channels, depth}\n"
-				"args0 must be buffer type!\n"
-			)
-		));
-		return false;
-	}
-
-	return true;
-}
-
-static void decodePng32(const v8::FunctionCallbackInfo<v8::Value>& args) {
-	auto isolate = args.GetIsolate();
-
-	if (!checkDecodePngArgsOrThrowException(isolate, args)) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"args[0] must be buffer type!\n"
+		);
 		return;
 	}
 
 	auto arg0 = args[0]->ToObject();
 	auto data = (const char*)(node::Buffer::Data(arg0));
 	auto size = int(node::Buffer::Length(arg0));
+	auto expect_channels = int(args[1]->NumberValue());
 
+	if(data == NULL) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"invalid data: NULL!\n"
+		);
+		return;
+	}
+	if(expect_channels != 3 && expect_channels != 4) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"invalid expect_channels: %d, expect 3/4!\n",
+			expect_channels
+		);
+		return;
+	}
+
+	bool rv = false;
 	int width, height;
 	std::string output;
-	if(!DecodePng32(&output, data, size, &width, &height)) {
-		isolate->ThrowException(v8::Exception::TypeError(
-			v8::String::NewFromUtf8(isolate, "DecodePng32 failed!")
-		));
+	switch(expect_channels) {
+	case 3:
+		rv = DecodePng24(&output, data, size, &width, &height);
+		break;
+	case 4:
+		rv = DecodePng32(&output, data, size, &width, &height);
+		break;
+	}
+	if(!rv) {
+		v8ThrowException(isolate, "c++: decodePng failed!");
 		return;
 	}
 
@@ -292,51 +310,7 @@ static void decodePng32(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	);
 
 	args.GetReturnValue().Set(result);
-}
-
-static void decodePng24(const v8::FunctionCallbackInfo<v8::Value>& args) {
-	auto isolate = args.GetIsolate();
-
-	if (!checkDecodePngArgsOrThrowException(isolate, args)) {
-		return;
-	}
-
-	auto arg0 = args[0]->ToObject();
-	auto data = (const char*)(node::Buffer::Data(arg0));
-	auto size = int(node::Buffer::Length(arg0));
-
-	int width, height;
-	std::string output;
-	if(!DecodePng24(&output, data, size, &width, &height)) {
-		isolate->ThrowException(v8::Exception::TypeError(
-			v8::String::NewFromUtf8(isolate, "DecodePng24 failed!")
-		));
-		return;
-	}
-
-	v8::Local<v8::Object> result = v8::Object::New(isolate);
-	result->Set(v8::Local<v8::Context>(),
-		v8::String::NewFromUtf8(isolate, "pix"),
-		node::Buffer::Copy(isolate, output.data(), output.size()).ToLocalChecked()
-	);
-	result->Set(v8::Local<v8::Context>(),
-		v8::String::NewFromUtf8(isolate, "width"),
-		v8::Number::New(isolate, width)
-	);
-	result->Set(v8::Local<v8::Context>(),
-		v8::String::NewFromUtf8(isolate, "height"),
-		v8::Number::New(isolate, height)
-	);
-	result->Set(v8::Local<v8::Context>(),
-		v8::String::NewFromUtf8(isolate, "channels"),
-		v8::Number::New(isolate, 3)
-	);
-	result->Set(v8::Local<v8::Context>(),
-		v8::String::NewFromUtf8(isolate, "depth"),
-		v8::Number::New(isolate, 8)
-	);
-
-	args.GetReturnValue().Set(result);
+	return;
 }
 
 // ----------------------------------------------------------------------------
@@ -348,8 +322,7 @@ static void initModule(v8::Local<v8::Object> module) {
 
 	NODE_SET_METHOD(module, "encodeImage", encodeImage);
 
-	NODE_SET_METHOD(module, "decodePng24", decodePng24);
-	NODE_SET_METHOD(module, "decodePng32", decodePng32);
+	NODE_SET_METHOD(module, "decodePng", decodePng);
 }
 
 NODE_MODULE(guetzli, initModule);

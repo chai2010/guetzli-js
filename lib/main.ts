@@ -73,7 +73,7 @@ export function decodePng24(data:Uint8Array): Image {
 	assert(utils.isBuffer(data))
 	assert(data.length > 0)
 
-	var m = ccapi.decodePng24(data)
+	var m = ccapi.decodePng24(data, 3)
 
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
@@ -92,7 +92,7 @@ export function decodePng32(data:Uint8Array): Image {
 	assert(utils.isBuffer(data))
 	assert(data.length > 0)
 
-	var m = ccapi.decodePng32(data)
+	var m = ccapi.decodePng(data, 4)
 
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
