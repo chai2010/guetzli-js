@@ -1,8 +1,9 @@
 # guetzli-js
 
-![License](https://img.shields.io/npm/l/guetzli-js.svg)
+[![Build Status](https://travis-ci.org/chai2010/guetzli-js.svg)](https://travis-ci.org/chai2010/guetzli-js)
+[![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)
 [![NPM Version](https://img.shields.io/npm/v/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)
-[![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)  
+![License](https://img.shields.io/npm/l/guetzli-js.svg)
 
 [![NPM](https://nodei.co/npm/guetzli-js.png?downloads=true&downloadRank=true&stars=true)](https://npmjs.org/guetzli-js)  
 [![NPM](https://nodei.co/npm-dl/guetzli-js.png?height=3&months=9)](https://npmjs.org/guetzli-js)  
@@ -12,35 +13,20 @@
 
 [Guetzli](https://github.com/google/guetzli) for NodeJS/Browser
 
-## Online Demo
-
-**Browser suggest: Chrome, Firefox, Edge. Chrome is the best choice!**
+## Demo
 
 This demo show guetzli-js in browser, encode a canvas and save as a jpeg file.
 
 - https://chai2010.github.io/guetzli-js/example/
+- https://github.com/chai2010/guetzli-js/tree/master/example
 
-The source code is [here](https://github.com/chai2010/guetzli-js/tree/master/example).
 
-Build example form source:
-
-```
-gulp example
-```
-
-Start a web server:
-
-```
-npm install http-server -g
-http-server dist -a 127.0.0.1 -p 8080 -c-1
-```
-
-Open the page: http://127.0.0.1:8080/example/
+**Browser suggest: Chrome, Firefox, Edge. Chrome is the best choice!**
 
 
 ## Install
 
-### Windows User
+### Windows
 
 ```
 $ npm install -g windows-build-tool
@@ -50,18 +36,7 @@ $ node-gyp install
 $ npm install -g guetzli-js
 ```
 
-In China:
-
-```
-$ npm  install -g cnpm --registry=https://registy.npm.taobao.org
-$ cnpm install -g windows-build-tool
-$ cnpm install -g node-gyp
-
-$ node-gyp install --dist-url https://npm.taobao.org/mirrors/node
-$ cnpm install -g guetzli-js
-```
-
-### macOS and Linux User
+### macOS and Linux
 
 ```
 $ npm install -g node-gyp
@@ -70,71 +45,38 @@ $ node-gyp install
 $ npm install -g guetzli-js
 ```
 
-In China:
+### NPM mirror for China
 
-```
-$ npm  install -g cnpm --registry=https://registy.npm.taobao.org
-$ cnpm install -g node-gyp
-
-$ node-gyp install --dist-url https://npm.taobao.org/mirrors/node
-$ cnpm install -g guetzli-js
-```
-
-### Build `guetzli.node` with CMake
-
-**Windows x64**
-
-- Install CMake 3.5+
-- Install VS2015
-- run `build-win64.bat` in command line
-
-**Windows x86**
-
-- Install CMake 3.5+
-- Install VS2015
-- run `build-win32.bat` in command line
-
-**Darwin or Linux**
-
-- Install CMake 3.5+
-- Install GCC
-- `mkdir build`
-- `cd build && cmake .. && make install`
-
-### Build `lib/cxx-emscripten/guetzli.out.js` with Emscripten
-
-- Install Emscripten
-- `make`
+- https://npm.taobao.org/
+- `npm install -g cnpm --registry=https://registry.npm.taobao.org`
+- `cnpm install -g windows-build-tool` (Windows)
+- `cnpm install -g node-gyp`
+- `cnpm install -g guetzli-js`
 
 
 ## Command: `guetzli-cli`
 
 ```
-$ guetzli-cli
-Usage: guetzli input_filename output_filename
+$ guetzli-cli bees.png bees.jpg
+Done
 
 $ guetzli-cli -h
 Usage: guetzli input_filename output_filename
-
-$ guetzli-cli bees.png bees.jpg
-Done
 
 $ guetzli-cli -v
 guetzli-1.0.1
 ```
 
+## Example
 
-## Example for NodeJS
+NodeJS:
 
 ```js
 const fs = require('fs')
 const guetzli = require('guetzli-js')
 
-// usage node a.js input.png output.jpg
-let args = process.argv.splice(2)
-
 // load png
-let data = fs.readFileSync(args[0])
+let data = fs.readFileSync('bees.png')
 
 // decode png image
 let m = guetzli.decodePng32(data)
@@ -143,9 +85,10 @@ let m = guetzli.decodePng32(data)
 let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality)
 
 // save jpg
-fs.writeFileSync(args[1], jpegData)
+fs.writeFileSync('bees.jpg', jpegData)
 ```
-## Example for Borwser
+
+Borwser:
 
 ```js
 const guetzli = require('guetzli-js/dist/lib/browser')
@@ -180,7 +123,7 @@ let jpegData2 = guetzli.encodeImage({
 ### Const
 
 ```ts
-export declare const version: string;
+export declare const version: string;        // 1.0.1, google/guetzli version
 export declare const minQuality: number;     // 84
 export declare const maxQuality: number;     // 110
 export declare const defaultQuality: number; // 95
@@ -230,6 +173,7 @@ let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
 let off = 0
 let gray = new Uint8Array(w*h)
 
+// GRBA => Gray
 for(let y = 0; y < canvas.height; y++) {
 	for(let x = 0; x < canvas.width; x++) {
 		let idx = y*canvas.width+x
@@ -241,6 +185,7 @@ for(let y = 0; y < canvas.height; y++) {
 	}
 }
 
+// encode as Gray
 let jpegData = guetzli.encodeGray(
 	gray, canvas.width, canvas.height, 0,
 	guetzli.defaultQuality
@@ -259,6 +204,7 @@ let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
 let off = 0
 let rgb = new Uint8Array(w*h*3)
 
+// GRBA => RGB
 for(let y = 0; y < canvas.height; y++) {
 	for(let x = 0; x < canvas.width; x++) {
 		let idx = y*canvas.width+x
@@ -268,6 +214,7 @@ for(let y = 0; y < canvas.height; y++) {
 	}
 }
 
+// encode as RGB
 let jpegData = guetzli.encodeRGB(
 	rgb, canvas.width, canvas.height, 0,
 	guetzli.defaultQuality
@@ -276,7 +223,6 @@ let jpegData = guetzli.encodeRGB(
 
 ### `encodeRGBA(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
 
-
 ```js
 const guetzli = require('guetzli-js/dist/lib/browser')
 
@@ -284,6 +230,7 @@ let canvas = document.getElementById('myCanvas')
 let ctx = canvas.getContext('2d')
 let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
 
+// encode as RGBA
 let jpegData = guetzli.encodeRGBA(
 	rgba, canvas.width, canvas.height, 0,
 	guetzli.defaultQuality
@@ -295,8 +242,8 @@ let jpegData = guetzli.encodeRGBA(
 ### `decodePng24(data: Uint8Array): Image`
 
 ```js
-const assert = require('assert')
 const fs = require('fs')
+const assert = require('assert')
 
 let data = fs.readFileSync('./testdata/bees.png')
 let m = guetzli.decodePng24(data)
@@ -313,8 +260,8 @@ assert(m.pix.length == pix_size)
 ### `decodePng32(data: Uint8Array): Image`
 
 ```js
-const assert = require('assert')
 const fs = require('fs')
+const assert = require('assert')
 
 let data = fs.readFileSync('./testdata/bees.png')
 let m = guetzli.decodePng32(data)
@@ -327,6 +274,35 @@ assert(m.depth == 8)    // 4*8 = 32 bit
 let pix_size = m.width*m.height*m.channels*m.depth/8
 assert(m.pix.length == pix_size)
 ```
+
+## Other
+
+### Build `guetzli.node` with CMake
+
+**Windows x64**
+
+- Install CMake 3.5+
+- Install VS2015
+- run `build-win64.bat` in command line
+
+**Windows x86**
+
+- Install CMake 3.5+
+- Install VS2015
+- run `build-win32.bat` in command line
+
+**Darwin or Linux**
+
+- Install CMake 3.5+
+- Install GCC
+- `mkdir build`
+- `cd build && cmake .. && make install`
+
+### Build `lib/cxx-emscripten/guetzli.out.js` with Emscripten
+
+- Install Emscripten
+- `make`
+
 
 ## License
 
