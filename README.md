@@ -90,17 +90,62 @@ let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQu
 fs.writeFileSync('bees.jpg', jpegData)
 ```
 
-Borwser:
+Borwser(A), `<script src='./guetzli.out.js'></script>` style:
+
+```html
+<!DOCTYPE html>
+
+<head>
+<title>Hello</title>
+
+<script src="./jquery.min.js"></script>
+</head>
+
+<body>
+<canvas id="myCanvas" width="120" height="80">show image</canvas>
+<div><button id="saveAsBtnRun">Save As...</button></div>
+
+<script src='./guetzli.out.js'></script>
+<script>
+$(document).ready(function() {
+	var canvas = document.getElementById('myCanvas')
+	var ctx = canvas.getContext('2d')
+
+	var m = new Image()
+	m.src = './bees.png'
+	m.onload = function() {
+		ctx.drawImage(m, 0, 0, canvas.width, canvas.height)
+	}
+})
+$("#saveAsBtnRun").click(function() {
+	var canvas = document.getElementById('myCanvas')
+	var ctx = canvas.getContext('2d')
+	var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
+
+	var jpegData = Module.encodeImage({
+		width:    canvas.width,
+		height:   canvas.height,
+		channels: 4,
+		depth:    8,
+		stride:   0,
+		pix:      imgd.data,
+	})
+})
+</script>
+</body>
+```
+
+Borwser(B), `require('guetzli-js/dist/lib/browser')` style:
 
 ```js
-const guetzli = require('guetzli-js/dist/lib/browser')
+var guetzli = require('guetzli-js/dist/lib/browser')
 
-let canvas = document.getElementById('myCanvas')
-let ctx = canvas.getContext('2d')
-let imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
+var canvas = document.getElementById('myCanvas')
+var ctx = canvas.getContext('2d')
+var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
 // all image
-let jpegData = guetzli.encodeImage({
+var jpegData = guetzli.encodeImage({
 	width:    canvas.width,
 	height:   canvas.height,
 	channels: 4,
@@ -110,7 +155,7 @@ let jpegData = guetzli.encodeImage({
 })
 
 // sub image
-let jpegData2 = guetzli.encodeImage({
+var jpegData2 = guetzli.encodeImage({
 	width:    canvas.width/2,
 	height:   canvas.height/2,
 	channels: 4,
