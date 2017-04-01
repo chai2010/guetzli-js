@@ -94,7 +94,7 @@ export interface Image {
 	pix:      Uint8Array;
 }
 
-export function encodeImage(m: Image, quality:number): Uint8Array;
+export function encodeImage(m: Image, quality?:number): Uint8Array;
 
 export function encodeGray(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
 export function encodeRGB(pix:Uint8Array, w:number, h:number, stride:number, quality:number): Uint8Array;
