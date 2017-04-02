@@ -129,7 +129,7 @@ $("#saveAsBtnRun").click(function() {
 		height:   canvas.height,
 		channels: 4,
 		depth:    8,
-		stride:   0,
+		stride:   canvas.width*4,
 		pix:      imgd.data,
 	})
 })
@@ -152,7 +152,7 @@ let jpegData = guetzli.encodeImage({
 	height:   canvas.height,
 	channels: 4,
 	depth:    8,
-	stride:   0,
+	stride:   canvas.width*4,
 	pix:      imgd.data,
 })
 
@@ -186,7 +186,7 @@ interface Image {
     height:   number;
     channels: number;
     depth:    number;
-    stride:   number;
+    stride:   number; // 0 is invalid
     pix:      Uint8Array;
 }
 ```
@@ -205,7 +205,7 @@ let jpegData = guetzli.encodeImage({
 	height:   h,
 	channels: 4,
 	depth:    8,
-	stride:   0,
+	stride:   w*4,
 	pix:      pix,
 })
 ```

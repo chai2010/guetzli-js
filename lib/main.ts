@@ -28,7 +28,7 @@ export interface Image {
 	height:   number;
 	channels: number;
 	depth:    number;
-	stride:   number;
+	stride:   number; // 0 is invalid
 	pix:      Uint8Array;
 }
 
