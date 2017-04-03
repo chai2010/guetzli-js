@@ -3,7 +3,7 @@
 		"lib/guetzli.ts",
 		"lib/guetzli-cli.ts",
 		"lib/browser.ts",
-		"lib/utils.ts",
+		"lib/helper.ts",
 		"lib/test.ts",
 		"lib/bench.ts"
 	],

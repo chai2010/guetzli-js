@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 "use strict";
 exports.__esModule = true;
+var assert = require("assert");
 var ccapi = function () {
     try {
         return require('../build/Release/guetzli.node');
@@ -11,8 +12,6 @@ var ccapi = function () {
         return require('../build/Debug/guetzli.node');
     }
 }();
-var assert = require('assert');
-var utils = require('./utils');
 // ----------------------------------------------------------------------------
 // guetzli api
 // ----------------------------------------------------------------------------
@@ -69,7 +68,7 @@ exports.encodeRGBA = encodeRGBA;
 // ----------------------------------------------------------------------------
 function decodePng24(data) {
     var m = ccapi.decodePng(data, 3);
-    assert(utils.isBuffer(m.pix));
+    assert(m.pix.length > 0);
     assert(m.width > 0 && m.height > 0);
     assert(m.channels > 0 && m.depth > 0);
     assert(m.channels == 3);
@@ -86,7 +85,7 @@ function decodePng24(data) {
 exports.decodePng24 = decodePng24;
 function decodePng32(data) {
     var m = ccapi.decodePng(data, 4);
-    assert(utils.isBuffer(m.pix));
+    assert(m.pix.length > 0);
     assert(m.width > 0 && m.height > 0);
     assert(m.channels > 0 && m.depth > 0);
     assert(m.channels == 4);

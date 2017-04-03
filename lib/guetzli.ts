@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import * as assert from 'assert'
+
 const ccapi = function() {
 	try {
 		return require('../build/Release/guetzli.node');
@@ -9,9 +11,6 @@ const ccapi = function() {
 		return require('../build/Debug/guetzli.node');
 	}
 }()
-
-const assert = require('assert')
-const utils = require('./utils')
 
 // ----------------------------------------------------------------------------
 // guetzli api
@@ -80,7 +79,7 @@ export function encodeRGBA(pix:Uint8Array, width:number, height:number, stride:n
 export function decodePng24(data:Uint8Array): Image {
 	let m = ccapi.decodePng(data, 3)
 
-	assert(utils.isBuffer(m.pix))
+	assert(m.pix.length > 0)
 	assert(m.width > 0 && m.height > 0)
 	assert(m.channels > 0 && m.depth > 0)
 	assert(m.channels == 3)
@@ -98,7 +97,7 @@ export function decodePng24(data:Uint8Array): Image {
 export function decodePng32(data:Uint8Array): Image {
 	let m = ccapi.decodePng(data, 4)
 
-	assert(utils.isBuffer(m.pix))
+	assert(m.pix.length > 0)
 	assert(m.width > 0 && m.height > 0)
 	assert(m.channels > 0 && m.depth > 0)
 	assert(m.channels == 4)
