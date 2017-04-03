@@ -121,7 +121,13 @@ export function encodePng32(pix:Uint8Array, width:number, height:number, stride:
 // JPEG helper (NodeJS Only)
 // ----------------------------------------------------------------------------
 
-// TODO
+export function encodeJpg(pix:Uint8Array, width:number, height:number, channels: number, stride:number, quality: number): Uint8Array {
+	return ccapi.encodeJpg(pix, width, height, channels, stride, quality)
+}
+
+export function decodeJpg(data:Uint8Array, expect_channels: number = 3): Image {
+	return ccapi.decodeJpg(data, expect_channels)
+}
 
 // ----------------------------------------------------------------------------
 // main module

@@ -108,7 +108,15 @@ exports.encodePng32 = encodePng32;
 // ----------------------------------------------------------------------------
 // JPEG helper (NodeJS Only)
 // ----------------------------------------------------------------------------
-// TODO
+function encodeJpg(pix, width, height, channels, stride, quality) {
+    return ccapi.encodeJpg(pix, width, height, channels, stride, quality);
+}
+exports.encodeJpg = encodeJpg;
+function decodeJpg(data, expect_channels) {
+    if (expect_channels === void 0) { expect_channels = 3; }
+    return ccapi.decodeJpg(data, expect_channels);
+}
+exports.decodeJpg = decodeJpg;
 // ----------------------------------------------------------------------------
 // main module
 // ----------------------------------------------------------------------------

@@ -18,3 +18,5 @@ export declare function decodePng24(data: Uint8Array): Image;
 export declare function decodePng32(data: Uint8Array): Image;
 export declare function encodePng24(pix: Uint8Array, width: number, height: number, stride: number): Uint8Array;
 export declare function encodePng32(pix: Uint8Array, width: number, height: number, stride: number): Uint8Array;
+export declare function encodeJpg(pix: Uint8Array, width: number, height: number, channels: number, stride: number, quality: number): Uint8Array;
+export declare function decodeJpg(data: Uint8Array, expect_channels?: number): Image;
