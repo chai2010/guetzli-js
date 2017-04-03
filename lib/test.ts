@@ -34,35 +34,35 @@ exports.testVersion = function(t: T) {
 }
 
 exports.testIsPngFilename = function(t: T) {
-	t.ok(isPngFilename('.png'))
-	t.ok(isPngFilename('.PNG'))
-	t.ok(isPngFilename('.PnG'))
+	t.ok(helper.isPngFilename('.png'))
+	t.ok(helper.isPngFilename('.PNG'))
+	t.ok(helper.isPngFilename('.PnG'))
 
-	t.ok(isPngFilename('1.png'))
-	t.ok(isPngFilename('1.PNG'))
-	t.ok(isPngFilename('1.pNG'))
+	t.ok(helper.isPngFilename('1.png'))
+	t.ok(helper.isPngFilename('1.PNG'))
+	t.ok(helper.isPngFilename('1.pNG'))
 
-	t.ifError(isPngFilename('png'))
-	t.ifError(isPngFilename('1.jpg'))
+	t.ifError(helper.isPngFilename('png'))
+	t.ifError(helper.isPngFilename('1.jpg'))
 
 	t.done()
 }
 
 exports.testIsJpegFilename = function(t: T) {
-	t.ok(isJpegFilename('.jpg'))
-	t.ok(isJpegFilename('.jPG'))
-	t.ok(isJpegFilename('.jpeg'))
-	t.ok(isJpegFilename('.jpEg'))
+	t.ok(helper.isJpegFilename('.jpg'))
+	t.ok(helper.isJpegFilename('.jPG'))
+	t.ok(helper.isJpegFilename('.jpeg'))
+	t.ok(helper.isJpegFilename('.jpEg'))
 
-	t.ok(isJpegFilename('.jpg'))
-	t.ok(isJpegFilename('1.jpeg'))
+	t.ok(helper.isJpegFilename('.jpg'))
+	t.ok(helper.isJpegFilename('1.jpeg'))
 
 	t.done()
 }
 
 exports.testLoadImage_png = function(t: T) {
 	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-	let m = loadImage(testdir + '/bees.png') // 444x258
+	let m = helper.loadImage(testdir + '/bees.png') // 444x258
 	t.ok(isValidImage(m))
 	t.ok(m.width == 444)
 	t.ok(m.height == 258)
@@ -71,7 +71,7 @@ exports.testLoadImage_png = function(t: T) {
 
 exports.testLoadImage_jpeg = function(t: T) {
 	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-	let m = loadImage(testdir + '/lena.jpg')
+	let m = helper.loadImage(testdir + '/lena.jpg')
 	t.ok(isValidImage(m))
 	t.done()
 }
@@ -80,7 +80,7 @@ exports.testGuetzliEncode = function(t: T) {
 	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
 
 	// 1. load png
-	let m1 = loadImage(testdir + '/bees.png')
+	let m1 = helper.loadImage(testdir + '/bees.png')
 
 	// 2. guetzli encode
 	let jepgData = guetzli.encodeImage(m1)
@@ -93,36 +93,6 @@ exports.testGuetzliEncode = function(t: T) {
 	t.ok(diff < 20, 'diff = ' + diff)
 
 	t.done()
-}
-
-function loadImage(filename: string): image.Image {
-	if(isPngFilename(filename)) {
-		return loadPngImage(filename)
-	}
-	if(isJpegFilename(filename)) {
-		return loadJpegImage(filename)
-	}
-	throw "unsupport format: " + filename
-}
-
-function isPngFilename(filename: string): boolean {
-	return /\.png/i.test(filename)
-}
-
-function isJpegFilename(filename: string): boolean {
-	return /\.jpg/i.test(filename) || /\.jpeg/i.test(filename)
-}
-
-function loadPngImage(filename:string): image.Image {
-	let data = fs.readFileSync(filename)
-	let m = helper.decodePng24(data)
-	return m
-}
-
-function loadJpegImage(filename:string): image.Image {
-	let data = fs.readFileSync(filename)
-	let m = helper.decodeJpg(data)
-	return m
 }
 
 function isValidImage(m: image.Image): boolean {

@@ -4,6 +4,7 @@
 "use strict";
 exports.__esModule = true;
 var assert = require("assert");
+var fs = require("fs");
 var ccapi = function () {
     try {
         return require('../build/Release/guetzli.node');
@@ -94,3 +95,35 @@ function decodeJpg(data, expect_channels) {
     return ccapi.decodeJpg(data, expect_channels);
 }
 exports.decodeJpg = decodeJpg;
+// ----------------------------------------------------------------------------
+function loadImage(filename) {
+    if (isPngFilename(filename)) {
+        return loadPngImage(filename);
+    }
+    if (isJpegFilename(filename)) {
+        return loadJpegImage(filename);
+    }
+    throw "unsupport format: " + filename;
+}
+exports.loadImage = loadImage;
+function isPngFilename(filename) {
+    return /\.png/i.test(filename);
+}
+exports.isPngFilename = isPngFilename;
+function isJpegFilename(filename) {
+    return /\.jpg/i.test(filename) || /\.jpeg/i.test(filename);
+}
+exports.isJpegFilename = isJpegFilename;
+function loadPngImage(filename) {
+    var data = fs.readFileSync(filename);
+    var m = decodePng24(data);
+    return m;
+}
+exports.loadPngImage = loadPngImage;
+function loadJpegImage(filename) {
+    var data = fs.readFileSync(filename);
+    var m = decodeJpg(data);
+    return m;
+}
+exports.loadJpegImage = loadJpegImage;
+// ----------------------------------------------------------------------------

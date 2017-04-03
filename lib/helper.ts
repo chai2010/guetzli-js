@@ -3,6 +3,8 @@
 // license that can be found in the LICENSE file.
 
 import * as assert from 'assert'
+import * as fs from 'fs'
+
 import * as image from './image'
 
 const ccapi = function() {
@@ -98,3 +100,37 @@ export function encodeJpg(pix:Uint8Array, width:number, height:number, channels:
 export function decodeJpg(data:Uint8Array, expect_channels: number = 3): image.Image {
 	return ccapi.decodeJpg(data, expect_channels)
 }
+
+// ----------------------------------------------------------------------------
+
+export function loadImage(filename: string): image.Image {
+	if(isPngFilename(filename)) {
+		return loadPngImage(filename)
+	}
+	if(isJpegFilename(filename)) {
+		return loadJpegImage(filename)
+	}
+	throw "unsupport format: " + filename
+}
+
+export function isPngFilename(filename: string): boolean {
+	return /\.png/i.test(filename)
+}
+
+export function isJpegFilename(filename: string): boolean {
+	return /\.jpg/i.test(filename) || /\.jpeg/i.test(filename)
+}
+
+export function loadPngImage(filename:string): image.Image {
+	let data = fs.readFileSync(filename)
+	let m = decodePng24(data)
+	return m
+}
+
+export function loadJpegImage(filename:string): image.Image {
+	let data = fs.readFileSync(filename)
+	let m = decodeJpg(data)
+	return m
+}
+
+// ----------------------------------------------------------------------------

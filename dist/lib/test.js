@@ -16,28 +16,28 @@ exports.testVersion = function (t) {
     t.done();
 };
 exports.testIsPngFilename = function (t) {
-    t.ok(isPngFilename('.png'));
-    t.ok(isPngFilename('.PNG'));
-    t.ok(isPngFilename('.PnG'));
-    t.ok(isPngFilename('1.png'));
-    t.ok(isPngFilename('1.PNG'));
-    t.ok(isPngFilename('1.pNG'));
-    t.ifError(isPngFilename('png'));
-    t.ifError(isPngFilename('1.jpg'));
+    t.ok(helper.isPngFilename('.png'));
+    t.ok(helper.isPngFilename('.PNG'));
+    t.ok(helper.isPngFilename('.PnG'));
+    t.ok(helper.isPngFilename('1.png'));
+    t.ok(helper.isPngFilename('1.PNG'));
+    t.ok(helper.isPngFilename('1.pNG'));
+    t.ifError(helper.isPngFilename('png'));
+    t.ifError(helper.isPngFilename('1.jpg'));
     t.done();
 };
 exports.testIsJpegFilename = function (t) {
-    t.ok(isJpegFilename('.jpg'));
-    t.ok(isJpegFilename('.jPG'));
-    t.ok(isJpegFilename('.jpeg'));
-    t.ok(isJpegFilename('.jpEg'));
-    t.ok(isJpegFilename('.jpg'));
-    t.ok(isJpegFilename('1.jpeg'));
+    t.ok(helper.isJpegFilename('.jpg'));
+    t.ok(helper.isJpegFilename('.jPG'));
+    t.ok(helper.isJpegFilename('.jpeg'));
+    t.ok(helper.isJpegFilename('.jpEg'));
+    t.ok(helper.isJpegFilename('.jpg'));
+    t.ok(helper.isJpegFilename('1.jpeg'));
     t.done();
 };
 exports.testLoadImage_png = function (t) {
     var testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-    var m = loadImage(testdir + '/bees.png'); // 444x258
+    var m = helper.loadImage(testdir + '/bees.png'); // 444x258
     t.ok(isValidImage(m));
     t.ok(m.width == 444);
     t.ok(m.height == 258);
@@ -45,14 +45,14 @@ exports.testLoadImage_png = function (t) {
 };
 exports.testLoadImage_jpeg = function (t) {
     var testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-    var m = loadImage(testdir + '/lena.jpg');
+    var m = helper.loadImage(testdir + '/lena.jpg');
     t.ok(isValidImage(m));
     t.done();
 };
 exports.testGuetzliEncode = function (t) {
     var testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
     // 1. load png
-    var m1 = loadImage(testdir + '/bees.png');
+    var m1 = helper.loadImage(testdir + '/bees.png');
     // 2. guetzli encode
     var jepgData = guetzli.encodeImage(m1);
     // 3. decode jpeg
@@ -62,31 +62,6 @@ exports.testGuetzliEncode = function (t) {
     t.ok(diff < 20, 'diff = ' + diff);
     t.done();
 };
-function loadImage(filename) {
-    if (isPngFilename(filename)) {
-        return loadPngImage(filename);
-    }
-    if (isJpegFilename(filename)) {
-        return loadJpegImage(filename);
-    }
-    throw "unsupport format: " + filename;
-}
-function isPngFilename(filename) {
-    return /\.png/i.test(filename);
-}
-function isJpegFilename(filename) {
-    return /\.jpg/i.test(filename) || /\.jpeg/i.test(filename);
-}
-function loadPngImage(filename) {
-    var data = fs.readFileSync(filename);
-    var m = helper.decodePng24(data);
-    return m;
-}
-function loadJpegImage(filename) {
-    var data = fs.readFileSync(filename);
-    var m = helper.decodeJpg(data);
-    return m;
-}
 function isValidImage(m) {
     return m.width > 0 && m.height > 0 && m.channels > 0 && m.pix.length > 0;
 }

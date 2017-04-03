@@ -10,3 +10,8 @@ export declare function encodePng24(pix: Uint8Array, width: number, height: numb
 export declare function encodePng32(pix: Uint8Array, width: number, height: number, stride: number): Uint8Array;
 export declare function encodeJpg(pix: Uint8Array, width: number, height: number, channels: number, stride: number, quality: number): Uint8Array;
 export declare function decodeJpg(data: Uint8Array, expect_channels?: number): image.Image;
+export declare function loadImage(filename: string): image.Image;
+export declare function isPngFilename(filename: string): boolean;
+export declare function isJpegFilename(filename: string): boolean;
+export declare function loadPngImage(filename: string): image.Image;
+export declare function loadJpegImage(filename: string): image.Image;
