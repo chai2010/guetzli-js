@@ -369,7 +369,7 @@ static void encodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	if(channels != 3 && channels != 4) {
 		v8ThrowException(isolate,
 			"function(pix, width, height, channels, stride) -> Buffer\n"
-			"invalid channels: %d, expect 1/3/4!\n",
+			"invalid channels: %d, expect 3/4!\n",
 			channels
 		);
 		return;
@@ -404,6 +404,190 @@ static void encodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 }
 
 // ----------------------------------------------------------------------------
+// JPEG helper
+// ----------------------------------------------------------------------------
+
+// function(data, expect_channels) -> {pix, width, height, channels, depth};
+static void decodeJpg(const v8::FunctionCallbackInfo<v8::Value>& args) {
+	auto isolate = args.GetIsolate();
+
+	if(args.Length() != 2) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"Wrong number of arguments!\n"
+		);
+		return;
+	}
+
+	if(!args[0]->IsObject() || !node::Buffer::HasInstance(args[0]->ToObject())) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"args[0] must be buffer type!\n"
+		);
+		return;
+	}
+
+	auto arg0 = args[0]->ToObject();
+	auto data = (const char*)(node::Buffer::Data(arg0));
+	auto size = int(node::Buffer::Length(arg0));
+	auto expect_channels = int(args[1]->NumberValue());
+
+	if(data == NULL) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"invalid data: NULL!\n"
+		);
+		return;
+	}
+	if(expect_channels != 1 && expect_channels != 3 && expect_channels != 4) {
+		v8ThrowException(isolate,
+			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
+			"invalid expect_channels: %d, expect 3/4!\n",
+			expect_channels
+		);
+		return;
+	}
+
+	bool rv = false;
+	int width, height;
+	std::string output;
+	switch(expect_channels) {
+	case 1:
+		rv = DecodeJpegGray(&output, data, size, &width, &height);
+		break;
+	case 3:
+		rv = DecodeJpegRGB(&output, data, size, &width, &height);
+		break;
+	case 4:
+		rv = DecodeJpegRGBA(&output, data, size, &width, &height);
+		break;
+	}
+	if(!rv) {
+		v8ThrowException(isolate, "c++: decodeJpg failed!");
+		return;
+	}
+
+	v8::Local<v8::Object> result = v8::Object::New(isolate);
+	result->Set(v8::Local<v8::Context>(),
+		v8::String::NewFromUtf8(isolate, "pix"),
+		node::Buffer::Copy(isolate, output.data(), output.size()).ToLocalChecked()
+	);
+	result->Set(v8::Local<v8::Context>(),
+		v8::String::NewFromUtf8(isolate, "width"),
+		v8::Number::New(isolate, width)
+	);
+	result->Set(v8::Local<v8::Context>(),
+		v8::String::NewFromUtf8(isolate, "height"),
+		v8::Number::New(isolate, height)
+	);
+	result->Set(v8::Local<v8::Context>(),
+		v8::String::NewFromUtf8(isolate, "channels"),
+		v8::Number::New(isolate, 4)
+	);
+	result->Set(v8::Local<v8::Context>(),
+		v8::String::NewFromUtf8(isolate, "depth"),
+		v8::Number::New(isolate, 8)
+	);
+
+	args.GetReturnValue().Set(result);
+	return;
+}
+
+// function(pix, width, height, channels, stride, quality) -> Buffer
+static void encodeJpg(const v8::FunctionCallbackInfo<v8::Value>& args) {
+	auto isolate = args.GetIsolate();
+
+	if(args.Length() != 6) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
+			"Wrong number of arguments!\n"
+		);
+		return;
+	}
+
+	if(!args[0]->IsObject() || !node::Buffer::HasInstance(args[0]->ToObject())) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
+			"args[0] must be buffer type!\n"
+		);
+		return;
+	}
+
+	for(int i = 1; i < 6; i++) {
+		if(!args[i]->IsNumber()) {
+			v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
+				"args[%d] must be number type!\n",
+				i
+			);
+			return;
+		}
+	}
+
+	auto pix = (const uint8_t*)(node::Buffer::Data(args[0]->ToObject()));
+	auto width = int(args[1]->NumberValue());
+	auto height = int(args[2]->NumberValue());
+	auto channels = int(args[3]->NumberValue());
+	auto stride = int(args[4]->NumberValue());
+	auto quality = int(args[5]->NumberValue());
+
+	if(pix == NULL) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
+			"invalid pix: NULL!\n",
+			channels
+		);
+		return;
+	}
+	if(width <= 0 || height <= 0) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
+			"invalid image size: %dx%d!\n",
+			width, height
+		);
+		return;
+	}
+	if(channels != 3 && channels != 4) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
+			"invalid channels: %d, expect 1/3/4!\n",
+			channels
+		);
+		return;
+	}
+	if(stride != 0 && stride < width*channels) {
+		v8ThrowException(isolate,
+			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
+			"invalid stride: %d, expect 0 or width*channels!\n",
+			stride
+		);
+		return;
+	}
+
+	bool rv = false;
+	std::string output;
+	switch(channels) {
+	case 1:
+		rv = EncodeJpegGray(&output, (const char*)pix, width, height, stride, quality);
+		break;
+	case 3:
+		rv = EncodeJpegRGB(&output, (const char*)pix, width, height, stride, quality);
+		break;
+	case 4:
+		rv = EncodeJpegRGBA(&output, (const char*)pix, width, height, stride, quality);
+		break;
+	}
+	if(!rv) {
+		v8ThrowException(isolate, "c++: encodeJpg failed!");
+		return;
+	}
+
+	auto result = node::Buffer::Copy(isolate, output.data(), output.size());
+	args.GetReturnValue().Set(result.ToLocalChecked());
+	return;
+}
+
+// ----------------------------------------------------------------------------
 // NodeJS Module
 // ----------------------------------------------------------------------------
 
@@ -411,6 +595,9 @@ static void initModule(v8::Local<v8::Object> module) {
 	NODE_SET_METHOD(module, "getVersion", getVersion);
 
 	NODE_SET_METHOD(module, "encodeImage", encodeImage);
+
+	NODE_SET_METHOD(module, "decodeJpg", decodeJpg);
+	NODE_SET_METHOD(module, "encodeJpg", encodeJpg);
 
 	NODE_SET_METHOD(module, "decodePng", decodePng);
 	NODE_SET_METHOD(module, "encodePng", encodePng);

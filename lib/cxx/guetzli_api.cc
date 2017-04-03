@@ -322,11 +322,11 @@ static bool DecodeJpeg(std::string* dst, const char* data, int size, int* width,
 }
 
 static bool EncodeJpeg(
-	std::string* dst, const char* data, int size,
+	std::string* dst, const char* data,
 	int width, int height, int channels, int width_step /* =0 */,
 	int quality /* =90 */
 ) {
-	if(dst == NULL || data == NULL || size <= 0) {
+	if(dst == NULL || data == NULL) {
 		return false;
 	}
 	if(width <= 0 || height <= 0) {
@@ -406,25 +406,25 @@ bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, in
 }
 
 bool EncodeJpegGray(
-	std::string* dst, const char* data, int size,
+	std::string* dst, const char* data,
 	int width, int height, int width_step, /* =0 */
 	int quality /* =90 */
 ) {
-	return EncodeJpeg(dst, data, size, width, height, 1, width_step, quality);
+	return EncodeJpeg(dst, data, width, height, 1, width_step, quality);
 }
 bool EncodeJpegRGB(
-	std::string* dst, const char* data, int size,
+	std::string* dst, const char* data,
 	int width, int height, int width_step, /* =0 */
 	int quality /* =90 */
 ) {
-	return EncodeJpeg(dst, data, size, width, height, 3, width_step, quality);
+	return EncodeJpeg(dst, data, width, height, 3, width_step, quality);
 }
 bool EncodeJpegRGBA(
-	std::string* dst, const char* data, int size,
+	std::string* dst, const char* data,
 	int width, int height, int width_step, /* =0 */
 	int quality /* =90 */
 ) {
-	return EncodeJpeg(dst, data, size, width, height, 4, width_step, quality);
+	return EncodeJpeg(dst, data, width, height, 4, width_step, quality);
 }
 
 #endif // GUETZLI_BUILD_FOR_BROWSER
