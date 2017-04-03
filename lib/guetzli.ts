@@ -27,10 +27,14 @@ export function encodeImage(m: image.Image, quality:number = defaultQuality): Ui
 	if(m.channels != 1 && m.channels != 3 && m.channels != 4) {
 		throw "guetzli.encodeImage: unsupport channels:" + m.channels
 	}
-	return ccapi.encodeImage(m.pix, m.width, m.height, m.channels, m.stride, quality)
+	let stride = m.width*m.channels;
+	if(m.stride && m.stride > 0) {
+		stride = m.stride;
+	}
+	return ccapi.encodeImage(m.pix, m.width, m.height, m.channels, stride, quality)
 }
 
-export function encodeGray(pix:Uint8Array, width:number, height:number, stride:number, quality:number): Uint8Array {
+export function encodeGray(pix:Uint8Array, width:number, height:number, stride:number = 0, quality:number = defaultQuality): Uint8Array {
 	return encodeImage({
 		width:    width,
 		height:   height,
@@ -39,7 +43,7 @@ export function encodeGray(pix:Uint8Array, width:number, height:number, stride:n
 		pix:      pix,
 	})
 }
-export function encodeRGB(pix:Uint8Array, width:number, height:number, stride:number, quality:number): Uint8Array {
+export function encodeRGB(pix:Uint8Array, width:number, height:number, stride:number = 0, quality:number = defaultQuality): Uint8Array {
 	return encodeImage({
 		width:    width,
 		height:   height,
@@ -48,7 +52,7 @@ export function encodeRGB(pix:Uint8Array, width:number, height:number, stride:nu
 		pix:      pix,
 	})
 }
-export function encodeRGBA(pix:Uint8Array, width:number, height:number, stride:number, quality:number): Uint8Array {
+export function encodeRGBA(pix:Uint8Array, width:number, height:number, stride:number = 0, quality:number = defaultQuality): Uint8Array {
 	return encodeImage({
 		width:    width,
 		height:   height,
