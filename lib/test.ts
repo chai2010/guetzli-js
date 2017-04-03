@@ -4,7 +4,9 @@
 
 // npm install nodeunit -g
 
+import * as image from "./image"
 import * as guetzli from "./guetzli"
+import * as helper from "./helper"
 
 import * as assert from 'assert'
 import * as fs from 'fs'
@@ -84,7 +86,7 @@ exports.testGuetzliEncode = function(t: T) {
 	let jepgData = guetzli.encodeImage(m1)
 
 	// 3. decode jpeg
-	let m2 = guetzli.decodeJpg(jepgData)
+	let m2 = helper.decodeJpg(jepgData)
 
 	// 4. compare image
 	let diff = averageDelta(m1, m2)
@@ -93,7 +95,7 @@ exports.testGuetzliEncode = function(t: T) {
 	t.done()
 }
 
-function loadImage(filename: string): guetzli.Image {
+function loadImage(filename: string): image.Image {
 	if(isPngFilename(filename)) {
 		return loadPngImage(filename)
 	}
@@ -111,37 +113,35 @@ function isJpegFilename(filename: string): boolean {
 	return /\.jpg/i.test(filename) || /\.jpeg/i.test(filename)
 }
 
-function loadPngImage(filename:string): guetzli.Image {
+function loadPngImage(filename:string): image.Image {
 	let data = fs.readFileSync(filename)
-	let m = guetzli.decodePng24(data)
+	let m = helper.decodePng24(data)
 	return m
 }
 
-function loadJpegImage(filename:string): guetzli.Image {
+function loadJpegImage(filename:string): image.Image {
 	let data = fs.readFileSync(filename)
-	let m = guetzli.decodeJpg(data)
+	let m = helper.decodeJpg(data)
 	return m
 }
 
-function isValidImage(m: guetzli.Image): boolean {
-	return m.width > 0 && m.height > 0 && m.channels > 0 && m.depth > 0 && m.pix.length > 0
+function isValidImage(m: image.Image): boolean {
+	return m.width > 0 && m.height > 0 && m.channels > 0 && m.pix.length > 0
 }
 
 // averageDelta returns the average delta in RGB space. The two images must
 // have the same bounds.
-function averageDelta(m0: guetzli.Image, m1: guetzli.Image): number {
+function averageDelta(m0: image.Image, m1: image.Image): number {
 	assert(m0.width == m1.width)
 	assert(m0.height == m1.height)
 	assert(m0.channels == m1.channels)
-	assert(m0.depth == m1.depth)
-	assert(m0.depth == 8)
 
 	let sum = 0, n = 0
 	for(let y = 0; y < m0.height; y++) {
 		for(let x = 0; x < m0.width; x++) {
 			for(let k = 0; k < m0.channels && k < 3; k++) {
-				let c0 = colorAt(m0, x, y, k)
-				let c1 = colorAt(m1, x, y, k)
+				let c0 = image.colorAt(m0, x, y, k)
+				let c1 = image.colorAt(m1, x, y, k)
 
 				sum += delta(c0, c1)
 				n++
@@ -150,13 +150,6 @@ function averageDelta(m0: guetzli.Image, m1: guetzli.Image): number {
 	}
 
 	return sum/n
-}
-
-function colorAt(m: guetzli.Image, x: number, y: number, iChannel: number): number {
-	assert(m.depth == 8)
-	let stride = m.stride>0? m.stride: m.width*m.channels;
-	let off = y*stride+x*m.channels+iChannel
-	return m.pix[off]
 }
 
 function delta(a: number, b: number): number {

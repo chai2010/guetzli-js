@@ -1,5 +1,12 @@
+import * as image from './image';
 export declare function isNode(): boolean;
 export declare const is_node: boolean;
 export declare function isUint8Array(obj: any): boolean;
 export declare function isArrayBuffer(obj: any): boolean;
 export declare function isBuffer(obj: any): boolean;
+export declare function decodePng24(data: Uint8Array): image.Image;
+export declare function decodePng32(data: Uint8Array): image.Image;
+export declare function encodePng24(pix: Uint8Array, width: number, height: number, stride: number): Uint8Array;
+export declare function encodePng32(pix: Uint8Array, width: number, height: number, stride: number): Uint8Array;
+export declare function encodeJpg(pix: Uint8Array, width: number, height: number, channels: number, stride: number, quality: number): Uint8Array;
+export declare function decodeJpg(data: Uint8Array, expect_channels?: number): image.Image;

@@ -3,8 +3,9 @@
 // license that can be found in the LICENSE file.
 "use strict";
 exports.__esModule = true;
-var fs = require('fs');
-var guetzli = require('./main');
+var fs = require("fs");
+var guetzli = require("./guetzli");
+var helper = require("./helper");
 function main() {
     var args = process.argv.splice(2);
     if (args.length == 1 && args[0] == '-v') {
@@ -22,7 +23,7 @@ function main() {
     // load png
     var data = fs.readFileSync(args[0]);
     // decode png image
-    var m = guetzli.decodePng32(data);
+    var m = helper.decodePng32(data);
     // encode jpg image
     var jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality);
     // save jpg

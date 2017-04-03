@@ -4,7 +4,9 @@
 "use strict";
 exports.__esModule = true;
 // npm install nodeunit -g
+var image = require("./image");
 var guetzli = require("./guetzli");
+var helper = require("./helper");
 var assert = require("assert");
 var fs = require("fs");
 var path = require("path");
@@ -54,7 +56,7 @@ exports.testGuetzliEncode = function (t) {
     // 2. guetzli encode
     var jepgData = guetzli.encodeImage(m1);
     // 3. decode jpeg
-    var m2 = guetzli.decodeJpg(jepgData);
+    var m2 = helper.decodeJpg(jepgData);
     // 4. compare image
     var diff = averageDelta(m1, m2);
     t.ok(diff < 20, 'diff = ' + diff);
@@ -77,16 +79,16 @@ function isJpegFilename(filename) {
 }
 function loadPngImage(filename) {
     var data = fs.readFileSync(filename);
-    var m = guetzli.decodePng24(data);
+    var m = helper.decodePng24(data);
     return m;
 }
 function loadJpegImage(filename) {
     var data = fs.readFileSync(filename);
-    var m = guetzli.decodeJpg(data);
+    var m = helper.decodeJpg(data);
     return m;
 }
 function isValidImage(m) {
-    return m.width > 0 && m.height > 0 && m.channels > 0 && m.depth > 0 && m.pix.length > 0;
+    return m.width > 0 && m.height > 0 && m.channels > 0 && m.pix.length > 0;
 }
 // averageDelta returns the average delta in RGB space. The two images must
 // have the same bounds.
@@ -94,26 +96,18 @@ function averageDelta(m0, m1) {
     assert(m0.width == m1.width);
     assert(m0.height == m1.height);
     assert(m0.channels == m1.channels);
-    assert(m0.depth == m1.depth);
-    assert(m0.depth == 8);
     var sum = 0, n = 0;
     for (var y = 0; y < m0.height; y++) {
         for (var x = 0; x < m0.width; x++) {
             for (var k = 0; k < m0.channels && k < 3; k++) {
-                var c0 = colorAt(m0, x, y, k);
-                var c1 = colorAt(m1, x, y, k);
+                var c0 = image.colorAt(m0, x, y, k);
+                var c1 = image.colorAt(m1, x, y, k);
                 sum += delta(c0, c1);
                 n++;
             }
         }
     }
     return sum / n;
-}
-function colorAt(m, x, y, iChannel) {
-    assert(m.depth == 8);
-    var stride = m.stride > 0 ? m.stride : m.width * m.channels;
-    var off = y * stride + x * m.channels + iChannel;
-    return m.pix[off];
 }
 function delta(a, b) {
     return (a > b) ? (a - b) : (b - a);

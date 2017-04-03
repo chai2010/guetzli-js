@@ -4,6 +4,7 @@
 
 import * as fs from 'fs'
 import * as guetzli from './guetzli'
+import * as helper from "./helper"
 
 export function main() {
 	let args = process.argv.splice(2)
@@ -26,7 +27,7 @@ export function main() {
 	let data = fs.readFileSync(args[0])
 
 	// decode png image
-	let m = guetzli.decodePng32(data)
+	let m = helper.decodePng32(data)
 
 	// encode jpg image
 	let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality)
