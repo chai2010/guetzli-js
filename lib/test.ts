@@ -125,3 +125,25 @@ function averageDelta(m0: image.Image, m1: image.Image): number {
 function delta(a: number, b: number): number {
 	return (a > b)? (a-b): (b-a)
 }
+
+// ----------------------------------------------------------------------------
+// try async/await
+
+async function delay(ms: number) {
+	return new Promise<void>(resole => {
+		setTimeout(resole, ms)
+	})
+}
+
+async function main(...args: string[]) {
+	for(const arg of args) {
+		console.log(arg)
+		await delay(300)
+	}
+}
+
+if(require.main === module) {
+	main('A', 'B', 'C')
+}
+
+// ----------------------------------------------------------------------------

@@ -14,6 +14,7 @@
 		"removeComments": false,
 		"noImplicitAny": true,
 		"allowJs": false,
+		"lib": ["es2015"],
 		"target": "es3"
 	}
 }
