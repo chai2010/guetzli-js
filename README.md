@@ -76,12 +76,13 @@ NodeJS:
 ```js
 const fs = require('fs')
 const guetzli = require('guetzli-js')
+const helper = require('guetzli-js/helper')
 
 // load png
 let data = fs.readFileSync('bees.png')
 
 // decode png image
-let m = guetzli.decodePng32(data)
+let m = helper.decodePng32(data)
 
 // encode jpg image
 let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality)
@@ -128,7 +129,6 @@ $("#saveAsBtnRun").click(function() {
 		width:    canvas.width,
 		height:   canvas.height,
 		channels: 4,
-		depth:    8,
 		stride:   canvas.width*4,
 		pix:      imgd.data,
 	})
@@ -151,7 +151,6 @@ let jpegData = guetzli.encodeImage({
 	width:    canvas.width,
 	height:   canvas.height,
 	channels: 4,
-	depth:    8,
 	stride:   canvas.width*4,
 	pix:      imgd.data,
 })
@@ -172,7 +171,7 @@ let jpegData2 = guetzli.encodeImage({
 ### Const
 
 ```ts
-export declare const version: string;        // 1.0.1, google/guetzli version
+export declare const version: string;        // google/guetzli version
 export declare const minQuality: number;     // 84
 export declare const maxQuality: number;     // 110
 export declare const defaultQuality: number; // 95
@@ -181,17 +180,17 @@ export declare const defaultQuality: number; // 95
 ### Image Type
 
 ```ts
+// require('guetzli-js/image').Image
 interface Image {
     width:    number;
     height:   number;
-    channels: number;
-    depth:    number;
-    stride:   number; // 0 is invalid
+	channels: number; // Gray=1, RGB=3, RGBA=4
+	stride?:  number; // 0 or >= width*channels
     pix:      Uint8Array;
 }
 ```
 
-### `encodeImage(m: Image, quality?: number = defaultQuality): Uint8Array`
+### `encodeImage(m: Image, quality: number = defaultQuality): Uint8Array`
 
 ```js
 const guetzli = require('guetzli-js')
@@ -204,8 +203,6 @@ let jpegData = guetzli.encodeImage({
 	width:    w,
 	height:   h,
 	channels: 4,
-	depth:    8,
-	stride:   w*4,
 	pix:      pix,
 })
 ```
@@ -286,81 +283,10 @@ let jpegData = guetzli.encodeRGBA(
 )
 ```
 
-## PNG helper (only for NodeJS)
+## More
 
-### `decodePng24(data: Uint8Array): Image`
-
-```js
-const fs = require('fs')
-const assert = require('assert')
-
-let data = fs.readFileSync('./testdata/bees.png')
-let m = guetzli.decodePng24(data)
-
-assert(m.width == 444)
-assert(m.height == 258)
-assert(m.channels == 3) // RGB
-assert(m.depth == 8)    // 3*8 = 24 bit
-
-let pix_size = m.width*m.height*m.channels*m.depth/8
-assert(m.pix.length == pix_size)
-```
-
-### `decodePng32(data: Uint8Array): Image`
-
-```js
-const fs = require('fs')
-const assert = require('assert')
-
-let data = fs.readFileSync('./testdata/bees.png')
-let m = guetzli.decodePng32(data)
-
-assert(m.width == 444)
-assert(m.height == 258)
-assert(m.channels == 4) // RGBA
-assert(m.depth == 8)    // 4*8 = 32 bit
-
-let pix_size = m.width*m.height*m.channels*m.depth/8
-assert(m.pix.length == pix_size)
-```
-
-### `encodePng24(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array`
-
-TODO
-
-### `encodePng32(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array`
-
-TODO
-
-
-## Other
-
-### Build `guetzli.node` with CMake
-
-**Windows x64**
-
-- Install CMake 3.5+
-- Install VS2015
-- run `build-win64.bat` in command line
-
-**Windows x86**
-
-- Install CMake 3.5+
-- Install VS2015
-- run `build-win32.bat` in command line
-
-**Darwin or Linux**
-
-- Install CMake 3.5+
-- Install GCC
-- `mkdir build`
-- `cd build && cmake .. && make install`
-
-### Build `lib/cxx-emscripten/guetzli.out.js` with Emscripten
-
-- Install Emscripten
-- `make`
-
+- [build.md](build.md)
+- [helper.md](helper.md)
 
 ## License
 
