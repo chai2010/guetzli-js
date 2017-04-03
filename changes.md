@@ -8,9 +8,10 @@ TODO
 
 ## 1.?.?
 
+- node: move Image type to image.Image, and remove `depth` filed, `stride` is optional
+- node: move png/jpeg helper function to helper module
 - support [travis-ci](https://travis-ci.org/chai2010/guetzli-js) build
-- node: add encodePng helper
-
+- more unit test
 
 ## 1.0.8
 
