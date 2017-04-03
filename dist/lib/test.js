@@ -40,10 +40,10 @@ exports.testLoadImage_png = function (t) {
     t.done();
 };
 exports.testLoadImage_jpeg = function (t) {
-    //let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-    //let m = loadImage(testdir + '/lena.jpg')
-    //t.ok(isValidImage(m))
-    t.done(); // TODO
+    var testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
+    var m = loadImage(testdir + '/lena.jpg');
+    t.ok(isValidImage(m));
+    t.done();
 };
 exports.testGuetzliEncode = function (t) {
     // 1. load png
@@ -73,7 +73,9 @@ function loadPngImage(filename) {
     return m;
 }
 function loadJpegImage(filename) {
-    throw "TODO";
+    var data = fs.readFileSync(filename);
+    var m = pkg.decodeJpg(data);
+    return m;
 }
 function isValidImage(m) {
     return m.width > 0 && m.height > 0 && m.channels > 0 && m.depth > 0 && m.pix.length > 0;

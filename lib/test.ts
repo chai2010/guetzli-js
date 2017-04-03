@@ -66,10 +66,10 @@ exports.testLoadImage_png = function(t: T) {
 }
 
 exports.testLoadImage_jpeg = function(t: T) {
-	//let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-	//let m = loadImage(testdir + '/lena.jpg')
-	//t.ok(isValidImage(m))
-	t.done() // TODO
+	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
+	let m = loadImage(testdir + '/lena.jpg')
+	t.ok(isValidImage(m))
+	t.done()
 }
 
 exports.testGuetzliEncode = function(t: T) {
@@ -106,7 +106,9 @@ function loadPngImage(filename:string): pkg.Image {
 }
 
 function loadJpegImage(filename:string): pkg.Image {
-	throw "TODO"
+	let data = fs.readFileSync(filename)
+	let m = pkg.decodeJpg(data)
+	return m
 }
 
 function isValidImage(m: pkg.Image): boolean {
