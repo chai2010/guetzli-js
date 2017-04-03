@@ -1,7 +1,7 @@
 {
 	"files": [
+		"lib/guetzli.ts",
 		"lib/guetzli-cli.ts",
-		"lib/main.ts",
 		"lib/browser.ts",
 		"lib/utils.ts",
 		"lib/test.ts",

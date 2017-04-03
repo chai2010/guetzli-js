@@ -4,7 +4,7 @@
 
 // npm install nodeunit -g
 
-import * as pkg from "./main"
+import * as guetzli from "./guetzli"
 
 import * as assert from 'assert'
 import * as fs from 'fs'
@@ -26,8 +26,8 @@ interface T {
 }
 
 exports.testVersion = function(t: T) {
-	t.ok(pkg.version == '1.0.1')
-	t.ok(/^\d+\.\d+\.\d+$/.test(pkg.version))
+	t.ok(guetzli.version == '1.0.1')
+	t.ok(/^\d+\.\d+\.\d+$/.test(guetzli.version))
 	t.done()
 }
 
@@ -81,10 +81,10 @@ exports.testGuetzliEncode = function(t: T) {
 	let m1 = loadImage(testdir + '/bees.png')
 
 	// 2. guetzli encode
-	let jepgData = pkg.encodeImage(m1)
+	let jepgData = guetzli.encodeImage(m1)
 
 	// 3. decode jpeg
-	let m2 = pkg.decodeJpg(jepgData)
+	let m2 = guetzli.decodeJpg(jepgData)
 
 	// 4. compare image
 	let diff = averageDelta(m1, m2)
@@ -93,7 +93,7 @@ exports.testGuetzliEncode = function(t: T) {
 	t.done()
 }
 
-function loadImage(filename: string): pkg.Image {
+function loadImage(filename: string): guetzli.Image {
 	if(isPngFilename(filename)) {
 		return loadPngImage(filename)
 	}
@@ -111,25 +111,25 @@ function isJpegFilename(filename: string): boolean {
 	return /\.jpg/i.test(filename) || /\.jpeg/i.test(filename)
 }
 
-function loadPngImage(filename:string): pkg.Image {
+function loadPngImage(filename:string): guetzli.Image {
 	let data = fs.readFileSync(filename)
-	let m = pkg.decodePng24(data)
+	let m = guetzli.decodePng24(data)
 	return m
 }
 
-function loadJpegImage(filename:string): pkg.Image {
+function loadJpegImage(filename:string): guetzli.Image {
 	let data = fs.readFileSync(filename)
-	let m = pkg.decodeJpg(data)
+	let m = guetzli.decodeJpg(data)
 	return m
 }
 
-function isValidImage(m: pkg.Image): boolean {
+function isValidImage(m: guetzli.Image): boolean {
 	return m.width > 0 && m.height > 0 && m.channels > 0 && m.depth > 0 && m.pix.length > 0
 }
 
 // averageDelta returns the average delta in RGB space. The two images must
 // have the same bounds.
-function averageDelta(m0: pkg.Image, m1: pkg.Image): number {
+function averageDelta(m0: guetzli.Image, m1: guetzli.Image): number {
 	assert(m0.width == m1.width)
 	assert(m0.height == m1.height)
 	assert(m0.channels == m1.channels)
@@ -152,7 +152,7 @@ function averageDelta(m0: pkg.Image, m1: pkg.Image): number {
 	return sum/n
 }
 
-function colorAt(m: pkg.Image, x: number, y: number, iChannel: number): number {
+function colorAt(m: guetzli.Image, x: number, y: number, iChannel: number): number {
 	assert(m.depth == 8)
 	let stride = m.stride>0? m.stride: m.width*m.channels;
 	let off = y*stride+x*m.channels+iChannel

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import pkg = require('./main')
+import guetzli = require('./guetzli')
 import Benchmark = require('benchmark')
 
 let b = new Benchmark.Suite()

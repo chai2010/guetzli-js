@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git://github.com/chai2010/guetzli-js.git"
   },
-  "main": "./dist/lib/main.js",
+  "main": "./dist/lib/guetzli.js",
   "bin": {
     "guetzli-cli": "./dist/bin/guetzli-cli"
   },

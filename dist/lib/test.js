@@ -4,13 +4,13 @@
 "use strict";
 exports.__esModule = true;
 // npm install nodeunit -g
-var pkg = require("./main");
+var guetzli = require("./guetzli");
 var assert = require("assert");
 var fs = require("fs");
 var path = require("path");
 exports.testVersion = function (t) {
-    t.ok(pkg.version == '1.0.1');
-    t.ok(/^\d+\.\d+\.\d+$/.test(pkg.version));
+    t.ok(guetzli.version == '1.0.1');
+    t.ok(/^\d+\.\d+\.\d+$/.test(guetzli.version));
     t.done();
 };
 exports.testIsPngFilename = function (t) {
@@ -52,9 +52,9 @@ exports.testGuetzliEncode = function (t) {
     // 1. load png
     var m1 = loadImage(testdir + '/bees.png');
     // 2. guetzli encode
-    var jepgData = pkg.encodeImage(m1);
+    var jepgData = guetzli.encodeImage(m1);
     // 3. decode jpeg
-    var m2 = pkg.decodeJpg(jepgData);
+    var m2 = guetzli.decodeJpg(jepgData);
     // 4. compare image
     var diff = averageDelta(m1, m2);
     t.ok(diff < 20, 'diff = ' + diff);
@@ -77,12 +77,12 @@ function isJpegFilename(filename) {
 }
 function loadPngImage(filename) {
     var data = fs.readFileSync(filename);
-    var m = pkg.decodePng24(data);
+    var m = guetzli.decodePng24(data);
     return m;
 }
 function loadJpegImage(filename) {
     var data = fs.readFileSync(filename);
-    var m = pkg.decodeJpg(data);
+    var m = guetzli.decodeJpg(data);
     return m;
 }
 function isValidImage(m) {
