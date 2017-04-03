@@ -35,8 +35,10 @@ exports.testIsJpegFilename = function (t) {
 };
 exports.testLoadImage_png = function (t) {
     var testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-    var m = loadImage(testdir + '/bees.png');
+    var m = loadImage(testdir + '/bees.png'); // 444x258
     t.ok(isValidImage(m));
+    t.ok(m.width == 444);
+    t.ok(m.height == 258);
     t.done();
 };
 exports.testLoadImage_jpeg = function (t) {
@@ -46,11 +48,17 @@ exports.testLoadImage_jpeg = function (t) {
     t.done();
 };
 exports.testGuetzliEncode = function (t) {
+    var testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
     // 1. load png
+    var m1 = loadImage(testdir + '/bees.png');
     // 2. guetzli encode
+    var jepgData = pkg.encodeImage(m1);
     // 3. decode jpeg
+    var m2 = pkg.decodeJpg(jepgData);
     // 4. compare image
-    t.done(); // TODO
+    var diff = averageDelta(m1, m2);
+    t.ok(diff < 20, 'diff = ' + diff);
+    t.done();
 };
 function loadImage(filename) {
     if (isPngFilename(filename)) {
@@ -69,7 +77,7 @@ function isJpegFilename(filename) {
 }
 function loadPngImage(filename) {
     var data = fs.readFileSync(filename);
-    var m = pkg.decodePng32(data);
+    var m = pkg.decodePng24(data);
     return m;
 }
 function loadJpegImage(filename) {

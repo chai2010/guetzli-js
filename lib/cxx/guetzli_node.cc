@@ -302,7 +302,7 @@ static void decodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	);
 	result->Set(v8::Local<v8::Context>(),
 		v8::String::NewFromUtf8(isolate, "channels"),
-		v8::Number::New(isolate, 4)
+		v8::Number::New(isolate, expect_channels)
 	);
 	result->Set(v8::Local<v8::Context>(),
 		v8::String::NewFromUtf8(isolate, "depth"),
@@ -482,7 +482,7 @@ static void decodeJpg(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	);
 	result->Set(v8::Local<v8::Context>(),
 		v8::String::NewFromUtf8(isolate, "channels"),
-		v8::Number::New(isolate, 4)
+		v8::Number::New(isolate, expect_channels)
 	);
 	result->Set(v8::Local<v8::Context>(),
 		v8::String::NewFromUtf8(isolate, "depth"),

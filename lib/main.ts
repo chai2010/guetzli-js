@@ -83,6 +83,8 @@ export function decodePng24(data:Uint8Array): Image {
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
 	assert(m.channels > 0 && m.depth > 0)
+	assert(m.channels == 3)
+	assert(m.depth == 8)
 
 	return {
 		width: m.width,
@@ -99,7 +101,8 @@ export function decodePng32(data:Uint8Array): Image {
 	assert(utils.isBuffer(m.pix))
 	assert(m.width > 0 && m.height > 0)
 	assert(m.channels > 0 && m.depth > 0)
-
+	assert(m.channels == 4)
+	assert(m.depth == 8)
 	return {
 		width: m.width,
 		height: m.height,

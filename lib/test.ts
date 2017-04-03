@@ -60,8 +60,10 @@ exports.testIsJpegFilename = function(t: T) {
 
 exports.testLoadImage_png = function(t: T) {
 	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
-	let m = loadImage(testdir + '/bees.png')
+	let m = loadImage(testdir + '/bees.png') // 444x258
 	t.ok(isValidImage(m))
+	t.ok(m.width == 444)
+	t.ok(m.height == 258)
 	t.done()
 }
 
@@ -73,12 +75,22 @@ exports.testLoadImage_jpeg = function(t: T) {
 }
 
 exports.testGuetzliEncode = function(t: T) {
-	// 1. load png
-	// 2. guetzli encode
-	// 3. decode jpeg
-	// 4. compare image
+	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
 
-	t.done() // TODO
+	// 1. load png
+	let m1 = loadImage(testdir + '/bees.png')
+
+	// 2. guetzli encode
+	let jepgData = pkg.encodeImage(m1)
+
+	// 3. decode jpeg
+	let m2 = pkg.decodeJpg(jepgData)
+
+	// 4. compare image
+	let diff = averageDelta(m1, m2)
+	t.ok(diff < 20, 'diff = ' + diff)
+
+	t.done()
 }
 
 function loadImage(filename: string): pkg.Image {
@@ -101,7 +113,7 @@ function isJpegFilename(filename: string): boolean {
 
 function loadPngImage(filename:string): pkg.Image {
 	let data = fs.readFileSync(filename)
-	let m = pkg.decodePng32(data)
+	let m = pkg.decodePng24(data)
 	return m
 }
 
@@ -130,6 +142,7 @@ function averageDelta(m0: pkg.Image, m1: pkg.Image): number {
 			for(let k = 0; k < m0.channels && k < 3; k++) {
 				let c0 = colorAt(m0, x, y, k)
 				let c1 = colorAt(m1, x, y, k)
+
 				sum += delta(c0, c1)
 				n++
 			}
