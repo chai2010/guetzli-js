@@ -27,7 +27,7 @@ export function main() {
 	let data = fs.readFileSync(args[0])
 
 	// decode png image
-	let m = helper.decodePng32(data)
+	let m = helper.decodePng(data)
 
 	// encode jpg image
 	let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality)

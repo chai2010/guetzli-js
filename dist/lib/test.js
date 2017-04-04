@@ -123,6 +123,7 @@ function delta(a, b) {
     return (a > b) ? (a - b) : (b - a);
 }
 // ----------------------------------------------------------------------------
+// try async/await
 function delay(ms) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

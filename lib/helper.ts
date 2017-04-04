@@ -48,52 +48,32 @@ export function isBuffer(obj:any): boolean {
 // PNG helper (NodeJS Only)
 // ----------------------------------------------------------------------------
 
-export function decodePng24(data:Uint8Array): image.Image {
-	let m = ccapi.decodePng(data, 3)
+export function decodePng(data:Uint8Array, expect_channels: number = 4): image.Image {
+	let m = ccapi.decodePng(data, expect_channels)
 
 	assert(m.pix.length > 0)
 	assert(m.width > 0 && m.height > 0)
 	assert(m.channels > 0 && m.depth > 0)
-	assert(m.channels == 3)
-	assert(m.depth == 8)
+	assert(m.channels == expect_channels)
 
 	return {
 		width: m.width,
 		height: m.height,
 		channels: m.channels,
-		stride: m.width*3,
-		pix: m.pix,
-	}
-}
-export function decodePng32(data:Uint8Array): image.Image {
-	let m = ccapi.decodePng(data, 4)
-
-	assert(m.pix.length > 0)
-	assert(m.width > 0 && m.height > 0)
-	assert(m.channels > 0 && m.depth > 0)
-	assert(m.channels == 4)
-	assert(m.depth == 8)
-	return {
-		width: m.width,
-		height: m.height,
-		channels: m.channels,
-		stride: m.width*4,
+		stride: m.width*m.channels,
 		pix: m.pix,
 	}
 }
 
-export function encodePng24(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array {
-	return ccapi.encodePng(pix, width, height, 3, stride)
-}
-export function encodePng32(pix:Uint8Array, width:number, height:number, stride:number): Uint8Array {
-	return ccapi.encodePng(pix, width, height, 4, stride)
+export function encodePng(pix:Uint8Array, width:number, height:number, channels:number, stride:number = 0): Uint8Array {
+	return ccapi.encodePng(pix, width, height, channels, stride)
 }
 
 // ----------------------------------------------------------------------------
 // JPEG helper (NodeJS Only)
 // ----------------------------------------------------------------------------
 
-export function encodeJpg(pix:Uint8Array, width:number, height:number, channels: number, stride:number, quality: number): Uint8Array {
+export function encodeJpg(pix:Uint8Array, width:number, height:number, channels: number, stride:number = 0, quality: number = 95): Uint8Array {
 	return ccapi.encodeJpg(pix, width, height, channels, stride, quality)
 }
 
@@ -123,7 +103,7 @@ export function isJpegFilename(filename: string): boolean {
 
 export function loadPngImage(filename:string): image.Image {
 	let data = fs.readFileSync(filename)
-	let m = decodePng24(data)
+	let m = decodePng(data, 3)
 	return m
 }
 

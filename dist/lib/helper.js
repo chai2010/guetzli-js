@@ -43,50 +43,33 @@ exports.isBuffer = isBuffer;
 // ----------------------------------------------------------------------------
 // PNG helper (NodeJS Only)
 // ----------------------------------------------------------------------------
-function decodePng24(data) {
-    var m = ccapi.decodePng(data, 3);
+function decodePng(data, expect_channels) {
+    if (expect_channels === void 0) { expect_channels = 4; }
+    var m = ccapi.decodePng(data, expect_channels);
     assert(m.pix.length > 0);
     assert(m.width > 0 && m.height > 0);
     assert(m.channels > 0 && m.depth > 0);
-    assert(m.channels == 3);
-    assert(m.depth == 8);
+    assert(m.channels == expect_channels);
     return {
         width: m.width,
         height: m.height,
         channels: m.channels,
-        stride: m.width * 3,
+        stride: m.width * m.channels,
         pix: m.pix
     };
 }
-exports.decodePng24 = decodePng24;
-function decodePng32(data) {
-    var m = ccapi.decodePng(data, 4);
-    assert(m.pix.length > 0);
-    assert(m.width > 0 && m.height > 0);
-    assert(m.channels > 0 && m.depth > 0);
-    assert(m.channels == 4);
-    assert(m.depth == 8);
-    return {
-        width: m.width,
-        height: m.height,
-        channels: m.channels,
-        stride: m.width * 4,
-        pix: m.pix
-    };
+exports.decodePng = decodePng;
+function encodePng(pix, width, height, channels, stride) {
+    if (stride === void 0) { stride = 0; }
+    return ccapi.encodePng(pix, width, height, channels, stride);
 }
-exports.decodePng32 = decodePng32;
-function encodePng24(pix, width, height, stride) {
-    return ccapi.encodePng(pix, width, height, 3, stride);
-}
-exports.encodePng24 = encodePng24;
-function encodePng32(pix, width, height, stride) {
-    return ccapi.encodePng(pix, width, height, 4, stride);
-}
-exports.encodePng32 = encodePng32;
+exports.encodePng = encodePng;
 // ----------------------------------------------------------------------------
 // JPEG helper (NodeJS Only)
 // ----------------------------------------------------------------------------
 function encodeJpg(pix, width, height, channels, stride, quality) {
+    if (stride === void 0) { stride = 0; }
+    if (quality === void 0) { quality = 95; }
     return ccapi.encodeJpg(pix, width, height, channels, stride, quality);
 }
 exports.encodeJpg = encodeJpg;
@@ -116,7 +99,7 @@ function isJpegFilename(filename) {
 exports.isJpegFilename = isJpegFilename;
 function loadPngImage(filename) {
     var data = fs.readFileSync(filename);
-    var m = decodePng24(data);
+    var m = decodePng(data, 3);
     return m;
 }
 exports.loadPngImage = loadPngImage;

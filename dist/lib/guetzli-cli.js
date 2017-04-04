@@ -23,7 +23,7 @@ function main() {
     // load png
     var data = fs.readFileSync(args[0]);
     // decode png image
-    var m = helper.decodePng32(data);
+    var m = helper.decodePng(data);
     // encode jpg image
     var jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality);
     // save jpg
