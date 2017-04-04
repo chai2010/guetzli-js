@@ -209,6 +209,36 @@ bool DecodePng24(
 	return true;
 }
 
+bool DecodePngGray(std::string* dst, const char* data, int size, int* width, int* height) {
+	std::string s;
+	if(!DecodePng24(&s, data, size, width, height)) {
+		dst->clear();
+		return false;
+	}
+
+	dst->resize(s.size()/3);
+
+	auto pSrc = (const uint8_t*)s.data();
+	auto pDst = (uint8_t*)dst->data();
+
+	int k = 0;
+	for(int i = 0; i < s.size(); i++) {
+		auto R = pSrc[k++];
+		auto G = pSrc[k++];
+		auto B = pSrc[k++];
+		pDst[i] = (R+G+B)/3;
+	}
+
+	return true;
+}
+
+bool DecodePngRGB(std::string* dst, const char* data, int size, int* width, int* height) {
+	return DecodePng24(dst, data, size, width, height);
+}
+bool DecodePngRGBA(std::string* dst, const char* data, int size, int* width, int* height) {
+	return DecodePng32(dst, data, size, width, height);
+}
+
 bool EncodePng32(
 	std::string* dst, const char* data, int width, int height, int stride /*=0*/
 ) {
@@ -285,6 +315,27 @@ bool EncodePng24(
 	free(png);
 
 	return true;
+}
+
+bool EncodePngGray(
+	std::string* dst, const char* pix,
+	int width, int height, int stride
+) {
+	std::vector<uint8_t> rgb;
+	grayToRGBVector(&rgb, (const uint8_t*)pix, width, height, stride);
+	return EncodePng24(dst, (const char*)rgb.data(), width, height, stride);
+}
+bool EncodePngRGB(
+	std::string* dst, const char* pix,
+	int width, int height, int stride
+) {
+	return EncodePng24(dst, pix, width, height, stride);
+}
+bool EncodePngRGBA(
+	std::string* dst, const char* pix,
+	int width, int height, int stride
+) {
+	return EncodePng32(dst, pix, width, height, stride);
 }
 
 // --------------------------------------------------------
@@ -406,25 +457,27 @@ bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, in
 }
 
 bool EncodeJpegGray(
-	std::string* dst, const char* data,
-	int width, int height, int width_step, /* =0 */
+	std::string* dst, const char* pix,
+	int width, int height, int stride, /* =0 */
 	int quality /* =90 */
 ) {
-	return EncodeJpeg(dst, data, width, height, 1, width_step, quality);
+	return EncodeJpeg(dst, pix, width, height, 1, stride, quality);
 }
 bool EncodeJpegRGB(
-	std::string* dst, const char* data,
-	int width, int height, int width_step, /* =0 */
+	std::string* dst, const char* pix,
+	int width, int height, int stride, /* =0 */
 	int quality /* =90 */
 ) {
-	return EncodeJpeg(dst, data, width, height, 3, width_step, quality);
+	return EncodeJpeg(dst, pix, width, height, 3, stride, quality);
 }
 bool EncodeJpegRGBA(
-	std::string* dst, const char* data,
-	int width, int height, int width_step, /* =0 */
+	std::string* dst, const char* pix,
+	int width, int height, int stride, /* =0 */
 	int quality /* =90 */
 ) {
-	return EncodeJpeg(dst, data, width, height, 4, width_step, quality);
+	std::vector<uint8_t> rgb;
+	rgbaToRGBVector(&rgb, (const uint8_t*)pix, width, height, stride);
+	return EncodeJpeg(dst, (const char*)rgb.data(), width, height, 3, 0, quality);
 }
 
 #endif // GUETZLI_BUILD_FOR_BROWSER

@@ -63,6 +63,24 @@ bool guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quali
 // ----------------------------------------------------------------------------
 
 #if !defined(GUETZLI_BUILD_FOR_BROWSER)
+
+bool DecodePngGray(std::string* dst, const char* data, int size, int* width, int* height);
+bool DecodePngRGB(std::string* dst, const char* data, int size, int* width, int* height);
+bool DecodePngRGBA(std::string* dst, const char* data, int size, int* width, int* height);
+
+bool EncodePngGray(
+	std::string* dst, const char* pix,
+	int width, int height, int stride
+);
+bool EncodePngRGB(
+	std::string* dst, const char* pix,
+	int width, int height, int stride
+);
+bool EncodePngRGBA(
+	std::string* dst, const char* pix,
+	int width, int height, int stride
+);
+
 bool DecodePng32(
 	std::string* dst, const char* data, int size,
 	int* width, int* height
