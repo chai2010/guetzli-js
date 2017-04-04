@@ -159,7 +159,7 @@ bool guetzliEncodeRGBA(const uint8_t* pix, int w, int h, int stride, float quali
 
 #if !defined(GUETZLI_BUILD_FOR_BROWSER)
 
-bool DecodePng32(
+static bool DecodePng32(
 	std::string* dst, const char* data, int size,
 	int* width, int* height
 ) {
@@ -184,7 +184,7 @@ bool DecodePng32(
 	return true;
 }
 
-bool DecodePng24(
+static bool DecodePng24(
 	std::string* dst, const char* data, int size,
 	int* width, int* height
 ) {
@@ -239,7 +239,7 @@ bool DecodePngRGBA(std::string* dst, const char* data, int size, int* width, int
 	return DecodePng32(dst, data, size, width, height);
 }
 
-bool EncodePng32(
+static bool EncodePng32(
 	std::string* dst, const char* data, int width, int height, int stride /*=0*/
 ) {
 	if(dst == NULL || data == NULL) {
@@ -278,7 +278,7 @@ bool EncodePng32(
 	return true;
 }
 
-bool EncodePng24(
+static bool EncodePng24(
 	std::string* dst, const char* data, int width, int height, int stride /*=0*/
 ) {
 	if(dst == NULL || data == NULL) {
@@ -347,7 +347,7 @@ static bool DecodeJpeg(std::string* dst, const char* data, int size, int* width,
 	if(width == NULL || height == NULL) {
 		return false;
 	}
-	if(expect_channels != 1 && expect_channels != 3 && expect_channels != 4) {
+	if(expect_channels != 1 && expect_channels != 3) {
 		return false;
 	}
 
@@ -453,7 +453,26 @@ bool DecodeJpegRGB(std::string* dst, const char* data, int size, int* width, int
 	return DecodeJpeg(dst, data, size, width, height, 3);
 }
 bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, int* height) {
-	return DecodeJpeg(dst, data, size, width, height, 4);
+	std::string s;
+	if(!DecodeJpeg(&s, data, size, width, height, 3)) {
+		dst->clear();
+		return false;
+	}
+
+	dst->resize(s.size()*4/3);
+
+	auto pSrc = (const uint8_t*)s.data();
+	auto pDst = (uint8_t*)dst->data();
+
+	int k = 0;
+	for(int i = 0; i < s.size(); i += 3) {
+		pDst[i+0] = pSrc[k++];
+		pDst[i+1] = pSrc[k++];
+		pDst[i+2] = pSrc[k++];
+		k++;
+	}
+
+	return true;
 }
 
 bool EncodeJpegGray(

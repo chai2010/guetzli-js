@@ -262,7 +262,7 @@ static void decodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 		);
 		return;
 	}
-	if(expect_channels != 3 && expect_channels != 4) {
+	if(expect_channels != 1 && expect_channels != 3 && expect_channels != 4) {
 		v8ThrowException(isolate,
 			"function(data, expect_channels) -> {pix, width, height, channels, depth}\n"
 			"invalid expect_channels: %d, expect 3/4!\n",
@@ -275,11 +275,14 @@ static void decodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	int width, height;
 	std::string output;
 	switch(expect_channels) {
+	case 1:
+		rv = DecodePngGray(&output, data, size, &width, &height);
+		break;
 	case 3:
-		rv = DecodePng24(&output, data, size, &width, &height);
+		rv = DecodePngRGB(&output, data, size, &width, &height);
 		break;
 	case 4:
-		rv = DecodePng32(&output, data, size, &width, &height);
+		rv = DecodePngRGBA(&output, data, size, &width, &height);
 		break;
 	}
 	if(!rv) {
@@ -366,7 +369,7 @@ static void encodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 		);
 		return;
 	}
-	if(channels != 3 && channels != 4) {
+	if(channels != 1 && channels != 3 && channels != 4) {
 		v8ThrowException(isolate,
 			"function(pix, width, height, channels, stride) -> Buffer\n"
 			"invalid channels: %d, expect 3/4!\n",
@@ -386,11 +389,14 @@ static void encodePng(const v8::FunctionCallbackInfo<v8::Value>& args) {
 	bool rv = false;
 	std::string output;
 	switch(channels) {
+	case 1:
+		rv = EncodePngGray(&output, (const char*)pix, width, height, stride);
+		break;
 	case 3:
-		rv = EncodePng24(&output, (const char*)pix, width, height, stride);
+		rv = EncodePngRGB(&output, (const char*)pix, width, height, stride);
 		break;
 	case 4:
-		rv = EncodePng32(&output, (const char*)pix, width, height, stride);
+		rv = EncodePngRGBA(&output, (const char*)pix, width, height, stride);
 		break;
 	}
 	if(!rv) {
@@ -547,7 +553,7 @@ static void encodeJpg(const v8::FunctionCallbackInfo<v8::Value>& args) {
 		);
 		return;
 	}
-	if(channels != 3 && channels != 4) {
+	if(channels != 1 && channels != 3 && channels != 4) {
 		v8ThrowException(isolate,
 			"function(pix, width, height, channels, stride, quality) -> Buffer\n"
 			"invalid channels: %d, expect 1/3/4!\n",

@@ -81,41 +81,23 @@ bool EncodePngRGBA(
 	int width, int height, int stride
 );
 
-bool DecodePng32(
-	std::string* dst, const char* data, int size,
-	int* width, int* height
-);
-
-bool DecodePng24(
-	std::string* dst, const char* data, int size,
-	int* width, int* height
-);
-
-bool EncodePng32(
-	std::string* dst, const char* data, int width, int height, int stride /*=0*/
-);
-
-bool EncodePng24(
-	std::string* dst, const char* data, int width, int height, int stride /*=0*/
-);
-
 bool DecodeJpegGray(std::string* dst, const char* data, int size, int* width, int* height);
 bool DecodeJpegRGB(std::string* dst, const char* data, int size, int* width, int* height);
 bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, int* height);
 
 bool EncodeJpegGray(
 	std::string* dst, const char* data,
-	int width, int height, int width_step, /* =0 */
+	int width, int height, int stride, /* =0 */
 	int quality /* =90 */
 );
 bool EncodeJpegRGB(
 	std::string* dst, const char* data,
-	int width, int height, int width_step, /* =0 */
+	int width, int height, int stride, /* =0 */
 	int quality /* =90 */
 );
 bool EncodeJpegRGBA(
 	std::string* dst, const char* data,
-	int width, int height, int width_step, /* =0 */
+	int width, int height, int stride, /* =0 */
 	int quality /* =90 */
 );
 
