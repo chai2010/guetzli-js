@@ -2,10 +2,7 @@
 
 # guetzli-js
 
-[![Build Status](https://travis-ci.org/chai2010/guetzli-js.svg)](https://travis-ci.org/chai2010/guetzli-js)
-[![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)
-[![NPM Version](https://img.shields.io/npm/v/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js)
-![License](https://img.shields.io/npm/l/guetzli-js.svg)
+[![Build Status](https://travis-ci.org/chai2010/guetzli-js.svg)](https://travis-ci.org/chai2010/guetzli-js) [![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js) [![NPM Version](https://img.shields.io/npm/v/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js) ![License](https://img.shields.io/npm/l/guetzli-js.svg)
 
 [![NPM](https://nodei.co/npm/guetzli-js.png?downloads=true&downloadRank=true&stars=true)](https://npmjs.org/guetzli-js)  
 [![NPM](https://nodei.co/npm-dl/guetzli-js.png?height=3&months=9)](https://npmjs.org/guetzli-js)  
@@ -19,8 +16,7 @@
 
 This demo show guetzli-js in browser, encode a canvas and save as a jpeg file.
 
-- https://chai2010.github.io/guetzli-js/example/
-- https://github.com/chai2010/guetzli-js/tree/master/example
+- https://chai2010.github.io/guetzli-js/example/hello-01
 
 
 **Browser suggest: Chrome, Firefox, Edge. Chrome is the best choice!**
@@ -69,7 +65,7 @@ $ guetzli-cli -v
 guetzli-1.0.1
 ```
 
-## Example
+## Examples
 
 NodeJS:
 
@@ -91,7 +87,7 @@ let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQu
 fs.writeFileSync('bees.jpg', jpegData)
 ```
 
-Borwser(A), `<script src='./guetzli.out.js'></script>` style:
+Borwser:
 
 ```html
 <!DOCTYPE html>
@@ -100,13 +96,13 @@ Borwser(A), `<script src='./guetzli.out.js'></script>` style:
 <title>Hello</title>
 
 <script src="./jquery.min.js"></script>
+<script src='../lib/cxx-emscripten/guetzli.out.js'></script>
 </head>
 
 <body>
 <canvas id="myCanvas" width="120" height="80">show image</canvas>
 <div><button id="saveAsBtnRun">Save As...</button></div>
 
-<script src='./guetzli.out.js'></script>
 <script>
 const guetzli = Module
 
@@ -137,60 +133,44 @@ $("#saveAsBtnRun").click(function() {
 </body>
 ```
 
-Borwser(B), `require('guetzli-js/dist/lib/browser')` style:
-
-```js
-const guetzli = require('guetzli-js/dist/lib/browser')
-
-let canvas = document.getElementById('myCanvas')
-let ctx = canvas.getContext('2d')
-let imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
-
-// all image
-let jpegData = guetzli.encodeImage({
-	width:    canvas.width,
-	height:   canvas.height,
-	channels: 4,
-	stride:   canvas.width*4,
-	pix:      imgd.data,
-})
-
-// sub image
-let jpegData2 = guetzli.encodeImage({
-	width:    canvas.width/2,
-	height:   canvas.height/2,
-	channels: 4,
-	depth:    8,
-	stride:   canvas.width*4, // avoid padding
-	pix:      imgd.data,
-})
-```
 
 ## Guetzli API
-
-### Const
 
 ```ts
 export declare const version: string;        // google/guetzli version
 export declare const minQuality: number;     // 84
 export declare const maxQuality: number;     // 110
 export declare const defaultQuality: number; // 95
-```
 
-### Image Type
-
-```ts
 // require('guetzli-js/image').Image
-interface Image {
+interface image.Image {
     width:    number;
     height:   number;
 	channels: number; // Gray=1, RGB=3, RGBA=4
 	stride?:  number; // 0 or >= width*channels
     pix:      Uint8Array;
 }
+
+function encodeImage(m: image.Image, quality?: number): Uint8Array;
+function encodeGray(pix: Uint8Array, width: number, height: number, stride?: number, quality?: number): Uint8Array;
+function encodeRGB(pix: Uint8Array, width: number, height: number, stride?: number, quality?: number): Uint8Array;
+function encodeRGBA(pix: Uint8Array, width: number, height: number, stride?: number, quality?: number): Uint8Array;
 ```
 
-### `encodeImage(m: Image, quality: number = defaultQuality): Uint8Array`
+Helpers:
+
+```ts
+function decodePng(data: Uint8Array, expect_channels?: number): image.Image;
+function decodeJpg(data: Uint8Array, expect_channels?: number): image.Image;
+
+function encodePng(pix: Uint8Array, width: number, height: number, channels: number, stride?: number): Uint8Array;
+function encodeJpg(pix: Uint8Array, width: number, height: number, channels: number, stride?: number, quality?: number): Uint8Array;
+
+function loadImage(filename: string): image.Image;
+```
+
+
+### NodeJS: Encode Image
 
 ```js
 const guetzli = require('guetzli-js')
@@ -207,11 +187,31 @@ let jpegData = guetzli.encodeImage({
 })
 ```
 
-### `encodeGray(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
+### Browser: Encode Image
+
+```html
+<script src='../lib/cxx-emscripten/guetzli.out.js'></script>
+```
 
 ```js
-const guetzli = require('guetzli-js/dist/lib/browser')
+const guetzli = Module;
 
+let canvas = document.getElementById('myCanvas')
+let ctx = canvas.getContext('2d')
+let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+
+let jpegData = guetzli.encodeImage({
+	width:    canvas.width,
+	height:   canvas.height,
+	channels: 4,
+	stride:   canvas.width*4,
+	pix:      rgba,
+})
+```
+
+### Example: RGBA to Gray
+
+```js
 let canvas = document.getElementById('myCanvas')
 let ctx = canvas.getContext('2d')
 let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
@@ -230,63 +230,36 @@ for(let y = 0; y < canvas.height; y++) {
 		gray[off++] = ((R+G+B)/3)|0
 	}
 }
-
-// encode as Gray
-let jpegData = guetzli.encodeGray(
-	gray, canvas.width, canvas.height, 0,
-	guetzli.defaultQuality
-)
-```
-
-### `encodeRGB(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
-
-```js
-const guetzli = require('guetzli-js/dist/lib/browser')
-
-let canvas = document.getElementById('myCanvas')
-let ctx = canvas.getContext('2d')
-let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
-
-let off = 0
-let rgb = new Uint8Array(w*h*3)
-
-// GRBA => RGB
-for(let y = 0; y < canvas.height; y++) {
-	for(let x = 0; x < canvas.width; x++) {
-		let idx = y*canvas.width+x
-		rgb[off++] = rgba[idx*4+0]
-		rgb[off++] = rgba[idx*4+0]
-		rgb[off++] = rgba[idx*4+0]
-	}
-}
-
-// encode as RGB
-let jpegData = guetzli.encodeRGB(
-	rgb, canvas.width, canvas.height, 0,
-	guetzli.defaultQuality
-)
-```
-
-### `encodeRGBA(pix: Uint8Array, width: number, height: number, stride: number, quality: number): Uint8Array`
-
-```js
-const guetzli = require('guetzli-js/dist/lib/browser')
-
-let canvas = document.getElementById('myCanvas')
-let ctx = canvas.getContext('2d')
-let rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data
-
-// encode as RGBA
-let jpegData = guetzli.encodeRGBA(
-	rgba, canvas.width, canvas.height, 0,
-	guetzli.defaultQuality
-)
 ```
 
 ## More
 
-- [build.md](build.md)
-- [helper.md](helper.md)
+### Build `guetzli.node` with CMake
+
+**Windows x64**
+
+- Install CMake 3.5+
+- Install VS2015
+- run `build-win64.bat` in command line
+
+**Windows x86**
+
+- Install CMake 3.5+
+- Install VS2015
+- run `build-win32.bat` in command line
+
+**Darwin or Linux**
+
+- Install CMake 3.5+
+- Install GCC
+- `mkdir build`
+- `cd build && cmake .. && make install`
+
+### Build `lib/cxx-emscripten/guetzli.out.js` with Emscripten
+
+- Install Emscripten
+- `make`
+
 
 ## License
 
