@@ -222,7 +222,7 @@ bool DecodePngGray(std::string* dst, const char* data, int size, int* width, int
 	auto pDst = (uint8_t*)dst->data();
 
 	int k = 0;
-	for(int i = 0; i < s.size(); i++) {
+	for(int i = 0; i < dst->size(); i++) {
 		auto R = pSrc[k++];
 		auto G = pSrc[k++];
 		auto B = pSrc[k++];
@@ -340,14 +340,11 @@ bool EncodePngRGBA(
 
 // --------------------------------------------------------
 
-static bool DecodeJpeg(std::string* dst, const char* data, int size, int* width, int* height, int expect_channels) {
+static bool DecodeJpeg_RGB(std::string* dst, const char* data, int size, int* width, int* height) {
 	if(dst == NULL || data == NULL || size <= 0) {
 		return false;
 	}
 	if(width == NULL || height == NULL) {
-		return false;
-	}
-	if(expect_channels != 1 && expect_channels != 3) {
 		return false;
 	}
 
@@ -355,17 +352,18 @@ static bool DecodeJpeg(std::string* dst, const char* data, int size, int* width,
 	auto p = jpgd::decompress_jpeg_image_from_memory(
 		(const unsigned char *)data, size,
 		width, height, &channels,
-		expect_channels
+		3
 	);
 	if(p == NULL) {
 		return false;
 	}
-	if(*width <= 0 || *height <= 0 || channels != expect_channels) {
+
+	if(*width <= 0 || *height <= 0 || channels != 3) {
 		free(p);
 		return false;
 	}
 
-	dst->resize((*width)*(*height)*expect_channels);
+	dst->resize((*width)*(*height)*3);
 	dst->assign((const char*)p, dst->size());
 	free(p);
 
@@ -447,14 +445,33 @@ static bool EncodeJpeg(
 }
 
 bool DecodeJpegGray(std::string* dst, const char* data, int size, int* width, int* height) {
-	return DecodeJpeg(dst, data, size, width, height, 1);
+	std::string s;
+	if(!DecodeJpeg_RGB(&s, data, size, width, height)) {
+		dst->clear();
+		return false;
+	}
+
+	dst->resize(s.size()/3);
+
+	auto pSrc = (const uint8_t*)s.data();
+	auto pDst = (uint8_t*)dst->data();
+
+	int k = 0;
+	for(int i = 0; i < dst->size(); i++) {
+		auto R = pSrc[k++];
+		auto G = pSrc[k++];
+		auto B = pSrc[k++];
+		pDst[i] = (R+G+B)/3;
+	}
+
+	return true;
 }
 bool DecodeJpegRGB(std::string* dst, const char* data, int size, int* width, int* height) {
-	return DecodeJpeg(dst, data, size, width, height, 3);
+	return DecodeJpeg_RGB(dst, data, size, width, height);
 }
 bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, int* height) {
 	std::string s;
-	if(!DecodeJpeg(&s, data, size, width, height, 3)) {
+	if(!DecodeJpeg_RGB(&s, data, size, width, height)) {
 		dst->clear();
 		return false;
 	}
@@ -466,9 +483,9 @@ bool DecodeJpegRGBA(std::string* dst, const char* data, int size, int* width, in
 
 	int k = 0;
 	for(int i = 0; i < s.size(); i += 3) {
-		pDst[i+0] = pSrc[k++];
-		pDst[i+1] = pSrc[k++];
-		pDst[i+2] = pSrc[k++];
+		pDst[k++] = pSrc[i+0];
+		pDst[k++] = pSrc[i+1];
+		pDst[k++] = pSrc[i+2];
 		k++;
 	}
 
