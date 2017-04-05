@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Hello</title>
+
+	<script src="./jquery.min.js"></script>
+	<script src="./FileSaver.js"></script>
+	<script src="../../lib/cxx-emscripten/guetzli.out.js"></script>
+</head>
+
+<body>
+<div id='guetzli-version'> loading ... </div>
+<canvas id="myCanvas" width="120" height="80">show image</canvas>
+<div><button id="saveAsBtnRun">Save As...</button></div>
+
+<script>
+var guetzli = Module;
+
+var testdir = '../../testdata/';
+
+function encodeImage(id) {
+	console.log("encodeImage:", '1')
+
+	let canvas = document.getElementById(id)
+	let ctx = canvas.getContext('2d')
+	let imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
+
+	console.log("width:", canvas.width)
+	console.log("height:", canvas.height)
+	console.log("imgd.data len:", imgd.data.length)
+
+	return guetzli.encodeImage({
+		width:    canvas.width,
+		height:   canvas.height,
+		channels: 4,
+		stride:   canvas.width*4,
+		pix:      imgd.data,
+	})
+}
+
+$(document).ready(function() {
+	console.log('showVersion begin')
+	$('#guetzli-version').text('guetzli-'+guetzliGetVersion());
+	console.log('showVersion end')
+
+	var canvas = document.getElementById('myCanvas')
+	var ctx = canvas.getContext('2d')
+
+	ctx.fillStyle = '#663300'
+	ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+	var m = new Image()
+	m.src = testdir + '/bees.png'
+	m.onload = function() {
+		ctx.drawImage(m, 5, 5, canvas.width-10, canvas.height-10)
+	}
+})
+
+$("#saveAsBtnRun").click(function() {
+	console.log('saveAsBtnRun begin')
+
+	var data = encodeImage('myCanvas')
+	var blob = new Blob([data.buffer], {type: "application/octet-stream;"})
+	saveAs(blob, "guetzli-demo.jpg")
+
+	console.log('saveAsBtnRun end')
+})
+</script>
+</body>
+</html>
