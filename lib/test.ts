@@ -12,28 +12,15 @@ import * as assert from 'assert'
 import * as fs from 'fs'
 import * as path from 'path'
 
-interface T {
-	ok(value: any, message?: string): void
-	equal(actual: any, expected: any, message?: string): void
-	notEqual(actual: any, expected: any, message?: string): void
-	deepEqual(actual: any, expected: any, message?: string): void
-	notDeepEqual(acutal: any, expected: any, message?: string): void
-	strictEqual(actual: any, expected: any, message?: string): void
-	notStrictEqual(actual: any, expected: any, message?: string): void
-	throws(block: Function, error: Function, message?: string): void
-	doesNotThrow(block: Function, error: Function, message?: string): void
-	ifError(value: any): void
-	expect(amount:number): void
-	done(): void
-}
+import * as nodeunit from 'nodeunit'
 
-exports.testVersion = function(t: T) {
+export function testVersion(t: nodeunit.Test) {
 	t.ok(guetzli.version == '1.0.1')
 	t.ok(/^\d+\.\d+\.\d+$/.test(guetzli.version))
 	t.done()
 }
 
-exports.testIsPngFilename = function(t: T) {
+export function testIsPngFilename(t: nodeunit.Test) {
 	t.ok(helper.isPngFilename('.png'))
 	t.ok(helper.isPngFilename('.PNG'))
 	t.ok(helper.isPngFilename('.PnG'))
@@ -48,7 +35,7 @@ exports.testIsPngFilename = function(t: T) {
 	t.done()
 }
 
-exports.testIsJpegFilename = function(t: T) {
+export function testIsJpegFilename(t: nodeunit.Test) {
 	t.ok(helper.isJpegFilename('.jpg'))
 	t.ok(helper.isJpegFilename('.jPG'))
 	t.ok(helper.isJpegFilename('.jpeg'))
@@ -60,7 +47,7 @@ exports.testIsJpegFilename = function(t: T) {
 	t.done()
 }
 
-exports.testLoadImage_png = function(t: T) {
+export function testLoadImage_png(t: nodeunit.Test) {
 	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
 	let m = helper.loadImage(testdir + '/bees.png') // 444x258
 	t.ok(isValidImage(m))
@@ -69,14 +56,14 @@ exports.testLoadImage_png = function(t: T) {
 	t.done()
 }
 
-exports.testLoadImage_jpeg = function(t: T) {
+export function testLoadImage_jpeg(t: nodeunit.Test) {
 	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
 	let m = helper.loadImage(testdir + '/lena.jpg')
 	t.ok(isValidImage(m))
 	t.done()
 }
 
-exports.testGuetzliEncode = function(t: T) {
+export function testGuetzliEncode(t: nodeunit.Test) {
 	let testdir = path.join(path.dirname(fs.realpathSync(__filename)), '../testdata');
 
 	// 1. load png
