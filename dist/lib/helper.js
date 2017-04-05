@@ -45,8 +45,10 @@ exports.isBuffer = isBuffer;
 // ----------------------------------------------------------------------------
 function decodePng(data, expect_channels) {
     if (expect_channels === void 0) { expect_channels = 4; }
+    assert(data && data.length > 0);
+    assert(expect_channels == 1 || expect_channels == 3 || expect_channels == 4);
     var m = ccapi.decodePng(data, expect_channels);
-    assert(m.pix.length > 0);
+    assert(m.pix && m.pix.length > 0);
     assert(m.width > 0 && m.height > 0);
     assert(m.channels > 0 && m.depth > 0);
     assert(m.channels == expect_channels);
@@ -61,6 +63,11 @@ function decodePng(data, expect_channels) {
 exports.decodePng = decodePng;
 function encodePng(pix, width, height, channels, stride) {
     if (stride === void 0) { stride = 0; }
+    assert(pix && pix.length > 0);
+    assert(width > 0);
+    assert(height > 0);
+    assert(channels == 1 || channels == 3 || channels == 4);
+    assert(stride == 0 || stride >= width * channels);
     return ccapi.encodePng(pix, width, height, channels, stride);
 }
 exports.encodePng = encodePng;
@@ -70,11 +77,18 @@ exports.encodePng = encodePng;
 function encodeJpg(pix, width, height, channels, stride, quality) {
     if (stride === void 0) { stride = 0; }
     if (quality === void 0) { quality = 95; }
+    assert(pix && pix.length > 0);
+    assert(width > 0);
+    assert(height > 0);
+    assert(channels == 1 || channels == 3 || channels == 4);
+    assert(stride == 0 || stride >= width * channels);
     return ccapi.encodeJpg(pix, width, height, channels, stride, quality);
 }
 exports.encodeJpg = encodeJpg;
 function decodeJpg(data, expect_channels) {
     if (expect_channels === void 0) { expect_channels = 3; }
+    assert(data && data.length > 0);
+    assert(expect_channels == 1 || expect_channels == 3 || expect_channels == 4);
     return ccapi.decodeJpg(data, expect_channels);
 }
 exports.decodeJpg = decodeJpg;
@@ -97,15 +111,17 @@ function isJpegFilename(filename) {
     return /\.jpg/i.test(filename) || /\.jpeg/i.test(filename);
 }
 exports.isJpegFilename = isJpegFilename;
-function loadPngImage(filename) {
+function loadPngImage(filename, expect_channels) {
+    if (expect_channels === void 0) { expect_channels = 4; }
     var data = fs.readFileSync(filename);
-    var m = decodePng(data, 3);
+    var m = decodePng(data, expect_channels);
     return m;
 }
 exports.loadPngImage = loadPngImage;
-function loadJpegImage(filename) {
+function loadJpegImage(filename, expect_channels) {
+    if (expect_channels === void 0) { expect_channels = 3; }
     var data = fs.readFileSync(filename);
-    var m = decodeJpg(data);
+    var m = decodeJpg(data, expect_channels);
     return m;
 }
 exports.loadJpegImage = loadJpegImage;

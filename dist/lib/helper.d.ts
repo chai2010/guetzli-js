@@ -11,5 +11,5 @@ export declare function decodeJpg(data: Uint8Array, expect_channels?: number): i
 export declare function loadImage(filename: string): image.Image;
 export declare function isPngFilename(filename: string): boolean;
 export declare function isJpegFilename(filename: string): boolean;
-export declare function loadPngImage(filename: string): image.Image;
-export declare function loadJpegImage(filename: string): image.Image;
+export declare function loadPngImage(filename: string, expect_channels?: number): image.Image;
+export declare function loadJpegImage(filename: string, expect_channels?: number): image.Image;
