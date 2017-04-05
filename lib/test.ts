@@ -91,12 +91,12 @@ function isValidImage(m: image.Image): boolean {
 function averageDelta(m0: image.Image, m1: image.Image): number {
 	assert(m0.width == m1.width)
 	assert(m0.height == m1.height)
-	assert(m0.channels == m1.channels)
+	assert(m0.channels > 0 && m1.channels > 0)
 
 	let sum = 0, n = 0
 	for(let y = 0; y < m0.height; y++) {
 		for(let x = 0; x < m0.width; x++) {
-			for(let k = 0; k < m0.channels && k < 3; k++) {
+			for(let k = 0; k < m0.channels && m1.channels && k < 3; k++) {
 				let c0 = image.colorAt(m0, x, y, k)
 				let c1 = image.colorAt(m1, x, y, k)
 
