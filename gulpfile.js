@@ -21,14 +21,13 @@ const child_process = require('child_process')
 // task
 // gulp dist
 // gulp copy-cxx-emscripten
-// gulp example
 //
 // gulp all
 // ----------------------------------------------------------------------------
 
 gulp.task('default', ['dist'])
 
-gulp.task('all', ['dist', 'copy-cxx-emscripten', 'example'])
+gulp.task('all', ['dist', 'copy-cxx-emscripten'])
 
 gulp.task('dist', ['build', 'copy-testdata', 'copy-gyp-build'])
 
@@ -61,29 +60,6 @@ gulp.task('copy-cxx-emscripten', () => {
 	]).pipe(gulp.dest(
 		'dist/lib/cxx-emscripten'
 	))
-})
-
-gulp.task('example', ['example-copy-html'], () => {
-	return browserify({
-		basedir: 'example',
-		debug: true,
-		entries: ['index.ts'],
-		cache: {},
-		packageCache: {}
-	})
-	.plugin(tsify)
-	.bundle()
-	.pipe(source('bundle.min.js'))
-	.pipe(buffer())
-	.pipe(uglify())
-	.pipe(gulp.dest('dist/example'))
-})
-
-gulp.task('example-copy-html', () => {
-	return gulp.src([
-		'example/*.html',
-		'example/*.js',
-	]).pipe(gulp.dest('dist/example'))
 })
 
 gulp.task('copy-testdata', () => {
