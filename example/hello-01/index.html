@@ -22,9 +22,9 @@ var testdir = '../../testdata/';
 function encodeImage(id) {
 	console.log("encodeImage:", '1')
 
-	let canvas = document.getElementById(id)
-	let ctx = canvas.getContext('2d')
-	let imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
+	var canvas = document.getElementById(id)
+	var ctx = canvas.getContext('2d')
+	var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
 	console.log("width:", canvas.width)
 	console.log("height:", canvas.height)
