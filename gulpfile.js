@@ -6,6 +6,7 @@ const gulp = require('gulp')
 const ts = require('gulp-typescript')
 const uglify =require('gulp-uglify')
 const nodeunit = require('gulp-nodeunit')
+const benchmark = require('gulp-bench')
 
 const browserify = require('browserify')
 const tsify = require('tsify')
@@ -91,8 +92,11 @@ gulp.task('copy-testdata', () => {
 
 gulp.task('test', ['dist'], (cb) => {
 	gulp.src('dist/lib/test.js').pipe(nodeunit())
-});
+})
 
+gulp.task('bench', ['dist'], (cb) => {
+	gulp.src('dist/lib/bench.js', {read: false}).pipe(benchmark())
+})
 
 gulp.task('test-cli', ['dist'], (cb) => {
 	const cmd = 'node dist/lib/guetzli-cli.js testdata/bees.png a.out.jpg'
