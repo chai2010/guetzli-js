@@ -12,6 +12,7 @@ TODO
 - node: move png/jpeg helper function to helper module
 - support [travis-ci](https://travis-ci.org/chai2010/guetzli-js) build
 - more unit test
+- add bench test
 
 ## 1.0.8
 
