@@ -137,12 +137,12 @@ $("#saveAsBtnRun").click(function() {
 ## Guetzli API
 
 ```ts
-export declare const version: string;        // google/guetzli version
-export declare const minQuality: number;     // 84
-export declare const maxQuality: number;     // 110
-export declare const defaultQuality: number; // 95
+const version: string;        // google/guetzli version
+const minQuality: number;     // 84
+const maxQuality: number;     // 110
+const defaultQuality: number; // 95
 
-// require('guetzli-js/image').Image
+// require('guetzli-js/dist/lib/image').Image
 interface image.Image {
     width:    number;
     height:   number;
@@ -160,6 +160,8 @@ function encodeRGBA(pix: Uint8Array, width: number, height: number, stride?: num
 Helpers:
 
 ```ts
+// let helper = require('guetzli-js/dist/lib/helper')
+
 function decodePng(data: Uint8Array, expect_channels?: number): image.Image;
 function decodeJpg(data: Uint8Array, expect_channels?: number): image.Image;
 
