@@ -6,7 +6,7 @@
 TODO
 -->
 
-## 1.?.?
+## 1.0.9
 
 - node: move Image type to image.Image, and remove `depth` filed, `stride` is optional
 - node: move png/jpeg helper function to helper module
