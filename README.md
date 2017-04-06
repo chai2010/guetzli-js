@@ -84,10 +84,24 @@ const minQuality: number;     // 84
 const maxQuality: number;     // 110
 const defaultQuality: number; // 95
 
-function encodeImage(m: image.Image, quality?: number): Uint8Array;
-function encodeGray(pix: Uint8Array, width: number, height: number, stride?: number, quality?: number): Uint8Array;
-function encodeRGB(pix: Uint8Array, width: number, height: number, stride?: number, quality?: number): Uint8Array;
-function encodeRGBA(pix: Uint8Array, width: number, height: number, stride?: number, quality?: number): Uint8Array;
+function encodeImage(
+	m: image.Image, quality?: number = defaultQuality
+): Uint8Array;
+
+function encodeGray(
+	pix: Uint8Array, width: number, height: number,
+	stride?: number = 0, quality?: number = defaultQuality
+): Uint8Array;
+
+function encodeRGB(
+	pix: Uint8Array, width: number, height: number,
+	stride?: number = 0, quality?: number = defaultQuality
+): Uint8Array;
+
+function encodeRGBA(
+	pix: Uint8Array, width: number, height: number,
+	stride?: number = 0, quality?: number = defaultQuality
+): Uint8Array;
 ```
 
 ### Helpers (NodeJS Only):
@@ -96,12 +110,21 @@ function encodeRGBA(pix: Uint8Array, width: number, height: number, stride?: num
 ```ts
 // const helper = require('guetzli-js/dist/lib/helper')
 
-function decodePng(data: Uint8Array, expect_channels?: number): image.Image;
-function decodeJpg(data: Uint8Array, expect_channels?: number): image.Image;
+function decodePng(data: Uint8Array, expect_channels?: number = 4): image.Image;
+function decodeJpg(data: Uint8Array, expect_channels?: number = 3): image.Image;
 
-function encodePng(pix: Uint8Array, width: number, height: number, channels: number, stride?: number): Uint8Array;
-function encodeJpg(pix: Uint8Array, width: number, height: number, channels: number, stride?: number, quality?: number): Uint8Array;
+function encodePng(
+	pix: Uint8Array, width: number, height: number,
+	channels: number, stride?: number = 0
+): Uint8Array;
 
+function encodeJpg(
+	pix: Uint8Array, width: number, height: number,
+	channels: number, stride?: number = 0,
+	quality?: number = 95
+): Uint8Array;
+
+// only for jpg/png format
 function loadImage(filename: string): image.Image;
 ```
 
