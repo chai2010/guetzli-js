@@ -6,6 +6,12 @@
 TODO
 -->
 
+## 1.?.?
+
+- NPM: fix bad link in README.md
+- remove build dir after install
+
+
 ## 1.0.9
 
 - node: move Image type to image.Image, and remove `depth` filed, `stride` is optional
