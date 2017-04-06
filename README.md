@@ -77,7 +77,8 @@ interface image.Image {
 ### Guetzli API:
 
 ```ts
-// const image = require('guetzli-js')
+// const guetzli = require('guetzli-js')
+// const guetzli_asmjs = require('guetzli-js/dist/lib/cxx-emscripten/guetzli.out')
 
 const version: string;        // google/guetzli version
 const minQuality: number;     // 84
