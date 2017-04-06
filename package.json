@@ -19,8 +19,8 @@
     "guetzli-cli": "./dist/bin/guetzli-cli"
   },
   "scripts": {
-    "preinstall": "",
-    "postinstall": "node tools/copy_file.js build/Release/guetzli.node dist/build/Release/guetzli.node",
+    "preinstall": "node tools/preinstall.js",
+    "postinstall": "node tools/postinstall.js",
     "test": "nodeunit dist/lib/test.js",
     "bench": "node dist/lib/bench.js",
     "http-server": "http-server . -a 127.0.0.1 -p 8080 -c-1"
