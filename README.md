@@ -197,6 +197,8 @@ $("#saveAsBtnRun").click(function() {
 </body>
 ```
 
+See https://chai2010.github.io/guetzli-js/example/hello-01/
+
 ### Borwser: Settings
 
 ```html
