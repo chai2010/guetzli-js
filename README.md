@@ -1,4 +1,4 @@
-<p align="center"><img src="guetzli.png" alt="Guetzli" width="64"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/chai2010/guetzli-js/master/guetzli.png" alt="Guetzli" width="64"></p>
 
 # guetzli-js
 
