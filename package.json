@@ -19,7 +19,7 @@
     "guetzli-cli": "./dist/bin/guetzli-cli"
   },
   "scripts": {
-    "preinstall": "node tools/preinstall.js",
+    "preinstall": "",
     "postinstall": "node tools/postinstall.js",
     "test": "nodeunit dist/lib/test.js",
     "bench": "node dist/lib/bench.js",
