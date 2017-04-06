@@ -173,6 +173,19 @@ $("#saveAsBtnRun").click(function() {
 </body>
 ```
 
+### Borwser: Settings
+
+```html
+<script>
+var Module = {}
+Module.TOTAL_STACK = 5*1024*1024;   // 5 MB
+Module.TOTAL_MEMORY = 64*1024*1024; // 64 MB
+Module.ALLOW_MEMORY_GROWTH = true;
+Module.SIMD = false;
+</script>
+
+<script src='./dist/lib/cxx-emscripten/guetzli.out.js'></script>
+```
 
 ### RGB <==> Gray
 
