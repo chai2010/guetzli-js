@@ -70,10 +70,10 @@ export function testGuetzliEncode(t: nodeunit.Test) {
 	let m1 = helper.loadImage(testdir + '/bees.png')
 
 	// 2. guetzli encode
-	let jepgData = guetzli.encodeImage(m1)
+	let jpegData = guetzli.encodeImage(m1)
 
 	// 3. decode jpeg
-	let m2 = helper.decodeJpg(jepgData)
+	let m2 = helper.decodeJpg(jpegData)
 
 	// 4. compare image
 	let diff = averageDelta(m1, m2)
