@@ -20,12 +20,10 @@ function main() {
         console.log('Usage: guetzli input_filename output_filename');
         process.exit(0);
     }
-    // load png
-    var data = fs.readFileSync(args[0]);
-    // decode png image
-    var m = helper.decodePng(data);
+    // load jpg/png image
+    var m = helper.loadImage(args[0]);
     // encode jpg image
-    var jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality);
+    var jpegData = guetzli.encodeImage(m);
     // save jpg
     fs.writeFileSync(args[1], jpegData);
     // OK

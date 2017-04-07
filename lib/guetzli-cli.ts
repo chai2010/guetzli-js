@@ -23,14 +23,11 @@ export function main() {
 		process.exit(0)
 	}
 
-	// load png
-	let data = fs.readFileSync(args[0])
-
-	// decode png image
-	let m = helper.decodePng(data)
+	// load jpg/png image
+	let m = helper.loadImage(args[0])
 
 	// encode jpg image
-	let jpegData = guetzli.encodeRGBA(m.pix, m.width, m.height, 0, guetzli.defaultQuality)
+	let jpegData = guetzli.encodeImage(m)
 
 	// save jpg
 	fs.writeFileSync(args[1], jpegData)

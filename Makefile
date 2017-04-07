@@ -23,6 +23,10 @@ deps:
 	cnpm install -g windows-build-tool
 	node-gyp install --dist-url https://npm.taobao.org/mirrors/node
 
+gitclean:
+	git clean -dfX
+	git clean -df
+
 clean:
 	cmake -E remove_directory build
 	cmake -E remove_directory zz_build_win64_release

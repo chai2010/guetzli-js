@@ -8,6 +8,7 @@ TODO
 
 ## 1.?.?
 
+- `bin/guetzli`: support read jpeg image
 - NPM: fix bad link in README.md
 - remove build dir after install
 
