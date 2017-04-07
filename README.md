@@ -220,13 +220,15 @@ function gray2rgb(gray, width, height, stride) {
 	if(stride == 0) { stride = width }
 
 	let rgb = new Uint8Array(width*height*3)
+	let off = 0
+
 	for(let y = 0; y < height; y++) {
 		for(let x = 0; x < width; x++) {
 			let V = gray[y*stride + x]
 
-			rgb[(y*width+x)*3+0] = V // R
-			rgb[(y*width+x)*3+1] = V // G
-			rgb[(y*width+x)*3+2] = V // B
+			rgb[off++] = V // R
+			rgb[off++] = V // G
+			rgb[off++] = V // B
 		}
 	}
 	return rgb
@@ -236,12 +238,14 @@ function rgb2gray(rgb, width, height, stride) {
 	if(stride == 0) { stride = width*3 }
 
 	let gray = new Uint8Array(width*height)
+	let off = 0
+
 	for(let y = 0; y < height; y++) {
 		for(let x = 0; x < width; x++) {
-			let idx = y*stride + x
-			let R = rgb[idx*3+0]
-			let G = rgb[idx*3+1]
-			let B = rgb[idx*3+2]
+			let idx = y*stride + x*3
+			let R = rgb[idx+0]
+			let G = rgb[idx+1]
+			let B = rgb[idx+2]
 
 			gray[off++] = ((R+G+B)/3)|0
 		}
