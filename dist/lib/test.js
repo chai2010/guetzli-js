@@ -94,9 +94,9 @@ function testGuetzliEncode(t) {
     // 1. load png
     var m1 = helper.loadImage(testdir + '/bees.png');
     // 2. guetzli encode
-    var jepgData = guetzli.encodeImage(m1);
+    var jpegData = guetzli.encodeImage(m1);
     // 3. decode jpeg
-    var m2 = helper.decodeJpg(jepgData);
+    var m2 = helper.decodeJpg(jpegData);
     // 4. compare image
     var diff = averageDelta(m1, m2);
     t.ok(diff < 20, 'diff = ' + diff);
