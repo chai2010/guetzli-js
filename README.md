@@ -1,5 +1,12 @@
 <p align="center"><img src="https://raw.githubusercontent.com/chai2010/guetzli-js/master/guetzli.png" alt="Guetzli" width="64"></p>
 
+----
+
+- *赞助 BTC: 1Cbd6oGAUUyBi7X7MaR4np4nTmQZXVgkCW*
+- *赞助 ETH: 0x623A3C3a72186A6336C79b18Ac1eD36e1c71A8a6*
+
+----
+
 # guetzli-js
 
 [![Build Status](https://travis-ci.org/chai2010/guetzli-js.svg)](https://travis-ci.org/chai2010/guetzli-js) [![NPM](https://img.shields.io/npm/dt/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js) [![NPM Version](https://img.shields.io/npm/v/guetzli-js.svg)](https://www.npmjs.com/package/guetzli-js) ![License](https://img.shields.io/npm/l/guetzli-js.svg)
